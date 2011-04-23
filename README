@@ -1,0 +1,26 @@
+Contents
+--------
+
+This repository contains RPM spec and patch files for Mac OS X WorkShop.
+
+RPM files generated from this repository are available in
+http://www.ike-dyn.ritsumei.ac.jp/~uchida/OSXWS/,
+and these will be available in OSXWS main tree after some duration.
+
+Mac OS X WorkShop
+-----------------
+
+Mac OS X WorkShop (OSXWS) is the package system on Mac OS X.
+OSXWS is the install quick and ready to use package system mainly targeting
+on scientific research tools.
+
+The apt-rpm is the core package in OSXWS to manage packages.
+Both users and developers can enjoy the apt-rpm benefit in package management
+and porting packages from major Linux distribution.
+
+In addition, OSXWS has following features:
+
+- include user configuration files
+- quick install without building packages
+- support Universal Binary
+
