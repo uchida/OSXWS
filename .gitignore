@@ -1,0 +1,12 @@
+.DS_Store
+BUILD
+BUILDROOT
+RPMS
+SRPMS
+temp
+*.rpm
+*.tar.gz
+*.tar.bz2
+*.tgz
+*.zip
+UnicodeData.txt
