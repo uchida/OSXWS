@@ -1,0 +1,60 @@
+diff -uNr tmux-1.3.orig/GNUmakefile tmux-1.3/GNUmakefile
+--- tmux-1.3.orig/GNUmakefile	2010-10-14 21:44:38.000000000 +0900
++++ tmux-1.3/GNUmakefile	2010-10-14 23:04:16.000000000 +0900
+@@ -52,6 +52,7 @@
+ endif
+ 
+ PREFIX?= /usr/local
++MANDIR?= $(PREFIX)
+ INSTALL?= install
+ INSTALLDIR= $(INSTALL) -d
+ INSTALLBIN= $(INSTALL) -m 555
+@@ -81,7 +82,7 @@
+ install:	all
+ 		$(INSTALLDIR) $(DESTDIR)$(PREFIX)/bin
+ 		$(INSTALLBIN) tmux $(DESTDIR)$(PREFIX)/bin/tmux
+-		$(INSTALLDIR) $(DESTDIR)$(PREFIX)/man/man1
+-		$(INSTALLMAN) tmux.1 $(DESTDIR)$(PREFIX)/man/man1/tmux.1
++		$(INSTALLDIR) $(DESTDIR)$(MANDIR)/man1
++		$(INSTALLMAN) tmux.1 $(DESTDIR)$(MANDIR)/man1/tmux.1
+ 
+ -include .depend
+diff -uNr tmux-1.3.orig/tmux.1 tmux-1.3/tmux.1
+--- tmux-1.3.orig/tmux.1	2010-10-14 21:44:38.000000000 +0900
++++ tmux-1.3/tmux.1	2010-10-14 22:57:35.000000000 +0900
+@@ -121,7 +121,7 @@
+ By default,
+ .Nm
+ loads the system configuration file from
+-.Pa /etc/tmux.conf ,
++.Pa /usr/osxws/etc/tmux.conf ,
+ if present, then looks for a user configuration file at
+ .Pa ~/.tmux.conf .
+ The configuration file is a set of
+@@ -2598,12 +2598,12 @@
+ Show server information and terminal details.
+ .El
+ .Sh FILES
+-.Bl -tag -width "/etc/tmux.confXXX" -compact
++.Bl -tag -width "/usr/osxws/etc/tmux.confXXX" -compact
+ .It Pa ~/.tmux.conf
+ Default
+ .Nm
+ configuration file.
+-.It Pa /etc/tmux.conf
++.It Pa /usr/osxws/etc/tmux.conf
+ System-wide configuration file.
+ .El
+ .Sh EXAMPLES
+diff -uNr tmux-1.3.orig/tmux.h tmux-1.3/tmux.h
+--- tmux-1.3.orig/tmux.h	2010-10-14 21:44:38.000000000 +0900
++++ tmux-1.3/tmux.h	2010-10-14 22:57:35.000000000 +0900
+@@ -44,7 +44,7 @@
+ 
+ /* Default configuration files. */
+ #define DEFAULT_CFG ".tmux.conf"
+-#define SYSTEM_CFG "/etc/tmux.conf"
++#define SYSTEM_CFG "/usr/osxws/etc/tmux.conf"
+ 
+ /* Default prompt history length. */
+ #define PROMPT_HISTORY 100

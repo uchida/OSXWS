@@ -1,0 +1,12 @@
+diff -uNr gcc-5666.3.orig/build_libgcc gcc-5666.3/build_libgcc
+--- gcc-5666.3.orig/build_libgcc	2010-11-02 20:33:01.000000000 +0900
++++ gcc-5666.3/build_libgcc	2010-11-03 01:48:10.000000000 +0900
+@@ -324,7 +324,7 @@
+     if [ -L ${CANDIDATES[0]} ] ; then
+       ln -s `readlink ${CANDIDATES[0]}` .$DEST_ROOT/lib/$l || exit 1
+     else
+-      lipo -output .$DEST_ROOT/lib/$l -create "${CANDIDATES[@]}" || exit 1
++      ditto ${CANDIDATES[0]} .$DEST_ROOT/lib/$l || exit 1
+     fi
+     if ! file .$DEST_ROOT/lib/$l | grep stub > /dev/null ; then
+       strip -x .$DEST_ROOT/lib/$l || exit 1

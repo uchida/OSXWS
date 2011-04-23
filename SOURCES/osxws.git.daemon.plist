@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>osxws.git.daemon</string>
+    <key>OnDemand</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/osxws/bin/git</string>
+      <string>daemon</string>
+      <string>--inetd</string>
+      <string>--verbose</string>
+      <string>--export-all</string>
+      <string>--base-path=/Users/Shared/git</string>
+    </array>
+    <key>Sockets</key>
+    <dict>
+      <key>Listeners</key>
+      <array>
+	<dict>
+	  <key>SockFamily</key>
+	  <string>IPv4</string>
+	  <key>SockServiceName</key>
+	  <string>git</string>
+	  <key>SockType</key>
+	  <string>stream</string>
+	</dict>
+	<dict>
+	  <key>SockFamily</key>
+	  <string>IPv6</string>
+	  <key>SockServiceName</key>
+	  <string>git</string>
+	  <key>SockType</key>
+	  <string>stream</string>
+	</dict>
+      </array>
+    </dict>
+    <key>inetdCompatibility</key>
+    <dict>
+      <key>Wait</key>
+      <false/>
+    </dict>
+  </dict>
+</plist>

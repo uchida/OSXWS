@@ -1,0 +1,24 @@
+diff -uNr newsbeuter-2.3.orig/src/controller.cpp newsbeuter-2.3/src/controller.cpp
+--- newsbeuter-2.3.orig/src/controller.cpp	2010-12-16 18:33:41.000000000 +0900
++++ newsbeuter-2.3/src/controller.cpp	2010-12-16 18:55:56.000000000 +0900
+@@ -38,7 +38,7 @@
+ #include <sys/stat.h>
+ #include <pwd.h>
+ 
+-#include <ncursesw/ncurses.h>
++#include <ncurses.h>
+ 
+ #include <libxml/xmlversion.h>
+ #include <libxml/parser.h>
+diff -uNr newsbeuter-2.3.orig/src/view.cpp newsbeuter-2.3/src/view.cpp
+--- newsbeuter-2.3.orig/src/view.cpp	2010-12-16 18:33:41.000000000 +0900
++++ newsbeuter-2.3/src/view.cpp	2010-12-16 18:56:04.000000000 +0900
+@@ -40,7 +40,7 @@
+ #include <config.h>
+ #include <sys/param.h>
+ #include <string.h>
+-#include <ncursesw/ncurses.h>
++#include <ncurses.h>
+ 
+ 
+ extern "C" {

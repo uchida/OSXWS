@@ -1,0 +1,15 @@
+diff -uNr mercurial-1.7.3.orig/contrib/hgk mercurial-1.7.3/contrib/hgk
+--- mercurial-1.7.3.orig/contrib/hgk	2011-02-12 16:12:09.000000000 +0900
++++ mercurial-1.7.3/contrib/hgk	2011-02-12 16:16:36.000000000 +0900
+@@ -3946,9 +3946,9 @@
+ set diffopts "-U 5 -p"
+ set wrcomcmd "\"\$HG\" --config ui.report_untrusted=false debug-diff-tree --stdin -p --pretty"
+ 
+-set mainfont {Helvetica 9}
++set mainfont {Helvetica 12}
+ set curidfont {}
+-set textfont {Courier 9}
++set textfont {Courier 12}
+ set findmergefiles 0
+ set gaudydiff 0
+ set maxgraphpct 50

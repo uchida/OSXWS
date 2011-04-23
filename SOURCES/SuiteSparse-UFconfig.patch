@@ -1,0 +1,73 @@
+diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
+--- SuiteSparse.orig/UFconfig/UFconfig.mk	2010-09-21 13:24:56.000000000 +0900
++++ SuiteSparse/UFconfig/UFconfig.mk	2010-09-21 13:25:39.000000000 +0900
+@@ -37,19 +37,19 @@
+ # CFLAGS = -O   (for example; see below for details)
+ 
+ # C++ compiler (also uses CFLAGS)
+-CPLUSPLUS = g++
++CPLUSPLUS = g++-4.2
+ 
+ # ranlib, and ar, for generating libraries
+ RANLIB = ranlib
+-AR = ar cr
++AR = libtool -static -o
+ 
+ # delete and rename a file
+ RM = rm -f
+ MV = mv -f
+ 
+ # Fortran compiler (not normally required)
+-F77 = f77
+-F77FLAGS = -O
++F77 = gfortran
++F77FLAGS = -O3 -m32 -m64
+ F77LIB =
+ 
+ # C and Fortran libraries
+@@ -122,8 +122,8 @@
+ # The path is relative to where it is used, in CHOLMOD/Lib, CHOLMOD/MATLAB, etc.
+ # You may wish to use an absolute path.  METIS is optional.  Compile
+ # CHOLMOD with -DNPARTITION if you do not wish to use METIS.
+-METIS_PATH = ../../metis-4.0
+-METIS = ../../metis-4.0/libmetis.a
++METIS_PATH =
++METIS =
+ 
+ # If you use CHOLMOD_CONFIG = -DNPARTITION then you must use the following
+ # options:
+@@ -184,7 +184,7 @@
+ # -DNSUNPERF	    for Solaris only.  If defined, do not use the Sun
+ #			Performance Library
+ 
+-CHOLMOD_CONFIG =
++CHOLMOD_CONFIG = -DNPARTITION
+ 
+ #------------------------------------------------------------------------------
+ # SuiteSparseQR configuration:
+@@ -198,7 +198,7 @@
+ # -DHAVE_TBB        enable the use of Intel's Threading Building Blocks (TBB)
+ 
+ # default, without timing, without TBB:
+-SPQR_CONFIG =
++SPQR_CONFIG = -DNPARTITION
+ # with timing and TBB:
+ # SPQR_CONFIG = -DTIMING -DHAVE_TBB
+ # with timing
+@@ -296,11 +296,11 @@
+ # Macintosh
+ #------------------------------------------------------------------------------
+ 
+-# CC = gcc
+-# CFLAGS = -O3 -fno-common -no-cpp-precomp -fexceptions
+-# LIB = -lstdc++
+-# BLAS = -framework Accelerate
+-# LAPACK = -framework Accelerate
++CC = gcc-4.2
++CFLAGS = -O3 -fno-common -no-cpp-precomp -fexceptions -arch i386 -arch x86_64
++LIB = -lstdc++ -arch i386 -arch x86_64
++BLAS = -framework Accelerate
++LAPACK = -framework Accelerate
+ 
+ #------------------------------------------------------------------------------
+ # IBM RS 6000

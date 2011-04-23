@@ -1,0 +1,256 @@
+diff -uNr gcc-5666.3.orig/build_gcc gcc-5666.3/build_gcc
+--- gcc-5666.3.orig/build_gcc	2010-11-02 20:33:01.000000000 +0900
++++ gcc-5666.3/build_gcc	2010-11-03 01:49:36.000000000 +0900
+@@ -31,7 +31,7 @@
+ 
+ # Language front-ends to build. This also affects
+ # whether the C++ driver and driver-driver are installed
+-LANGUAGES=${LANGUAGES-c,objc,c++,obj-c++}
++LANGUAGES=${LANGUAGES-c,objc,c++,obj-c++,fortran}
+ 
+ # The B&I build script (~rc/bin/buildit) accepts an '-othercflags'
+ # command-line flag, and captures the argument to that flag in
+@@ -169,12 +169,16 @@
+ rm -f /usr/lib/gcc/*/4.0.0/specs
+ 
+ # These are the configure and build flags that are used.
+-CONFIGFLAGS="--disable-checking --enable-werror \
++CONFIGFLAGS="--disable-checking\
+   --prefix=$DEST_ROOT \
+   --mandir=\${prefix}/share/man \
+   --enable-languages=$LANGUAGES \
+   --program-transform-name=/^[cg][^.-]*$/s/$/-$MAJ_VERS/ \
+-  --with-slibdir=/usr/lib \
++  --with-slibdir=$DEST_ROOT/lib \
++  --with-gmp-lib=/usr/osxws/lib \
++  --with-gmp-include=/usr/osxws/include \
++  --with-mpfr-lib=/usr/osxws/lib \
++  --with-mpfr-include=/usr/osxws/include \
+   --build=$BUILD-apple-darwin$DARWIN_VERS"
+ 
+ # Figure out how many make processes to run.
+@@ -225,10 +229,10 @@
+   CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS" || exit 1
+ 
+ # Add the compiler we just built to the path, giving it appropriate names.
+-D=$DIR/dst-$BUILD-$BUILD/usr/bin
++D=$DIR/dst-$BUILD-$BUILD$DEST_ROOT/bin
+ ln -f $D/gcc-$MAJ_VERS $D/gcc || exit 1
+ ln -f $D/gcc $D/$BUILD-apple-darwin$DARWIN_VERS-gcc || exit 1
+-PATH=$DIR/dst-$BUILD-$BUILD/usr/bin:$PATH
++PATH=$DIR/dst-$BUILD-$BUILD$DEST_ROOT/bin:$PATH
+ 
+ # The cross-tools' build process expects to find certain programs
+ # under names like 'i386-apple-darwin$DARWIN_VERS-ar'; so make them.
+@@ -287,7 +291,7 @@
+    cd $DIR/obj-$BUILD-$t || exit 1
+    if [ \! -f Makefile ]; then
+     # APPLE LOCAL begin ARM ARM_CONFIGFLAGS
+-    T_CONFIGFLAGS="$CONFIGFLAGS --enable-werror-always \
++    T_CONFIGFLAGS="$CONFIGFLAGS \
+       --program-prefix=$t-apple-darwin$DARWIN_VERS- \
+       --host=$BUILD-apple-darwin$DARWIN_VERS \
+       --target=$t-apple-darwin$DARWIN_VERS"
+@@ -307,14 +311,14 @@
+      CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS" || exit 1
+ 
+    # Add the compiler we just built to the path.
+-   PATH=$DIR/dst-$BUILD-$t/usr/bin:$PATH
++   PATH=$DIR/dst-$BUILD-$t$DEST_ROOT/bin:$PATH
+  fi
+ done
+ 
+ # Rearrange various libraries, for no really good reason.
+ for t in $CROSS_TARGETS ; do
+   DT=$DIR/dst-$BUILD-$t
+-  D=`echo $DT/usr/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS`
++  D=`echo $DT$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS`
+   mv $D/static/libgcc.a $D/libgcc_static.a || exit 1
+   mv $D/kext/libgcc.a $D/libcc_kext.a || exit 1
+   rm -r $D/static $D/kext || exit 1
+@@ -444,6 +448,8 @@
+     lipo -output .$DEST_ROOT/bin/$t-apple-darwin$DARWIN_VERS-g++-$VERS -create \
+     $DIR/dst-*-$t$DEST_ROOT/bin/$t-apple-darwin$DARWIN_VERS-g++* || exit 1
+   fi
++  lipo -output .$DEST_ROOT/bin/$t-apple-darwin$DARWIN_VERS-gfortran-$VERS -create \
++  $DIR/dst-*-$t$DEST_ROOT/bin/$t-apple-darwin$DARWIN_VERS-gfortran* || exit 1
+ done
+ 
+ # lib
+@@ -466,16 +472,22 @@
+ 		.$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/ || exit 1
+ 	    cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/libgomp.spec \
+ 		.$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/ || exit 1
++        cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/libgfortran.a \
++        .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/ || exit 1
+ 	    if [ $h = 'powerpc' ] ; then
+ 		cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/ppc64/libgomp.a \
+ 		    .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/ppc64/ || exit 1
+ 		cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/ppc64/libgomp.spec \
+ 		    .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/ppc64/ || exit 1
++        cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/ppc64/libgfortran.a \
++            .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/ppc64/ || exit 1
+ 	    elif [ $h = 'i686' ] ; then
+ 		cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/x86_64/libgomp.a \
+ 		    .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/x86_64/ || exit 1
+ 		cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/x86_64/libgomp.spec \
+ 		    .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/x86_64/ || exit 1
++        cp -p $DIR/dst-$h-$t$DEST_ROOT/lib/x86_64/libgfortran.a \
++            .$DEST_ROOT/lib/gcc/$t-apple-darwin$DARWIN_VERS/$VERS/x86_64/ || exit 1
+ 	    fi
+ 	fi
+     done
+@@ -557,6 +569,15 @@
+ 	-L$DIR/dst-$BUILD-$h$DEST_ROOT/$h-apple-darwin$DARWIN_VERS/lib/                    \
+         -L$DIR/obj-$h-$BUILD/libiberty/                                        \
+ 	-o $DEST_DIR/$DEST_ROOT/bin/tmp-$h-cpp-$MAJ_VERS || exit 1
++    $DIR/dst-$BUILD-$h$DEST_ROOT/bin/$h-apple-darwin$DARWIN_VERS-gcc-$VERS     \
++	$ORIG_SRC_DIR/driverdriver.c                               \
++	-DPDN="\"-apple-darwin$DARWIN_VERS-gfortran-$VERS\""                                    \
++	-DIL="\"$DEST_ROOT/bin/\"" -I  $ORIG_SRC_DIR/include                   \
++	-I  $ORIG_SRC_DIR/gcc -I  $ORIG_SRC_DIR/gcc/config                     \
++	-liberty -L$DIR/dst-$BUILD-$h$DEST_ROOT/lib/                           \
++	-L$DIR/dst-$BUILD-$h$DEST_ROOT/$h-apple-darwin$DARWIN_VERS/lib/                    \
++        -L$DIR/obj-$h-$BUILD/libiberty/                                        \
++	-o $DEST_DIR/$DEST_ROOT/bin/tmp-$h-gfortran-$MAJ_VERS || exit 1
+     if [ $BUILD_CXX -eq 1 ]; then
+ 	$DIR/dst-$BUILD-$h$DEST_ROOT/bin/$h-apple-darwin$DARWIN_VERS-gcc-$VERS     \
+ 	    $ORIG_SRC_DIR/driverdriver.c                               \
+@@ -576,6 +597,9 @@
+ lipo -output $DEST_DIR/$DEST_ROOT/bin/cpp-$MAJ_VERS -create \
+   $DEST_DIR/$DEST_ROOT/bin/tmp-*-cpp-$MAJ_VERS || exit 1
+ rm $DEST_DIR/$DEST_ROOT/bin/tmp-*-cpp-$MAJ_VERS || exit 1
++lipo -output $DEST_DIR/$DEST_ROOT/bin/gfortran-$MAJ_VERS -create \
++  $DEST_DIR/$DEST_ROOT/bin/tmp-*-gfortran-$MAJ_VERS || exit 1
++rm $DEST_DIR/$DEST_ROOT/bin/tmp-*-gfortran-$MAJ_VERS || exit 1
+ 
+ if [ $BUILD_CXX -eq 1 ]; then
+   lipo -output $DEST_DIR/$DEST_ROOT/bin/g++-$MAJ_VERS -create \
+@@ -597,7 +621,7 @@
+ rm -rf * || exit 1
+ 
+ # Generate .dSYM files
+-find $DEST_DIR -perm -0111 \! -name fixinc.sh \
++find $DEST_DIR -perm -0111 \! -name fixinc.sh \! -name libgfortran\* \
+     \! -name mkheaders -type f -print | xargs -n 1 -P ${SYSCTL} dsymutil
+ 
+ # Save .dSYM files and .a archives
+diff -uNr gcc-5666.3.orig/build_libgcc gcc-5666.3/build_libgcc
+--- gcc-5666.3.orig/build_libgcc	2010-11-02 20:33:01.000000000 +0900
++++ gcc-5666.3/build_libgcc	2010-11-03 01:52:33.000000000 +0900
+@@ -163,12 +163,16 @@
+ rm -f /usr/lib/gcc/*/4.0.0/specs
+ 
+ # These are the configure and build flags that are used.
+-CONFIGFLAGS="--disable-checking --enable-werror \
++CONFIGFLAGS="--disable-checking \
+   --prefix=$DEST_ROOT \
+   --mandir=\${prefix}/share/man \
+-  --enable-languages=c,objc,c++,obj-c++ \
++  --enable-languages=c,objc,c++,obj-c++,fortran \
+   --program-transform-name=/^[cg][^.-]*$/s/$/-$MAJ_VERS/ \
+-  --with-slibdir=/usr/lib \
++  --with-slibdir=$DEST_ROOT/lib \
++  --with-gmp-lib=/usr/osxws/lib
++  --with-gmp-include=/usr/osxws/include
++  --with-mpfr-lib=/usr/osxws/lib
++  --with-mpfr-include=/usr/osxws/include
+   --build=$BUILD-apple-darwin$DARWIN_VERS"
+ 
+ # Figure out how many make processes to run.
+@@ -208,10 +212,10 @@
+   CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS" || exit 1
+ 
+ # Add the compiler we just built to the path, giving it appropriate names.
+-D=$DIR/dst-$BUILD-$BUILD/usr/bin
++D=$DIR/dst-$BUILD-$BUILD$DEST_ROOT/bin
+ ln -f $D/gcc-$MAJ_VERS $D/gcc || exit 1
+ ln -f $D/gcc $D/$BUILD-apple-darwin$DARWIN_VERS-gcc || exit 1
+-PATH=$DIR/dst-$BUILD-$BUILD/usr/bin:$PATH
++PATH=$DIR/dst-$BUILD-$BUILD$DEST_ROOT/bin:$PATH
+ 
+ # The cross-tools' build process expects to find certain programs
+ # under names like 'i386-apple-darwin$DARWIN_VERS-ar'; so make them.
+@@ -270,7 +274,7 @@
+    cd $DIR/obj-$BUILD-$t || exit 1
+    if [ \! -f Makefile ]; then
+     # APPLE LOCAL begin ARM ARM_CONFIGFLAGS
+-    T_CONFIGFLAGS="$CONFIGFLAGS --enable-werror-always \
++    T_CONFIGFLAGS="$CONFIGFLAGS \
+       --program-prefix=$t-apple-darwin$DARWIN_VERS- \
+       --host=$BUILD-apple-darwin$DARWIN_VERS \
+       --target=$t-apple-darwin$DARWIN_VERS"
+@@ -290,7 +294,7 @@
+      CFLAGS="$CFLAGS" CXXFLAGS="$CFLAGS" || exit 1
+ 
+    # Add the compiler we just built to the path.
+-   PATH=$DIR/dst-$BUILD-$t/usr/bin:$PATH
++   PATH=$DIR/dst-$BUILD-$t$DEST_ROOT/bin:$PATH
+  fi
+ done
+ 
+diff -uNr gcc-5666.3.orig/gcc/config/rs6000/rs6000.c gcc-5666.3/gcc/config/rs6000/rs6000.c
+--- gcc-5666.3.orig/gcc/config/rs6000/rs6000.c	2010-11-02 20:33:01.000000000 +0900
++++ gcc-5666.3/gcc/config/rs6000/rs6000.c	2010-11-03 01:49:36.000000000 +0900
+@@ -81,6 +81,8 @@
+ #define TARGET_NO_PROTOTYPE 0
+ #endif
+ 
++int disable_typechecking_for_spec_flag;
++
+ #define min(A,B)	((A) < (B) ? (A) : (B))
+ #define max(A,B)	((A) > (B) ? (A) : (B))
+ 
+diff -uNr gcc-5666.3.orig/gcc/fortran/Make-lang.in gcc-5666.3/gcc/fortran/Make-lang.in
+--- gcc-5666.3.orig/gcc/fortran/Make-lang.in	2010-11-02 20:33:01.000000000 +0900
++++ gcc-5666.3/gcc/fortran/Make-lang.in	2010-11-03 01:49:36.000000000 +0900
+@@ -74,7 +74,7 @@
+     fortran/trans.o fortran/trans-array.o fortran/trans-common.o \
+     fortran/trans-const.o fortran/trans-decl.o fortran/trans-expr.o \
+     fortran/trans-intrinsic.o fortran/trans-io.o fortran/trans-openmp.o \
+-    fortran/trans-stmt.o fortran/trans-types.o
++    fortran/trans-stmt.o fortran/trans-types.o fortran/fake.o
+ 
+ # GFORTRAN uses GMP for its internal arithmetics.
+ F95_LIBS = $(GMPLIBS) $(LIBS)
+@@ -107,7 +107,7 @@
+ f951$(exeext): $(F95_OBJS) \
+ 		$(BACKEND) $(LIBDEPS)
+ 	$(CC) $(ALL_CFLAGS) $(LDFLAGS) -o $@ \
+-		$(F95_OBJS) $(BACKEND) $(F95_LIBS)
++		$(F95_OBJS) $(BACKEND) $(F95_LIBS) stub-objc.o
+ 
+ gt-fortran-trans.h    : s-gtype; @true
+ #
+diff -uNr gcc-5666.3.orig/gcc/fortran/fake.c gcc-5666.3/gcc/fortran/fake.c
+--- gcc-5666.3.orig/gcc/fortran/fake.c	1970-01-01 09:00:00.000000000 +0900
++++ gcc-5666.3/gcc/fortran/fake.c	2010-11-03 01:49:36.000000000 +0900
+@@ -0,0 +1,28 @@
++#include <stdlib.h>
++#include <stdio.h>
++
++#define MK_FAKE(X) void X (void); void X (void) { fprintf(stderr, "** FATAL: call to an unsupported function!\n"); exit(1); }
++
++int c_language = 0; /* 0 is C which is the default */
++
++MK_FAKE(build_function_call)
++MK_FAKE(build_modify_expr)
++MK_FAKE(build_stmt)
++MK_FAKE(decl_attributes)
++MK_FAKE(decl_constant_value)
++MK_FAKE(flag_iasm_blocks)
++MK_FAKE(iasm_addr)
++MK_FAKE(iasm_build_bracket)
++MK_FAKE(iasm_force_constraint)
++MK_FAKE(iasm_get_register_var)
++MK_FAKE(iasm_in_operands)
++MK_FAKE(iasm_is_pseudo)
++MK_FAKE(iasm_print_operand)
++MK_FAKE(iasm_state)
++MK_FAKE(lookup_name)
++MK_FAKE(parse_in)
++MK_FAKE(pointer_int_sum)
++MK_FAKE(store_init_value)
++
++/* this is new in Xcode 3.2 and may cause problems */
++MK_FAKE(create_init_utf16_var)

@@ -1,0 +1,11 @@
+diff -uNr Python-2.7.orig/Lib/ctypes/macholib/dyld.py Python-2.7/Lib/ctypes/macholib/dyld.py
+--- Python-2.7.orig/Lib/ctypes/macholib/dyld.py	2010-10-28 09:14:09.000000000 +0900
++++ Python-2.7/Lib/ctypes/macholib/dyld.py	2010-10-28 09:32:45.000000000 +0900
+@@ -26,6 +26,7 @@
+ 
+ DEFAULT_LIBRARY_FALLBACK = [
+     os.path.expanduser("~/lib"),
++    "/usr/osxws/lib",
+     "/usr/local/lib",
+     "/lib",
+     "/usr/lib",

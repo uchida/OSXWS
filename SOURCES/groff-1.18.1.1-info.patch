@@ -1,0 +1,83 @@
+diff -uNr groff-1.18.1.1.orig/doc/Makefile.in groff-1.18.1.1/doc/Makefile.in
+--- groff-1.18.1.1.orig/doc/Makefile.in	2002-09-10 04:31:37.000000000 +0900
++++ groff-1.18.1.1/doc/Makefile.in	2010-12-19 00:35:40.000000000 +0900
+@@ -106,7 +106,7 @@
+ prepare_examples: grnexmpl.g
+ 	test -f grnexmpl.g || cp $(srcdir)/grnexmpl.g .
+ 
+-groff: groff.texinfo
++groff.info: groff.texinfo
+ 	$(MAKEINFO) -I$(srcdir) $(srcdir)/groff.texinfo
+ 
+ gnu.eps: gnu.xpm
+diff -uNr groff-1.18.1.1.orig/doc/Makefile.sub groff-1.18.1.1/doc/Makefile.sub
+--- groff-1.18.1.1.orig/doc/Makefile.sub	2002-07-26 22:48:54.000000000 +0900
++++ groff-1.18.1.1/doc/Makefile.sub	2010-12-19 00:35:40.000000000 +0900
+@@ -110,7 +110,7 @@
+ 	$(GROFF) -Tps -ms -mwww >$@
+ 
+ 
+-all: groff $(PROCESSEDDOCFILES) prepare_examples \
++all: groff.info $(PROCESSEDDOCFILES) prepare_examples \
+      $(PROCESSEDEXAMPLEFILES) $(make_html)
+ 
+ html: $(HTMLDOCFILES) $(HTMLEXAMPLEFILES)
+@@ -118,7 +118,7 @@
+ prepare_examples: grnexmpl.g
+ 	test -f grnexmpl.g || cp $(srcdir)/grnexmpl.g .
+ 
+-groff: groff.texinfo
++groff.info: groff.texinfo
+ 	$(MAKEINFO) -I$(srcdir) $(srcdir)/groff.texinfo
+ 
+ gnu.eps: gnu.xpm
+@@ -131,20 +131,20 @@
+ 
+ grnexmpl.ps: grnexmpl.me grnexmpl.g
+ 
+-distfiles: groff gnu.eps gnu.png
++distfiles: groff.info gnu.eps gnu.png
+ 
+-install_data: groff $(DOCFILES) $(PROCESSEDDOCFILES) $(make_install_html) \
++install_data: groff.info $(DOCFILES) $(PROCESSEDDOCFILES) $(make_install_html) \
+               $(EXAMPLEFILES) $(PROCESSEDEXAMPLEFILES)
+ 	-test -d $(infodir) || $(mkinstalldirs) $(infodir)
+ # Prefer info files in builddir over srcdir; we test for
+-# the existence of `groff'.
++# the existence of `groff.info'.
+ 	d=.; \
+-	  test -f "groff" || d=$(srcdir); \
+-	  for f in $$d/groff $$d/groff-*; do \
+-	    rm -f $(infodir)/`basename $$f`; \
+-	    $(INSTALL_DATA) $$f $(infodir)/`basename $$f`; \
++	  test -f "groff.info" || d=$(srcdir); \
++	  for f in $$d/groff.info `ls $$d/groff.info*`; do \
++	    rm -f $(infodir)/$$f; \
++	    $(INSTALL_DATA) $$f $(infodir)/$$f; \
+ 	  done
+-	$(INSTALL_INFO) --info-dir=$(infodir) $(infodir)/groff
++	$(INSTALL_INFO) --info-dir=$(infodir) $(infodir)/groff.info
+ 	-test -d $(docdir) || $(mkinstalldirs) $(docdir)
+ 	for f in $(DOCFILES); do \
+ 	  rm -f $(docdir)/$$f; \
+@@ -186,7 +186,7 @@
+ 	-for f in groff groff-*; do \
+ 	  rm -f $(infodir)/$$f; \
+ 	done
+-	$(INSTALL_INFO) --delete --info-dir=$(infodir) $(infodir)/groff
++	$(INSTALL_INFO) --delete --info-dir=$(infodir) $(infodir)/groff.info
+ 	-for f in $(DOCFILES) $(PROCESSEDDOCFILES); do \
+ 	  rm -f $(docdir)/$$f; \
+ 	done
+diff -uNr groff-1.18.1.1.orig/doc/groff.texinfo groff-1.18.1.1/doc/groff.texinfo
+--- groff-1.18.1.1.orig/doc/groff.texinfo	2002-10-03 01:45:19.000000000 +0900
++++ groff-1.18.1.1/doc/groff.texinfo	2010-12-19 00:35:49.000000000 +0900
+@@ -8,7 +8,7 @@
+ @c
+ 
+ @c %**start of header (This is for running Texinfo on a region.)
+-@setfilename groff
++@setfilename groff.info
+ @settitle The GNU Troff Manual
+ @setchapternewpage odd
+ @footnotestyle separate

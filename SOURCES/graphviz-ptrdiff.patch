@@ -1,0 +1,12 @@
+diff -uNr graphviz-2.26.3.orig/lib/sfio/sfhdr.h graphviz-2.26.3/lib/sfio/sfhdr.h
+--- graphviz-2.26.3.orig/lib/sfio/sfhdr.h	2010-12-21 03:01:08.000000000 +0900
++++ graphviz-2.26.3/lib/sfio/sfhdr.h	2010-12-21 03:01:47.000000000 +0900
+@@ -31,6 +31,8 @@
+ #include	"FEATURE/sfio"
+ #include	"sfio_t.h"
+ 
++#include	<stddef.h>
++
+ /* note that the macro vt_threaded has effect on vthread.h */
+ #include	<vthread.h>
+ 

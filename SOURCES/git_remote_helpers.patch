@@ -1,0 +1,26 @@
+diff -uNr git-1.7.3.5.orig/git_remote_helpers/Makefile git-1.7.3.5/git_remote_helpers/Makefile
+--- git-1.7.3.5.orig/git_remote_helpers/Makefile	2011-01-08 16:40:51.000000000 +0900
++++ git-1.7.3.5/git_remote_helpers/Makefile	2011-01-08 16:45:20.000000000 +0900
+@@ -22,17 +22,18 @@
+ endif
+ 
+ PYLIBDIR=$(shell $(PYTHON_PATH) -c \
+-	 "import sys; \
+-	 print 'lib/python%i.%i/site-packages' % sys.version_info[:2]")
++	"import sys; \
++	from distutils.sysconfig import get_python_lib; \
++	print get_python_lib(0)")
+ 
+ all: $(pysetupfile)
+ 	$(QUIET)$(PYTHON_PATH) $(pysetupfile) $(QUIETSETUP) build
+ 
+ install: $(pysetupfile)
+-	$(PYTHON_PATH) $(pysetupfile) install --prefix $(DESTDIR_SQ)$(prefix)
++	$(PYTHON_PATH) $(pysetupfile) install --root $(DESTDIR_SQ)
+ 
+ instlibdir: $(pysetupfile)
+-	@echo "$(DESTDIR_SQ)$(prefix)/$(PYLIBDIR)"
++	@echo "$(DESTDIR_SQ)$(PYLIBDIR)"
+ 
+ clean:
+ 	$(QUIET)$(PYTHON_PATH) $(pysetupfile) $(QUIETSETUP) clean -a

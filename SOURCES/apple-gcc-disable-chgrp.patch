@@ -1,0 +1,12 @@
+diff -uNr gcc-5666.3.orig/build_gcc gcc-5666.3/build_gcc
+--- gcc-5666.3.orig/build_gcc	2009-12-16 07:21:10.000000000 +0900
++++ gcc-5666.3/build_gcc	2010-11-02 15:24:39.000000000 +0900
+@@ -618,8 +618,6 @@
+ find $DEST_DIR -name \*.a -print | xargs strip -SX || exit 1
+ find $DEST_DIR -name \*.a -print | xargs ranlib || exit 1
+ find $DEST_DIR -name \*.dSYM -print | xargs rm -r || exit 1
+-chgrp -h -R wheel $DEST_DIR
+-chgrp -R wheel $DEST_DIR
+ 
+ # Done!
+ exit 0

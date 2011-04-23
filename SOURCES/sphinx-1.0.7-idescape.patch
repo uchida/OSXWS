@@ -1,0 +1,12 @@
+diff -uNr Sphinx-1.0.7.orig/sphinx/writers/latex.py Sphinx-1.0.7/sphinx/writers/latex.py
+--- Sphinx-1.0.7.orig/sphinx/writers/latex.py	2011-01-22 16:47:08.000000000 +0900
++++ Sphinx-1.0.7/sphinx/writers/latex.py	2011-01-22 16:47:35.000000000 +0900
+@@ -272,7 +272,7 @@
+         return '\\autopageref*{%s}' % self.idescape(id)
+ 
+     def idescape(self, id):
+-        return str(unicode(id).translate(tex_replace_map))
++        return unicode(id).translate(tex_replace_map)
+ 
+     def generate_indices(self):
+         def generate(content, collapsed):

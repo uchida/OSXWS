@@ -1,0 +1,28 @@
+diff -uNr gcc-5666.3.orig/build_gcc gcc-5666.3/build_gcc
+--- gcc-5666.3.orig/build_gcc	2010-11-09 04:01:13.000000000 +0900
++++ gcc-5666.3/build_gcc	2010-11-09 04:02:42.000000000 +0900
+@@ -81,10 +81,10 @@
+ 
+ # This is the libstdc++ version to use.
+ LIBSTDCXX_VERSION=4.2.1
+-if [ ! -d "$DEST_ROOT/include/c++/$LIBSTDCXX_VERSION" ]; then
++if [ ! -d "/usr/include/c++/$LIBSTDCXX_VERSION" ]; then
+   LIBSTDCXX_VERSION=4.0.0
+ fi
+-NON_ARM_CONFIGFLAGS="--with-gxx-include-dir=\${prefix}/include/c++/$LIBSTDCXX_VERSION"
++NON_ARM_CONFIGFLAGS="--with-gxx-include-dir=/usr/include/c++/$LIBSTDCXX_VERSION"
+ 
+ DARWIN_VERS=`uname -r | sed 's/\..*//'`
+ echo DARWIN_VERS = $DARWIN_VERS
+diff -uNr gcc-5666.3.orig/build_libgcc gcc-5666.3/build_libgcc
+--- gcc-5666.3.orig/build_libgcc	2010-11-09 04:01:13.000000000 +0900
++++ gcc-5666.3/build_libgcc	2010-11-09 04:03:03.000000000 +0900
+@@ -78,7 +78,7 @@
+ if [ ! -d "$DEST_ROOT/include/c++/$LIBSTDCXX_VERSION" ]; then
+   LIBSTDCXX_VERSION=4.0.0
+ fi
+-NON_ARM_CONFIGFLAGS="--with-gxx-include-dir=\${prefix}/include/c++/$LIBSTDCXX_VERSION"
++NON_ARM_CONFIGFLAGS="--with-gxx-include-dir=/usr/include/c++/$LIBSTDCXX_VERSION"
+ 
+ DARWIN_VERS=`uname -r | sed 's/\..*//'`
+ echo DARWIN_VERS = $DARWIN_VERS

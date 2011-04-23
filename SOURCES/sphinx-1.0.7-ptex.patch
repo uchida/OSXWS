@@ -1,0 +1,60 @@
+diff -r 080d33f56352 sphinx/texinputs/Makefile
+--- a/sphinx/texinputs/Makefile	Sat Jan 22 15:10:33 2011 +0100
++++ b/sphinx/texinputs/Makefile	Sun Jan 23 19:25:07 2011 +0900
+@@ -14,15 +14,16 @@
+ all-dvi: $(ALLDVI)
+ all-ps: all-dvi
+ 	for f in *.dvi; do dvips $$f; done
+-all-pdf-ja: $(wildcard *.tex)
+-	ebb $(wildcard *.pdf *.png *.gif *.jpeg)
+-	platex -kanji=utf8 $(LATEXOPTS) '$<'
+-	platex -kanji=utf8 $(LATEXOPTS) '$<'
+-	platex -kanji=utf8 $(LATEXOPTS) '$<'
+-	-mendex -U -f -d '$(basename $<).dic' -s python.ist '$(basename $<).idx'
+-	platex -kanji=utf8 $(LATEXOPTS) '$<'
+-	platex -kanji=utf8 $(LATEXOPTS) '$<'
+-	dvipdfmx '$(basename $<).dvi'
++
++all-pdf-ja:
++	for f in *.pdf *.png *.gif *.jpg *.jpeg; do ebb $$f; done
++	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
++	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
++	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
++	for f in *.idx; do mendex -U -f -d "`basename $$f .idx`.dic" -s python.ist $$f; done
++	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
++	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
++	for f in *.dvi; do dvipdfmx $$f; done
+ 
+ zip: all-$(FMT)
+ 	mkdir $(ARCHIVEPREFIX)docs-$(FMT)
+@@ -61,4 +62,5 @@
+ 	rm -f *.dvi *.log *.ind *.aux *.toc *.syn *.idx *.out *.ilg *.pla
+ 
+ .PHONY: all all-pdf all-dvi all-ps clean
++.PHONY: all-pdf-ja
+ 
+diff -r 080d33f56352 sphinx/writers/latex.py
+--- a/sphinx/writers/latex.py	Sat Jan 22 15:10:33 2011 +0100
++++ b/sphinx/writers/latex.py	Sun Jan 23 19:25:07 2011 +0900
+@@ -196,13 +196,17 @@
+             if lang:
+                 self.elements['classoptions'] += ',' + babel.get_language()
+             elif builder.config.language == 'ja':
+-                self.elements['classoptions'] += ',english,dvipdfm'
++                self.elements['classoptions'] += ',dvipdfm'
+                 # not elements of babel, but this should be above sphinx.sty.
+                 # because pTeX (Japanese TeX) cannot handle this count.
+-                self.elements['babel'] += r'\newcount\pdfoutput\pdfoutput=0'
++                self.elements['babel'] = r'\newcount\pdfoutput\pdfoutput=0'
+                 # to make the pdf with correct encoded hyperref bookmarks
+-                self.elements['preamble'] += \
+-                    r'\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}'
++                self.elements['preamble'] += r'''
++                \ifnum 42146=\euc"A4A2
++                \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}
++                \else
++                \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
++                \fi'''
+             else:
+                 self.builder.warn('no Babel option known for language %r' %
+                                   builder.config.language)

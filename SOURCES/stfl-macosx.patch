@@ -1,0 +1,134 @@
+diff -uNr stfl-0.21.orig/Makefile stfl-0.21/Makefile
+--- stfl-0.21.orig/Makefile	2009-06-20 02:30:52.000000000 +0900
++++ stfl-0.21/Makefile	2010-12-18 17:23:58.000000000 +0900
+@@ -24,10 +24,10 @@
+ export CFLAGS += -I. -Wall -Os -ggdb -D_GNU_SOURCE -fPIC
+ export LDLIBS += -lncursesw
+ 
+-SONAME  := libstfl.so.0
++SONAME  := libstfl.0.dylib
+ VERSION := 0.21
+ 
+-all: libstfl.so.$(VERSION) libstfl.a example
++all: libstfl.$(VERSION).dylib libstfl.a example
+ 
+ example: libstfl.a example.o
+ 
+@@ -37,9 +37,9 @@
+ 	ar qc $@ $^
+ 	ranlib $@
+ 
+-libstfl.so.$(VERSION): public.o base.o parser.o dump.o style.o binding.o iconv.o \
++libstfl.$(VERSION).dylib: public.o base.o parser.o dump.o style.o binding.o iconv.o \
+                        $(patsubst %.c,%.o,$(wildcard widgets/*.c))
+-	$(CC) -shared -Wl,-soname,$(SONAME) -o $@ $^
++	$(CC) $(LDLIBS) -dynamiclib -install_name $(prefix)/$(libdir)/libstfl.0.dylib -Wl -o $@ $^
+ 
+ clean:
+ 	rm -f libstfl.a example core core.* *.o Makefile.deps
+@@ -50,7 +50,7 @@
+ 	rm -f python/stfl_wrap.c python/stfl_wrap.o
+ 	rm -f ruby/Makefile ruby/stfl_wrap.c ruby/stfl_wrap.o
+ 	rm -f ruby/stfl.so ruby/build_ok Makefile.deps_new
+-	rm -f stfl.pc libstfl.so libstfl.so.*
++	rm -f stfl.pc libstfl.dylib libstfl.*.dylib
+ 
+ Makefile.deps: *.c widgets/*.c *.h
+ 	$(CC) -I. -MM *.c > Makefile.deps_new
+@@ -63,8 +63,9 @@
+ 	install -m 644 libstfl.a $(DESTDIR)$(prefix)/$(libdir)
+ 	install -m 644 stfl.h $(DESTDIR)$(prefix)/include/
+ 	install -m 644 stfl.pc $(DESTDIR)$(prefix)/$(libdir)/pkgconfig/
+-	install -m 644 libstfl.so.$(VERSION) $(DESTDIR)$(prefix)/$(libdir)
+-	ln -fs libstfl.so.$(VERSION) $(DESTDIR)$(prefix)/$(libdir)/libstfl.so
++	install -m 644 libstfl.$(VERSION).dylib $(DESTDIR)$(prefix)/$(libdir)
++	ln -fs libstfl.$(VERSION).dylib $(DESTDIR)$(prefix)/$(libdir)/libstfl.dylib
++	ln -fs libstfl.$(VERSION).dylib $(DESTDIR)$(prefix)/$(libdir)/$(SONAME)
+ 
+ stfl.pc: stfl.pc.in
+ 	sed 's,@VERSION@,$(VERSION),g' < $< | sed 's,@PREFIX@,$(prefix),g' > $@
+diff -uNr stfl-0.21.orig/perl5/Makefile.snippet stfl-0.21/perl5/Makefile.snippet
+--- stfl-0.21.orig/perl5/Makefile.snippet	2007-07-24 20:54:01.000000000 +0900
++++ stfl-0.21/perl5/Makefile.snippet	2010-12-18 17:13:02.000000000 +0900
+@@ -25,9 +25,9 @@
+ 
+ perl5/build_ok: libstfl.a stfl.h perl5/stfl.i swig/*.i
+ 	test ! -f perl5/Makefile || $(MAKE) -C perl5 clean
+-	cd perl5 && swig -perl5 stfl.i && perl Makefile.PL
++	cd perl5 && swig -perl5 stfl.i && perl Makefile.PL LDFLAGS=@LDFLAGS@ LDDLFLAGS=@LDDLFLAGS@
+ 	$(MAKE) -C perl5 && touch perl5/build_ok
+ 
+ install_perl5: perl5/build_ok
+-	$(MAKE) -C perl5 DESTDIR=$(DESTDIR) PREFIX=$(prefix) install_vendor
++	$(MAKE) -C perl5 DESTDIR=$(DESTDIR) PREFIX=$(prefix) install_site
+ 
+diff -uNr stfl-0.21.orig/python/Makefile.snippet stfl-0.21/python/Makefile.snippet
+--- stfl-0.21.orig/python/Makefile.snippet	2009-06-18 17:27:16.000000000 +0900
++++ stfl-0.21/python/Makefile.snippet	2010-12-18 17:21:56.000000000 +0900
+@@ -20,6 +20,7 @@
+ 
+ PYTHON_VERSION = $(shell python -V 2>&1 | cut -f2 -d' ' | cut -f1-2 -d'.')
+ PYTHON_SITEARCH = $(shell python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")
++PYTHON_SITEINC = $(shell python -c "from distutils.sysconfig import get_python_inc; print get_python_inc(1)")
+ 
+ all: python/_stfl.so python/stfl.py python/stfl.pyc
+ 
+@@ -27,7 +28,7 @@
+ 
+ python/_stfl.so python/stfl.py python/stfl.pyc: libstfl.a stfl.h python/stfl.i swig/*.i
+ 	cd python && swig -python -threads stfl.i
+-	gcc -shared -pthread -fPIC python/stfl_wrap.c -I/usr/include/python$(PYTHON_VERSION) \
++	$(CC) $(LDLIBS) -bundle -undefined dynamic_lookup -pthread python/stfl_wrap.c -I$(PYTHON_SITEINC) \
+ 		-I. libstfl.a -lncursesw -o python/_stfl.so
+ 	cd python && python -c 'import stfl'
+ 
+diff -uNr stfl-0.21.orig/ruby/Makefile.snippet stfl-0.21/ruby/Makefile.snippet
+--- stfl-0.21.orig/ruby/Makefile.snippet	2009-06-01 03:29:54.000000000 +0900
++++ stfl-0.21/ruby/Makefile.snippet	2010-12-18 17:22:12.000000000 +0900
+@@ -18,6 +18,7 @@
+ #  MA 02110-1301 USA
+ #
+ 
++RSLIBDIR = $(shell dirname `ruby -r rbconfig -e 'print Config::CONFIG["sitelibdir"]'`)
+ 
+ all: ruby/build_ok
+ 
+@@ -25,9 +26,9 @@
+ 
+ ruby/build_ok: libstfl.a stfl.h ruby/stfl.i swig/*.i
+ 	cd ruby && swig -ruby stfl.i && ruby extconf.rb
+-	$(MAKE) -C ruby clean && $(MAKE) -C ruby LIBS+="../libstfl.a -lncursesw" CFLAGS+="-pthread -I.." DLDFLAGS+="-pthread" DESTDIR=$(DESTDIR) prefix=$(prefix) sitedir=$(prefix)/$(libdir)/ruby
++	$(MAKE) -C ruby clean && $(MAKE) -C ruby LIBS+="../libstfl.a -lncursesw" CFLAGS+="-pthread -I.." DLDFLAGS+="-pthread" DESTDIR=$(DESTDIR) prefix=$(prefix) sitedir=$(RSLIBDIR)
+ 	touch ruby/build_ok
+ 
+ install_ruby: ruby/build_ok
+-	$(MAKE) -C ruby DESTDIR=$(DESTDIR) prefix=$(prefix) sitedir='$(DESTDIR)$(prefix)/$(libdir)/ruby' install
++	$(MAKE) -C ruby DESTDIR=$(DESTDIR) prefix=$(prefix) sitedir='$(DESTDIR)$(RSLIBDIR)' install
+ 
+diff -uNr stfl-0.21.orig/spl/Makefile.snippet stfl-0.21/spl/Makefile.snippet
+--- stfl-0.21.orig/spl/Makefile.snippet	2009-06-01 03:32:37.000000000 +0900
++++ stfl-0.21/spl/Makefile.snippet	2010-12-18 16:32:23.000000000 +0900
+@@ -19,17 +19,17 @@
+ #
+ 
+ 
+-all: spl/mod_stfl.so
++all: spl/mod_stfl.dylib
+ 
+ install: install_spl
+ 
+-spl/mod_stfl.so: CFLAGS += $(shell spl-config --cflags)
++spl/mod_stfl.dylib: CFLAGS += $(shell spl-config --cflags)
+ 
+-spl/mod_stfl.so: libstfl.a stfl.h spl/mod_stfl.c
+-	gcc -pthread -shared -fPIC $(CFLAGS) $(LDFLAGS) spl/mod_stfl.c \
+-		-L. libstfl.a $(LDLIBS) -o spl/mod_stfl.so
++spl/mod_stfl.dylib: libstfl.a stfl.h spl/mod_stfl.c
++	$(CC) -pthread -dynamiclib -install_name $(prefix)/$(libdir)/spl_modules/mod_stfl.dylib \
++		$(CFLAGS) $(LDFLAGS) spl/mod_stfl.c -L. libstfl.a $(LDLIBS) -o spl/mod_stfl.dylib
+ 
+-install_spl: spl/mod_stfl.so
++install_spl: spl/mod_stfl.dylib
+ 	mkdir -p $(DESTDIR)$(prefix)/$(libdir)/spl_modules
+ 	install spl/mod_stfl.so $(DESTDIR)$(prefix)/$(libdir)/spl_modules/
+ 

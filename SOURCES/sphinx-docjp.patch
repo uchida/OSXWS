@@ -1,0 +1,21 @@
+diff -uNr docjp.orig/conf.py docjp/conf.py
+--- docjp.orig/conf.py	2010-12-25 21:14:37.000000000 +0900
++++ docjp/conf.py	2010-12-25 21:23:23.000000000 +0900
+@@ -17,7 +17,7 @@
+ version = sphinx.__released__
+ release = version
+ show_authors = True
+-#language = 'ja'
++language = 'ja'
+ 
+ html_theme = 'sphinxdoc'
+ modindex_common_prefix = ['sphinx.']
+@@ -50,7 +50,7 @@
+     'fontpkg': '\\usepackage{palatino}',
+ }
+ 
+-latex_docclass = {"manual":"jarticle"}
++latex_docclass = {"manual":"jreport"}
+ 
+ latex_elements = {
+   "papersize": "a4paper",

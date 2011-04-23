@@ -1,0 +1,26 @@
+diff -uNr graphviz-2.26.3.orig/plugin/quartz/Makefile.in graphviz-2.26.3/plugin/quartz/Makefile.in
+--- graphviz-2.26.3.orig/plugin/quartz/Makefile.in	2010-12-22 15:52:32.000000000 +0900
++++ graphviz-2.26.3/plugin/quartz/Makefile.in	2010-12-22 17:29:01.000000000 +0900
+@@ -70,7 +70,7 @@
+ 	GVTextLayout.lo
+ am_libgvplugin_quartz_la_OBJECTS = $(am__objects_1)
+ libgvplugin_quartz_la_OBJECTS = $(am_libgvplugin_quartz_la_OBJECTS)
+-libgvplugin_quartz_la_LINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) \
++libgvplugin_quartz_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(OBJCLD) $(AM_OBJCFLAGS) \
+ 	$(OBJCFLAGS) $(libgvplugin_quartz_la_LDFLAGS) $(LDFLAGS) -o $@
+ @WITH_QUARTZ_TRUE@@WITH_WIN32_FALSE@am_libgvplugin_quartz_la_rpath =  \
+@@ -98,11 +98,11 @@
+ 	$(LDFLAGS) -o $@
+ OBJCCOMPILE = $(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+ 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_OBJCFLAGS) $(OBJCFLAGS)
+-LTOBJCCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
++LTOBJCCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+ 	--mode=compile $(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+ 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_OBJCFLAGS) $(OBJCFLAGS)
+ OBJCLD = $(OBJC)
+-OBJCLINK = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
++OBJCLINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
+ 	$(OBJCLD) $(AM_OBJCFLAGS) $(OBJCFLAGS) $(AM_LDFLAGS) \
+ 	$(LDFLAGS) -o $@
+ SOURCES = $(libgvplugin_quartz_la_SOURCES) \

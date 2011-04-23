@@ -1,0 +1,21 @@
+diff -uNr gcc-5666.3.orig/gcc/version.c gcc-5666.3/gcc/version.c
+--- gcc-5666.3.orig/gcc/version.c	2010-03-19 06:22:43.000000000 +0900
++++ gcc-5666.3/gcc/version.c	2011-02-05 19:15:24.000000000 +0900
+@@ -9,7 +9,7 @@
+    the revision of your modified compiler.  */
+ 
+ /* APPLE LOCAL begin Apple version */
+-#define VERSUFFIX " (Apple Inc. build 5666) (dot 3)"
++#define VERSUFFIX " (Mac OS X WorkShop) (Apple Inc. build 5666) (dot 3)"
+ /* APPLE LOCAL end Apple version */
+ 
+ /* This is the location of the online document giving instructions for
+@@ -20,7 +20,7 @@
+    not bugs in your modifications.)  */
+ 
+ /* APPLE LOCAL Apple bug-report */
+-const char bug_report_url[] = "<URL:http://developer.apple.com/bugreporter>";
++const char bug_report_url[] = "<URL:http://macwiki.sourceforge.jp/wiki/index.php/MacOSX_WorkShop/10.6>";
+ 
+ /* The complete version string, assembled from several pieces.
+    BASEVER, DATESTAMP, and DEVPHASE are defined by the Makefile.  */
