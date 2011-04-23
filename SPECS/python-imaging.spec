@@ -6,7 +6,7 @@
 Summary: The Python Imaging Library
 Summary(ja): Python イメージ処理ライブラリ
 Name: python-%{modulename}
-Version: 1.1.6
+Version: 1.1.7
 Release: 0%{?_dist_release}
 License: MIT
 Group: Development/Languages
@@ -21,6 +21,7 @@ Requires: libpng >= 1.0.12
 Requires: zlib >= 1.1.4
 Requires: freetype >= 2.1.3
 BuildRequires: python-devel = 2.6.6
+BuildRequires: lcms-devel
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRequires: XOrg-devel libjpeg-devel libpng-devel zlib-devel freetype-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -45,6 +46,8 @@ rm -rf $RPM_BUILD_ROOT
 %build
 export CC='gcc-4.2' ARCHFLAGS='-arch i386 -arch x86_64'
 python setup.py build
+
+%check
 python selftest.py
 
 %install
@@ -68,6 +71,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc Docs
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-0
+- update to 1.1.7
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.6-0
 - initial build for Mac OS X WorkShop
 
