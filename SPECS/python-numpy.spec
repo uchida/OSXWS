@@ -61,8 +61,6 @@ popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export CC='gcc' CXX='g++' F77='gfortran' F90='gfortran'
-export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 
 %clean

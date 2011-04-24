@@ -63,7 +63,6 @@ popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export ARCHFLAGS='-arch i386 -arch x86_64'
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT
 
 %clean
