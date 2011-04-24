@@ -6,11 +6,10 @@ Summary: Scientific Library for Python
 Summary(ja): Python 科学技術計算ライブラリ
 Name: python-%{modulename}
 Version: 0.9.0
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
-Group: Applications/Edutainment
 URL: http://www.scipy.org
 
 Requires: apple-gcc
@@ -79,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-1
+- fix typo in Group
+
 * Thu Mar  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-0
 - update to 0.9.0
 

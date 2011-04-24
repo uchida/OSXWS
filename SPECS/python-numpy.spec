@@ -5,12 +5,11 @@
 Summary: NumPy: array processing for numbers, strings, records, and objects.
 Name: python-%{modulename}
 Version: 1.5.1
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Source1: numpy-site.cfg
 License: BSD
 Group: Development/Languages
-Group: Applications/Edutainment
 URL: http://numpy.scipy.org/
 
 Requires: apple-gcc
@@ -80,6 +79,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.1-2
+- fix typo in Group
+
 * Thu Mar  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.1-1
 - remove Requires fftw, this is no longer supported
 
