@@ -1,0 +1,12 @@
+diff -uNr Cython-0.14.1.orig/Demos/embed/Makefile Cython-0.14.1/Demos/embed/Makefile
+--- Cython-0.14.1.orig/Demos/embed/Makefile	2011-04-24 16:00:03.000000000 +0900
++++ Cython-0.14.1/Demos/embed/Makefile	2011-04-24 16:00:26.000000000 +0900
+@@ -14,7 +14,7 @@
+ SYSLIBS= $(shell $(PYTHON) -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('SYSLIBS'))")
+ 
+ embedded: embedded.o
+-	$(LINKCC) -o $@ $^ $(LIBDIR1)/$(STATIC_PYLIB) $(LINKFORSHARED) -L$(LIBDIR1) -L$(LIBDIR2) $(LIBS) $(SYSLIBS)
++	$(LINKCC) -o $@ $^ -lPython -L$(LIBDIR1) -L$(LIBDIR2) $(LIBS) $(SYSLIBS)
+ 
+ embedded.o: embedded.c
+ 	$(CC) -c $^ -I$(INCDIR)
