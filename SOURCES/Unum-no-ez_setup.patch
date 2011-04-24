@@ -1,0 +1,9 @@
+diff -uNr Unum-4.1.1.orig/setup.py Unum-4.1.1/setup.py
+--- Unum-4.1.1.orig/setup.py	2011-04-24 11:56:18.000000000 +0900
++++ Unum-4.1.1/setup.py	2011-04-24 11:56:25.000000000 +0900
+@@ -1,5 +1,3 @@
+-import ez_setup
+-ez_setup.use_setuptools()
+ from setuptools import setup
+ 
+ setup(name = "Unum",
