@@ -6,7 +6,7 @@
 Summary: Apple's version of gcc with gfortran
 Name: apple-gcc
 Version: %{apple_version}.gf
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://www.opensource.apple.com/tarballs/gcc/gcc-%{apple_version}.tar.gz
 Source1: http://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-fortran-%{gcc_version}.tar.gz
 Patch0: apple-gcc-fortran.patch
@@ -81,18 +81,19 @@ rm -rf $RPM_BUILD_ROOT/Developer
 rm -f $RPM_BUILD_ROOT%{_libdir}/{,x86_64/}*.la
 rm -f $RPM_BUILD_ROOT%{_libdir}/gcc/%{gcc_target_platform}/%{gcc_version}/{,x86_64/}*.la
 # for alternatives
+pushd $RPM_BUILD_ROOT%{_bindir}
+    for bin in gcc g++ cpp gfortran; do
+        mv -f %{gcc_target_platform}-$bin-%{gcc_version} %{gcc_target_platform}-$bin-%{gcc_version}-osxws
+    done
+popd
 pushd $RPM_BUILD_ROOT%{_libdir}
   for lib in libgcc_s.*.dylib libgfortran*.dylib libgomp*.dylib; do
-    if [ -f "$lib" ] ; then
       mv -f "$lib" "$lib"-%{gcc_version}
-    fi
   done
 popd
 pushd $RPM_BUILD_ROOT%{_libdir}/x86_64
   for lib in lib*; do
-    if [ -f "$lib" ] ; then
       mv -f "$lib" "$lib"-%{gcc_version}
-    fi
   done
 popd
 
@@ -115,23 +116,23 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/update-alternatives \
   --install %{_bindir}/gcc gcc %{_bindir}/gcc-%{major_version} 26 \
   --slave   %{_bindir}/cc cc %{_bindir}/gcc-%{major_version} \
-  --slave   %{_bindir}/%{gcc_target_platform}-gcc \
-              %{gcc_target_platform}-gcc \
-              %{_bindir}/%{gcc_target_platform}-gcc-%{gcc_version} \
   --slave   %{_bindir}/g++ g++ %{_bindir}/g++-%{major_version} \
   --slave   %{_bindir}/c++ c++ %{_bindir}/g++-%{major_version} \
-  --slave   %{_bindir}/%{gcc_target_platform}-g++ \
-              %{gcc_target_platform}-g++ \
-              %{_bindir}/%{gcc_target_platform}-g++-%{gcc_version} \
   --slave   %{_bindir}/cpp cpp %{_bindir}/cpp-%{major_version} \
-  --slave   %{_bindir}/%{gcc_target_platform}-cpp \
-              %{gcc_target_platform}-cpp \
-              %{_bindir}/%{gcc_target_platform}-cpp-%{gcc_version} \
-  --slave   %{_bindir}/gcov gcov %{_bindir}/gcov-%{major_version} \
   --slave   %{_bindir}/gfortran gfortran %{_bindir}/gfortran-%{major_version} \
-  --slave   %{_bindir}/%{gcc_target_platform}-gfortran \
-              %{gcc_target_platform}-gfortran \
-              %{_bindir}/%{gcc_target_platform}-gfortran-%{gcc_version} \
+  --slave   %{_bindir}/gcov gcov %{_bindir}/gcov-%{major_version} \
+  --slave   %{_bindir}/%{gcc_target_platform}-gcc-%{gcc_version} \
+              %{gcc_target_platform}-gcc-%{gcc_version} \
+              %{_bindir}/%{gcc_target_platform}-gcc-%{gcc_version}-osxws \
+  --slave   %{_bindir}/%{gcc_target_platform}-g++-%{gcc_version} \
+              %{gcc_target_platform}-g++-%{gcc_version} \
+              %{_bindir}/%{gcc_target_platform}-g++-%{gcc_version}-osxws \
+  --slave   %{_bindir}/%{gcc_target_platform}-cpp-%{gcc_version} \
+              %{gcc_target_platform}-cpp-%{gcc_version} \
+              %{_bindir}/%{gcc_target_platform}-cpp-%{gcc_version}-osxws \
+  --slave   %{_bindir}/%{gcc_target_platform}-gfortran-%{gcc_version} \
+              %{gcc_target_platform}-gfortran-%{gcc_version} \
+              %{_bindir}/%{gcc_target_platform}-gfortran-%{gcc_version}-osxws \
   --slave   %{_libdir}/libgcc_s.1.dylib libgcc_s.1.dylib \
               %{_libdir}/libgcc_s.1.dylib-%{gcc_version} \
   --slave   %{_libdir}/libgcc_s.10.4.dylib libgcc_s.10.4.dylib \
@@ -236,7 +237,10 @@ fi
 %doc gfortran/ChangeLog libgfortran/ChangeLog
 
 %changelog
-* Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5666.3.gf-1
+* Mon Apr 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5666.3.gf-1
+- fix the filename problem with update-alternatives
+
+* Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5666.3.gf-0
 - update to Apple build 5666.3
 
 * Sun Feb  6 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5664.gf-1
