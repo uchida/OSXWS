@@ -4,10 +4,10 @@
 Summary: rebuild a new abstract syntax tree from Python's ast
 Name: python-%{modulename}
 Version: 0.21.0
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
-Group: Development/Language
+Group: Development/Languages
 URL: http://www.logilab.org/project/%{name}
 
 Requires: python = 2.6.6
@@ -54,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog COPYING COPYING.LESSER README
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21.0-1
+- fix type in Group
+
 * Wed Dec 22 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21.0-0
 - initial build for Mac OS X WorkShop 10.6
 

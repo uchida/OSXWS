@@ -4,10 +4,10 @@
 Summary: MPIR/GMP interface to Python
 Name: python-%{modulename}
 Version: 1.14
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://gmpy.googlecode.com/files/%{modulename}-%{version}.zip
 License: LGPLv2+
-Group: Development/Language
+Group: Development/Languages
 URL: http://code.google.com/p/gmpy/
 
 Requires: python = 2.6.6
@@ -52,6 +52,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc changes.txt lgpl-2.1.txt mac_build.txt mutable_mpz.txt README
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-1
+- fix type in Group
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-0
 - initial build for Mac OS X WorkShop 10.6
 

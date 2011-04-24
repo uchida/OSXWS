@@ -4,14 +4,14 @@
 Summary: An interpreted, interactive, object-oriented programming language
 Name: python
 Version: 2.6.6
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 Source1: http://docs.python.org/ftp/python/doc/%{version}/python-%{version}-docs-pdf-a4.tar.bz2
 Source2: http://docs.python.org/ftp/python/doc/%{version}/python-%{version}-docs-html.tar.bz2
 Patch0: python-Lib-ctypes-macholib-dyld-fallback-osxws.patch
 Patch1: python-Lib-cgi-osxws.patch
 License: PSF
-Group: Development/Language
+Group: Development/Languages
 URL: http://www.python.org/
 
 Requires(post): alternatives
@@ -163,6 +163,9 @@ fi
 %{frameworkdir}/Python.framework/Versions/%{python_version}/include
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.6-1
+- fix type in Group
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.6-0
 - initial build for Mac OS X WorkShop
 

@@ -7,7 +7,7 @@ Version: 0.53.0
 Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
-Group: Development/Language
+Group: Development/Languages
 URL: http://www.logilab.org/project/%{name}
 
 Requires: python = 2.6.6

@@ -5,10 +5,10 @@ Summary: World timezone definitions, modern and historical of python
 Summary(ja): Python 版の世界同時帯の現代的、歴史的な定義
 Name: python-%{modulename}
 Version: 2010l
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/pytz/pytz-%{version}.tar.gz
 License: MIT
-Group: Development/Language
+Group: Development/Languages
 URL: http://pytz.sourceforge.net
 
 Requires: python = 2.6.6
@@ -44,6 +44,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES.txt LICENSE.txt README.txt
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2010l-1
+- fix type in Group
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2010l-0
 - initial build for Mac OS X WorkShop 10.6
 

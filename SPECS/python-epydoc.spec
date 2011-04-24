@@ -4,12 +4,12 @@
 Summary: Edward Loper's API Documentation Generation Tool
 Name: python-%{modulename}
 Version: 3.0.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/e/%{modulename}/%{modulename}-%{version}.tar.gz
 # http://sourceforge.net/tracker/?func=detail&aid=3027939&group_id=32455&atid=405620
 Patch0: logilab-docutils.patch
 License: MIT
-Group: Development/Language
+Group: Development/Languages
 URL: http://epydoc.sourceforge.net/
 
 Requires: python = 2.6.6
@@ -51,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/*
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.1-1
+- fix type in Group
+
 * Wed Dec 22 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.1-0
 - initial build for Mac OS X WorkShop 10.6
 

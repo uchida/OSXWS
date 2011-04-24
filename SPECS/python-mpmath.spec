@@ -5,10 +5,10 @@
 Summary: a Python library for arbitrary-precision floating-point arithmetic
 Name: python-%{modulename}
 Version: 0.16
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://%{modulename}.googlecode.com/files/%{modulename}-all-%{version}.tar.gz
 License: BSD
-Group: Development/Language
+Group: Development/Languages
 URL: http://code.google.com/p/mpmath/
 
 Requires: python = 2.6.6
@@ -60,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-1
+- fix type in Group
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-0
 - initial build for Mac OS X WorkShop 10.6
 
