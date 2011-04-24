@@ -3,8 +3,8 @@
 
 Summary: rebuild a new abstract syntax tree from Python's ast
 Name: python-%{modulename}
-Version: 0.21.0
-Release: 1%{?_dist_release}
+Version: 0.21.1
+Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
 Group: Development/Languages
@@ -54,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog COPYING COPYING.LESSER README
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21.1-0
+- update to 0.21.1
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21.0-1
 - fix type in Group
 

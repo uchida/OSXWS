@@ -3,7 +3,7 @@
 
 Summary: collection of low-level Python packages and modules used by Logilab projects
 Name: python-%{modulename}
-Version: 0.53.0
+Version: 0.55.0
 Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
@@ -60,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/apidoc
 
 %changelog
-* Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.55.2
+- update to 0.55.2
+
+* Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.53.0-1
 - initial build for Mac OS X WorkShop 10.6
 
