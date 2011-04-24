@@ -4,16 +4,17 @@
 Summary: Edward Loper's API Documentation Generation Tool
 Name: python-%{modulename}
 Version: 3.0.1
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/e/%{modulename}/%{modulename}-%{version}.tar.gz
-# http://sourceforge.net/tracker/?func=detail&aid=3027939&group_id=32455&atid=405620
-Patch0: logilab-docutils.patch
+Patch1: epydoc-3.0.1-giftopng.patch
+Patch2: epydoc-3.0.1-new-docutils.patch
 License: MIT
 Group: Development/Languages
 URL: http://epydoc.sourceforge.net/
 
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
+Requires: tetex
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -30,6 +31,8 @@ For a more extensive example of epydoc's output, see the API documentation for P
 
 %prep
 %setup -q -n %{modulename}-%{version}
+%patch1 -p1
+%patch2 -p1
 
 %build
 python setup.py build
@@ -51,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/*
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.1-2
+- import patches from Fedora 15
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.1-1
 - fix type in Group
 
