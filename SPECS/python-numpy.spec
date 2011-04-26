@@ -19,12 +19,8 @@ Requires: python-nose
 BuildRequires: apple-gcc
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-%if %{with doc}
-BuildRequires: python-sphinx python-matplotlib
-%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
-
 %description
 NumPy is a general-purpose array-processing package designed to efficiently manipulate large multi-dimensional arrays of arbitrary records without sacrificing too much speed for small multi-dimensional arrays. NumPy is built on the Numeric code base and adds features introduced by numarray as well as an extended C-API and the ability to create arrays of arbitrary type which also makes NumPy suitable for interfacing with general-purpose data-base applications.
 
@@ -35,6 +31,18 @@ Numpy は汎用配列操作パッケージであり、大規模多次元配列�
 Numpy は Numeric のソースコードと numarray から導入された追加機能を基に作られ、拡張された C-API を持ち、汎用のデータベースと共に利用するのに最適な、任意の型を要素とする配列生成が可能です。
 
 Numpy は離散 Fourir 変換や線形代数、乱数生成といった基礎的な機能も備えています。
+
+%if %{with doc}
+%package doc
+Summary: Documentation files for SuiteSparse
+Group: Documentation
+BuildArch: noarch
+Requires: %{name} = %{version}-%{release}
+BuildRequires: python-sphinx python-matplotlib
+
+%description doc
+This package contains documentation files for %{name}.
+%endif
 
 %prep
 %setup -q -n %{modulename}-%{version}
@@ -71,12 +79,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{python_sitelib}/*
 %if %{with doc}
+%files doc
 %doc doc/build/html
 %doc doc/build/latex/numpy-user.pdf
 %doc doc/build/latex/numpy-ref.pdf
 %endif
 
 %changelog
+* Mon Apr 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.1-4
+- put documents into a doc subpackage
+
 * Mon Apr 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.1-3
 - modify install section, do not use --skip-build option
 
