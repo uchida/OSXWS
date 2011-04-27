@@ -1,5 +1,5 @@
 Name:           python-AppTools
-Version:        3.4.0
+Version:        3.4.1
 Release:        0%{?_dist_release}
 Summary:        Enthough Tool Suite Application Tools
 Group:          Development/Libraries
