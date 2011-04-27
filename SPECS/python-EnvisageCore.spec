@@ -1,5 +1,5 @@
 Name:           python-EnvisageCore
-Version:        3.1.3
+Version:        3.2.0
 Release:        0%{?_dist_release}
 Summary:        Extensible Application Framework
 Group:          Development/Libraries
@@ -49,6 +49,9 @@ done
 %{python_sitelib}/enthought/envisage
 
 %changelog
+* Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-0
+- update to 3.2.0
+
 * Tue Apr 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.3-0
 - initilal build for Mac OS X WorkShop 10.6
 

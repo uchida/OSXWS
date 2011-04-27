@@ -1,5 +1,5 @@
 Name:           python-EnvisagePlugins
-Version:        3.1.3
+Version:        3.2.0
 Release:        0%{?_dist_release}
 Summary:        Plug-ins for the Envisage framework
 Group:          Development/Libraries
@@ -60,6 +60,9 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 %{python_sitelib}/enthought/plugins
 
 %changelog
+* Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-0
+- update to 3.2.0
+
 * Tue Apr 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.3-0
 - initial build for Mac OS X WorkShop
 
