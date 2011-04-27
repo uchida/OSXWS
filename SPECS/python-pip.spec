@@ -1,6 +1,5 @@
 %define __python /usr/osxws/bin/python
 %define modulename pip
-%bcond_with doc
 
 Summary: pip installs packages
 Name: python-%{modulename}
