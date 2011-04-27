@@ -2,14 +2,14 @@
 
 Name:		python-TraitsBackendWX
 Version:	3.4.0
-Release:	4%{?dist}
+Release:    0%{?_dist_release}
 Summary:	WxPython backend for Traits and TraitsGUI (Pyface)
 Group:		Development/Libraries
 License:	BSD and EPL and LGPLv2 and LGPLv3 and Public Domain
 URL:		http://code.enthought.com/projects/traits_gui
 Source0:	http://www.enthought.com/repo/ETS/%{srcname}-%{version}.tar.gz
 BuildArch:	noarch
-BuildRequires:	python2-devel python-setuptools
+BuildRequires:	python-devel python-distribute
 # TraitsGUI[dock]
 Requires:	python-TraitsGUI
 # EnthoughtBase[ui] and Traits come with TraitsGUI
@@ -35,19 +35,19 @@ done
 
 # Remove DOS line endings
 for file in *.txt; do
- sed "s|\r||g" $file > $file.new && \
- touch -r $file $file.new && \
- mv $file.new $file
+    sed "s|\r||g" $file > $file.new && \
+    touch -r $file $file.new && \
+    mv $file.new $file
 done
 
 %build
 python setup.py build
 
 %install
-python setup.py install -O1 --skip-build --root %{buildroot}
+python setup.py install --skip-build --root $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel)
 %doc *.txt docs/*
 %{python_sitelib}/*.egg-info
 %{python_sitelib}/*.pth
@@ -55,14 +55,6 @@ python setup.py install -O1 --skip-build --root %{buildroot}
 %{python_sitelib}/enthought/pyface/ui/wx
 
 %changelog
-* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.4.0-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+* Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-0
+- initial build for Mac OS X WorkShop
 
-* Fri Aug 13 2010 Chen Lei <supercyper@163.com> - 3.4.0-3
-- Add Provides:python-TraitsBackend
-
-* Mon Jul 26 2010 Chen Lei <supercyper@163.com> - 3.4.0-2
-- Remove Requires:python-TraitsBackendWX
-
-* Mon Jul 26 2010 Chen Lei <supercyper@163.com> - 3.4.0-1
-- Initial package
