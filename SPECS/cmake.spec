@@ -5,8 +5,8 @@
 %endif
 %define dist hepx
 Name:		cmake
-Version:	2.8.0
-Release:	10.6%{?dist}1c
+Version:	2.8.4
+Release:    0%{?_dist_release}
 Summary:	Cross-platform make system
 
 Group:		Development/Tools
@@ -18,6 +18,8 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 %ifnos darwin
 BuildRequires:  ncurses-devel, libX11-devel
 BuildRequires:  curl-devel, expat-devel, xmlrpc-c-devel, zlib-devel
+%else
+BuildArch: fat
 %endif
 Requires:       rpm
 
@@ -39,6 +41,9 @@ generation, code generation, and template instantiation.
 %ifnos darwin
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
+%else
+export CFLAGS="-arch i386 -arch x86_64"
+export CXXFLAGS="-arch i386 -arch x86_64"
 %endif
 ./bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
             --docdir=/share/doc/%{name}-%{version} --mandir=/share/man
@@ -72,6 +77,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Apr 28 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.8.4-0
+- update to 2.8.4
+- support intel universal binary (i386, x86_64)
+
 * Sun Mar 21 2010 Keisuke Fujii <keisuke.fujii@kek.jp> - 2.8.0-10.6hepx1c
 - 2nd build on MacOSX
 - modified macosx10.6 patch to default to -flat_namespace
