@@ -14,6 +14,7 @@ BuildArch: noarch
 Requires: python = 2.6.6
 Requires: python-devel = 2.6.6
 Requires: /usr/osxws/bin/python2.6
+Requires: python-distribute
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 %if %{with doc}

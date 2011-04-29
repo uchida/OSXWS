@@ -23,6 +23,7 @@ URL: http://sphinx.pocoo.org/
 
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
+Requires: python-distribute
 Requires: python-docutils
 Requires: python-jinja2
 Requires: python-pygments

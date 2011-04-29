@@ -14,6 +14,7 @@ URL: http://pygments.org/
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
 Requires: bash-completion
+Requires: python-distribute
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRequires: python-nose
