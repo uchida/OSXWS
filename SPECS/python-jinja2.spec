@@ -40,9 +40,7 @@ Django の影響を受けたインライン表現と
 python setup.py build
 %if %{with doc}
 pushd docs
-make html latex
-pushd _build/latex
-make all-pdf
+make html
 popd
 %endif
 
@@ -59,7 +57,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS CHANGES LICENSE
 %if %{with doc}
 %doc docs/_build/html
-%doc docs/_build/latex/*.pdf
 %endif
 %doc examples
 
