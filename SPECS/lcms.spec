@@ -2,7 +2,7 @@
 
 Name: lcms
 Version: 1.19
-Release: 0%{?dist}
+Release: 0%{?_dist_release}
 Summary: Color Management System
 Group: Applications/Productivity
 License: MIT

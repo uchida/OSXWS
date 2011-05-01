@@ -35,6 +35,7 @@ Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}
 BuildRequires: python-sphinx
+BuildRequires: python-mpmath
 
 %description doc
 This package contains documentation files for %{name}.
@@ -49,10 +50,6 @@ python setup.py build
 %if %{with doc}
 pushd doc
 make html
-#make latex
-#pushd _build/latex
-#make all-pdf
-#popd
 popd
 %endif
 
