@@ -4,7 +4,7 @@
 
 Summary: Virtual Python Environment builder
 Name: python-%{modulename}
-Version: 1.5.2
+Version: 1.6.1
 Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/v/%{modulename}/%{modulename}-%{version}.tar.gz
 License: MIT
@@ -47,6 +47,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/*.txt
 
 %changelog
+* Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-0
+- update to 1.6.1
+
 * Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.2-0
 - initial build for Mac OS X WorkShop
 
