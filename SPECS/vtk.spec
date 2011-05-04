@@ -9,6 +9,7 @@ Release: 0%{?_dist_release}
 License: BSD
 Group: System Environment/Libraries
 Source: http://www.vtk.org/files/release/5.6/%{name}-%{version}.tar.gz
+Patch0: vtk-5.6.1-netcdf-cxx-version.patch
 
 URL: http://vtk.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -283,6 +284,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc vtk-examples-5.6/Examples
 
 %changelog
+* Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-1
+- fix the version of libvtkNetCDF_cxx
+
 * Wed May  4 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-0
 - initial build for Mac OS X WorkShop
 
