@@ -1,58 +1,27 @@
-%bcond_without OSMesa
-%bcond_without java
-
-%{!?python_sitearch:%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
+%define python_inc %(%{__python} -c "from distutils.sysconfig import get_python_inc; print get_python_inc()")
 Summary: The Visualization Toolkit - A high level 3D visualization library
 Name: vtk
 Version: 5.6.1
-Release: 8%{?dist}
+Release: 0%{?_dist_release}
 # This is a variant BSD license, a cross between BSD and ZLIB.
 # For all intents, it has the same rights and restrictions as BSD.
 # http://fedoraproject.org/wiki/Licensing/BSD#VTKBSDVariant
 License: BSD
 Group: System Environment/Libraries
 Source: http://www.vtk.org/files/release/5.6/%{name}-%{version}.tar.gz
-Patch0: vtk-5.2.0-pythondestdir.patch
-Patch1: vtk-5.2.0-gcc43.patch
-Patch2: vtk-5.6.0-testcxxjavaremove.patch
-# Python 2.7 compatibility: not yet sent upstream:
-Patch3: vtk-5.6.0-python27.patch
-# Add needed includes for gcc 4.6
-# http://public.kitware.com/Bug/view.php?id=11824
-Patch4: vtk-5.6.1-gcc46.patch
-# Use system libraries
-# http://public.kitware.com/Bug/view.php?id=11823
-Patch5: vtk-5.6.1-system.patch
-# Upstream patch to add soversions to libCosmo and libVPIC
-Patch6: vtk-5.6.1-soversion.patch
 
 URL: http://vtk.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildArch: fat
 BuildRequires: cmake
-BuildRequires: gcc-c++
-#%{?with_java:BuildRequires: gcc-java, libgcj-devel, java-devel}
-%{?with_java:BuildRequires: java-devel}
-BuildRequires: libX11-devel, libXt-devel, libXext-devel
-BuildRequires: libICE-devel, libGL-devel
-%{?with_OSMesa:BuildRequires: mesa-libOSMesa-devel}
-BuildRequires: tk-devel, tcl-devel
 BuildRequires: python-devel
-BuildRequires: expat-devel, freetype-devel, libjpeg-devel, libpng-devel
-BuildRequires: gl2ps-devel
+BuildRequires: freetype-devel, libjpeg-devel, libpng-devel
 BuildRequires: libtiff-devel, zlib-devel
 BuildRequires: libxml2-devel
-BuildRequires: qt4-devel
-BuildRequires: chrpath
+BuildRequires: qt
 BuildRequires: doxygen, graphviz
 BuildRequires: gnuplot
-BuildRequires: boost-devel
-BuildRequires: libtheora-devel
-BuildRequires: mysql-devel
-BuildRequires: postgresql-devel
 BuildRequires: wget
-BuildRequires: %{_includedir}/Xm
-%{!?with_java:Conflicts: vtk-java}
 
 %description
 VTK is an open-source software system for image processing, 3D
@@ -64,15 +33,8 @@ volume rendering, LOD control).
 %package devel
 Summary: VTK header files for building C++ code
 Requires: vtk = %{version}-%{release}
-%{?with_OSMesa:Requires: mesa-libOSMesa-devel}
-Requires: gl2ps-devel
-Requires: expat-devel, libjpeg-devel, libpng-devel
-Requires: libogg-devel
-Requires: libtheora-devel
+Requires: libjpeg-devel, libpng-devel
 Requires: libtiff-devel
-Requires: postgresql-devel
-Requires: mysql-devel
-Requires: qt4-devel
 Group: Development/Libraries
 
 %description devel 
@@ -87,23 +49,13 @@ Group: System Environment/Libraries
 %description tcl
 tcl bindings for VTK
 
-%package python
+%package -n python-%{name}
 Summary: Python bindings for VTK
 Requires: vtk = %{version}-%{release}
 Group: System Environment/Libraries
 
-%description python
+%description -n python-%{name}
 python bindings for VTK
-
-%if %{with java}
-%package java
-Summary: Java bindings for VTK
-Requires: vtk = %{version}-%{release}
-Group: System Environment/Libraries
-
-%description java
-Java bindings for VTK
-%endif
 
 %package qt
 Summary: Qt bindings for VTK
@@ -131,21 +83,13 @@ This package contains many well-commented examples showing how to use
 VTK. Examples are available in the C++, Tcl, Python and Java
 programming languages.
 
-
 %prep
 %setup -q -n VTK
-%patch0 -p1 -b .pythondestdir
-%patch1 -p1 -b .gcc43
-%patch2 -p1 -b .testcxxjava
-%patch3 -p1 -b .python27
-%patch4 -p1 -b .gcc46
-%patch5 -p1 -b .system
-%patch6 -p1 -b .soversion
 
 # Replace relative path ../../../VTKData with %{_datadir}/vtkdata-%{version}
 # otherwise it will break on symlinks.
 grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
-  perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
+    perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
 
 # Save an unbuilt copy of the Example's sources for %doc
 mkdir vtk-examples-5.6
@@ -155,78 +99,60 @@ rm -rf vtk-examples-5.6/Examples/GUI/Win32
 find vtk-examples-5.6 -type f | xargs chmod -R a-x
 
 %build
-export CFLAGS="%{optflags} -D_UNICODE"
-export CXXFLAGS="%{optflags} -D_UNICODE"
-%if %{with java}
-export JAVA_HOME=/usr/lib/jvm/java
-%endif
+export CFLAGS="-D_UNICODE -I%{_includedir}"
+export CXXFLAGS="-D_UNICODE -I%{_includedir}"
 
 mkdir build
 pushd build
-%{cmake} .. \
+cmake .. \
  -DBUILD_DOCUMENTATION:BOOL=ON \
  -DBUILD_EXAMPLES:BOOL=ON \
  -DBUILD_TESTING:BOOL=ON \
  -DVTK_INSTALL_INCLUDE_DIR:PATH=/include/vtk \
  -DVTK_INSTALL_LIB_DIR:PATH=/%{_lib}/vtk-5.6 \
  -DVTK_INSTALL_QT_DIR=/%{_lib}/qt4/plugins/designer \
- -DTK_INTERNAL_PATH:PATH=/usr/include/tk-private/generic \
-%if %{with OSMesa}
- -DVTK_OPENGL_HAS_OSMESA:BOOL=ON \
-%endif
  -DVTK_WRAP_PYTHON:BOOL=ON \
-%if %{with java}
- -DVTK_WRAP_JAVA:BOOL=ON \
- -DJAVA_INCLUDE_PATH:PATH=$JAVA_HOME/include \
- -DJAVA_INCLUDE_PATH2:PATH=$JAVA_HOME/include/linux \
- -DJAVA_AWT_INCLUDE_PATH:PATH=$JAVA_HOME/include \
-%else
  -DVTK_WRAP_JAVA:BOOL=OFF \
-%endif
  -DVTK_WRAP_TCL:BOOL=ON \
- -DVTK_USE_BOOST:BOOL=ON \
- -DVTK_USE_GL2PS:BOOL=ON \
- -DVTK_USE_GUISUPPORT:BOOL=ON \
- -DVTK_USE_MYSQL=ON \
- -DVTK_USE_OGGTHEORA_ENCODER=ON \
- -DVTK_USE_PARALLEL:BOOL=ON \
- -DVTK_USE_POSTGRES=ON \
- -DVTK_USE_SYSTEM_LIBRARIES=ON \
- -DVTK_USE_SYSTEM_LIBPROJ4=OFF \
  -DVTK_USE_QVTK=ON \
  -DVTK_USE_QT=ON \
- -DVTK_USE_TEXT_ANALYSIS=ON
+ -DVTK_USE_CARBON:BOOL=OFF \
+ -DVTK_USE_COCOA:BOOL=ON \
+ -DCMAKE_OSX_ARCHITECTURES:STRING="i386;x86_64" \
+ -DCMAKE_OSX_DEPLOYMENT_TARGET=10.6 \
+ -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
+ -DBUILD_SHARED_LIBS:BOOL=ON \
+ -DCMAKE_INSTALL_NAME_DIR:STRING="%{_libdir}/vtk-5.6" \
+ -DVTK_PYTHON_SETUP_ARGS="--root=$RPM_BUILD_ROOT"
 
-# Not working, see http://public.kitware.com/Bug/view.php?id=11978
-# -DVTK_USE_ODBC=ON \
-# Not working, see http://public.kitware.com/Bug/view.php?id=10779
-# -DVTK_USE_GNU_R:BOOL=ON \
-# Commented old flags in case we'd like to reactive some of them
-# -DVTK_USE_DISPLAY:BOOL=OFF \ # This prevents building of graphics tests
-# -DVTK_USE_MPI:BOOL=ON \
-
-# Got intermittent build error with -j
-make #%{?_smp_mflags}
+export DYLD_LIBRARY_PATH=`pwd`/bin
+export ARCHFLAGS='-arch i386 -arch x86_64'
+make
 
 # Remove executable bits from sources (some of which are generated)
 find . -name \*.c -or -name \*.cxx -or -name \*.h -or -name \*.hxx -or \
        -name \*.gif | xargs chmod -x
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT
 pushd build
-make install DESTDIR=%{buildroot}
-
-if [ "%{_lib}" != lib -a "`ls %{buildroot}%{_prefix}/lib/*`" != "" ]; then
-  mkdir -p %{buildroot}%{_libdir}
-  mv %{buildroot}%{_prefix}/lib/* %{buildroot}%{_libdir}/
-fi
-mv %{buildroot}%{_libdir}/vtk-5.6/lib*.so* %{buildroot}%{_libdir}/
+make install DESTDIR=$RPM_BUILD_ROOT
 
 # Gather list of non-python/tcl libraries
-ls %{buildroot}%{_libdir}/*.so.* \
-  | grep -Ev '(Java|QVTK|PythonD|TCL)' | sed -e's,^%{buildroot},,' > libs.list
+ls $RPM_BUILD_ROOT%{_libdir}/vtk-5.6/*.*.dylib \
+  | grep -Ev "(Java|QVTK|PythonD|TCL)" | sed -e"s,^$RPM_BUILD_ROOT,," > libs.list
+ls $RPM_BUILD_ROOT%{_libdir}/vtk-5.6/lib*cxx.dylib \
+  | grep -Ev "(Java|QVTK|PythonD|TCL)" | sed -e"s,^$RPM_BUILD_ROOT,," >> libs.list
+
+pushd $RPM_BUILD_ROOT%{python_sitelib}/vtk
+for l in *.so; do
+     for old in `otool -L $l|grep $RPM_BUILD_DIR/VTK/build/bin|cut -f1 -d' '`; do
+         new=`echo $old|sed -e "s,$RPM_BUILD_DIR/VTK/build/bin,%{_libdir}/vtk-5.6/,g"`
+         install_name_tool -change $old $new $l
+     done
+done
+popd
 
 # List of executable utilities
 cat > utils.list << EOF
@@ -235,7 +161,7 @@ lproj
 EOF
 
 # List of executable examples
-cat > examples.list << EOF
+cat > examples-bin.list << EOF
 HierarchicalBoxPipeline
 MultiBlock
 Arrays
@@ -246,16 +172,20 @@ Medical1
 Medical2
 Medical3
 finance
-AmbientSpheres
-Cylinder
-DiffuseSpheres
-SpecularSpheres
 Cone
 Cone2
 Cone3
 Cone4
 Cone5
 Cone6
+EOF
+
+# List of executable example, these are Mac Application
+cat > examples-app.list << EOF
+AmbientSpheres.app
+Cylinder.app
+DiffuseSpheres.app
+SpecularSpheres.app
 EOF
 
 # List of executable test binaries
@@ -272,273 +202,87 @@ RenderingCxxTests
 VTKBenchMark
 VolumeRenderingCxxTests
 WidgetsCxxTests
-SocketClient
-SocketServer
 EOF
 
-# Install utils/examples/testing, too
-for filelist in utils.list examples.list testing.list; do
+# Install utils, too
+for filelist in utils.list examples-bin.list testing.list; do
   for file in `cat $filelist`; do
-    install -p bin/$file %{buildroot}%{_bindir}
+    cp -a bin/$file $RPM_BUILD_ROOT%{_bindir}
   done
   perl -pi -e's,^,%{_bindir}/,' $filelist
 done
 
-# Remove any remnants of rpaths
-for file in `cat examples.list`; do
-  chrpath -d %{buildroot}$file
+mkdir -p $RPM_BUILD_ROOT%{_appdirmac}/VTK-examples
+for file in `cat examples-app.list`; do
+   cp -a bin/$file $RPM_BUILD_ROOT%{_appdirmac}/VTK-examples
 done
+perl -pi -e's,^,%{_appdirmac}/VTK-examples/,' examples-app.list
+
+cat examples-bin.list examples-app.list > examples.list
 
 # Main package contains utils and core libs
 cat libs.list utils.list > main.list
 popd
 
-# Make shared libs and scripts executable
-chmod a+x %{buildroot}%{_libdir}/lib*.so.*
-chmod a+x %{buildroot}%{_libdir}/vtk-5.6/doxygen/*.pl
-chmod a+x %{buildroot}%{_libdir}/vtk-5.6/testing/*.{py,tcl}
-
 # Remove exec bit from non-scripts and %%doc
-for file in `find %{buildroot} -type f -perm 0755 \
-  | xargs -r file | grep ASCII | awk -F: '{print $1}'`; do
+for file in `find $RPM_BUILD_ROOT -type f -perm 0755 -print0\
+  | xargs -0 file | grep ASCII | awk -F: '{print $1}'`; do
   head -1 $file | grep '^#!' > /dev/null && continue
   chmod 0644 $file
 done
 find Utilities/Upgrading -type f | xargs chmod -x
 
-# Add exec bits to shared libs ...
-#chmod 0755 %{buildroot}%{_libdir}/vtk-5.6/CMake/*.so
-chmod 0755 %{buildroot}%{_libdir}/python*/site-packages/vtk/*.so
-
 # Verdict places the docs in the false folder
-rm -fr %{buildroot}%{_libdir}/vtk-5.6/doc
-
-%check
-#LD_LIBARARY_PATH=`pwd`/bin ctest -V
+rm -fr $RPM_BUILD_ROOT%{_libdir}/vtk-5.6/doc
 
 %clean
-rm -rf %{buildroot}
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-%post tcl -p /sbin/ldconfig
-
-%postun tcl -p /sbin/ldconfig
-
-%post python -p /sbin/ldconfig
-
-%postun python -p /sbin/ldconfig
-
-%if %{with java}
-%post java -p /sbin/ldconfig
-
-%postun java -p /sbin/ldconfig
-%endif
-
-%post qt -p /sbin/ldconfig
-
-%postun qt -p /sbin/ldconfig
+rm -rf $RPM_BUILD_ROOT
 
 %files -f build/main.list
-%defattr(-,root,root,-)
-%doc --parents Copyright.txt README.html vtkLogo.jpg vtkBanner.gif Wrapping/*/README*
+%defattr(-,root,wheel)
+%doc Copyright.txt README.html vtkLogo.jpg vtkBanner.gif Wrapping/*/README*
 
 %files devel
-%defattr(-,root,root,-)
+%defattr(-,root,wheel)
 %doc Utilities/Upgrading
 %{_libdir}/vtk-5.6/doxygen
 %{_includedir}/vtk
-%{_libdir}/*.so
+%{_libdir}/vtk-5.6/*.dylib
 %{_libdir}/vtk-5.6/CMake
 %{_libdir}/vtk-5.6/*.cmake
 %{_libdir}/vtk-5.6/hints
 
 %files tcl
-%defattr(-,root,root,-)
-%{_libdir}/*TCL.so.*
+%defattr(-,root,wheel)
+%{_libdir}/vtk-5.6/*TCL*.dylib
 %{_bindir}/vtk
 %{_bindir}/vtkWrapTcl
 %{_bindir}/vtkWrapTclInit
 %{_libdir}/vtk-5.6/pkgIndex.tcl
 %{_libdir}/vtk-5.6/tcl
 
-%files python
-%defattr(-,root,root,-)
-#%{python_sitearch}/vtk
+%files -n python-%{name}
+%defattr(-,root,wheel)
 %{python_sitearch}/*
-%{_libdir}/*PythonD.so.*
+%{_libdir}/vtk-5.6/*PythonD*.dylib
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
 
-%if %{with java}
-%files java
-%defattr(-,root,root,-)
-%{_libdir}/*Java.so.*
-%{_libdir}/vtk-5.6/java
-%{_bindir}/vtkParseJava
-%{_bindir}/vtkWrapJava
-%endif
-
 %files qt
-%defattr(-,root,root,-)
-%{_libdir}/libQVTK.so.*
+%defattr(-,root,wheel)
+%{_libdir}/vtk-5.6/libQVTK.*.dylib
 %{_libdir}/qt4/plugins/designer
 
 %files testing -f build/testing.list
-%defattr(-,root,root,-)
+%defattr(-,root,wheel)
 %{_libdir}/vtk-5.6/testing
 
 %files examples -f build/examples.list
-%defattr(-,root,root,-)
+%defattr(-,root,wheel)
 %doc vtk-examples-5.6/Examples
 
 %changelog
-* Mon Mar 28 2011 Orion Poplawski <orion@cora.nwra.com> - 5.6.1-8
-- Rebuild for new mysql
+* Wed May  4 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-0
+- initial build for Mac OS X WorkShop
 
-* Thu Mar 17 2011 Orion Poplawski <orion@cora.nwra.com> - 5.6.1-7
-- Add needed requires to vtk-devel
-
-* Wed Mar 16 2011 Orion Poplawski <orion@cora.nwra.com> - 5.6.1-6
-- Turn on boost, mysql, postgres, ogg theora, and text analysis support,
-  bug 688275.
-
-* Wed Mar 16 2011 Marek Kasik <mkasik@redhat.com> - 5.6.1-5
-- Add backslashes to VTK_INSTALL_LIB_DIR and
-- VTK_INSTALL_INCLUDE_DIR (#687895)
-
-* Tue Mar 15 2011 Orion Poplawski <orion@cora.nwra.com> - 5.6.1-4
-- Set VTK_INSTALL_LIB_DIR, fix bug 687895
-
-* Fri Feb 18 2011 Orion Poplawski <orion@cora.nwra.com> - 5.6.1-3
-- Add patch to support gcc 4.6
-- Add patch to make using system libraries easier
-- Update pythondestdir patch to use --prefix and --root
-- Use system gl2ps and libxml2
-- Use standard cmake build macro, out of tree builds
-- Add patch from upstream to add sonames to libCosmo and libVPIC (bug #622840)
-
-* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.6.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
-
-* Mon Dec 7 2010 Orion Poplawski <orion@cora.nwra.com> - 5.6.1-1
-- Update to 5.6.1
-- Enable qt4 support, drop qt3 support
-
-* Wed Oct 20 2010 Adam Jackson <ajax@redhat.com> 5.6.0-37
-- Rebuild for new libOSMesa soname
-
-* Sat Jul 31 2010 David Malcolm <dmalcolm@redhat.com> - 5.6.0-36
-- add python 2.7 compat patch
-
-* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 5.6.0-35
-- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
-
-* Mon Jul  5 2010 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.6.0-34
-- Update to 5.6.0.
-
-* Sat Jun  6 2009 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.4.2-30
-- Update to 5.4.2.
-
-* Thu Mar 12 2009 Orion Poplawski <orion@cora.nwra.com> - 5.2.1-29
-- Update to 5.2.1
-
-* Fri Mar 06 2009 Jesse Keating <jkeating@redhat.com> - 5.2.0-28
-- Remove chmod on examples .so files, none are built.  This needs
-  more attention.
-
-* Sun Oct  5 2008 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.2.0-26
-- Update to 5.2.0.
-
-* Wed Oct 1 2008 Orion Poplawski <orion@cora.nwra.com> - 5.0.2-25
-- Fix patch fuzz
-
-* Mon Aug 25 2008 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.4-24
-- Change java build dependencies from java-devel to gcj.
-
-* Sun Aug 24 2008 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.4-23
-- %%check || : does not work anymore.
-- enable java by default.
-
-* Wed May 21 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 5.0.4-22
-- fix license tag
-
-* Sat Apr 12 2008 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.4-21
-- Fixes for gcc 4.3 by Orion Poplawski.
-
-* Sat Apr  5 2008 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.4-20
-- Change BR to qt-devel to qt3-devel.
-
-* Sat Feb 23 2008 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.4-19
-- Update to 5.0.4.
-
-* Mon May 28 2007 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.3-18
-- Move headers to %%{_includedir}/vtk.
-- Remove executable bit from sources.
-
-* Mon Apr 16 2007 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.3-17
-- Make java build conditional.
-- Add ldconfig %%post/%%postun for java/qt subpackages.
-
-* Sun Apr 15 2007 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.3-16
-- Remove %%ghosting pyc/pyo.
-
-* Wed Apr 04 2007 Paulo Roma <roma@lcg.ufrj.br> - 5.0.3-15
-- Update to 5.0.4.
-- Added support for qt4 plugin.
-
-* Wed Feb  7 2007 Orion Poplawski <orion@cora.nwra.com> - 5.0.2-14
-- Enable Java, Qt, GL2PS, OSMESA
-
-* Mon Sep 11 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.2-13
-- Update to 5.0.2.
-
-* Sun Aug  6 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.1-12
-- cmake needs to be >= 2.0.4.
-
-* Fri Aug  4 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.1-11
-- Fix some python issues including pyo management.
-
-* Sun Jul 23 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.1-10
-- Embed feedback from bug 199405 comment 5.
-- Fix some Group entries.
-- Remove redundant dependencies.
-- Use system libs.
-- Comment specfile more.
-- Change buildroot handling with CMAKE_INSTALL_PREFIX.
-- Enable qt designer plugin.
-
-* Wed Jul 19 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.1-7
-- Fix some permissions for rpmlint and debuginfo.
-
-* Sun Jul 16 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.1-7
-- Remove rpath and some further rpmlint warnings.
-
-* Thu Jul 13 2006 Axel Thimm <Axel.Thimm@ATrpms.net> - 5.0.1-6
-- Update to 5.0.1.
-
-* Wed May 31 2006 Axel Thimm <Axel.Thimm@ATrpms.net>
-- Update to 5.0.
-
-* Mon Apr 04 2004 Intrinsic Spin <spin@freakbait.com> 2.mr
-- built on a machine with a stock libGL.so
-
-* Sun Apr 04 2004 Intrinsic Spin <spin@freakbait.com>
-- little cleanups
-- Built for FC1
-
-* Sun Jan 11 2004 Intrinsic Spin <spin@freakbait.com>
-- Built against a reasonably good (according to dashboard) CVS version so-as
- to get GL2PS support.
-- Rearranged. Cleaned up. Added some comments. 
-
-* Sat Jan 10 2004 Intrinsic Spin <spin@freakbait.com>
-- Blatently stole this spec file for my own nefarious purposes.
-- Removed Java (for now). Merged the Python and Tcl stuff into 
- the main rpm.
-
-* Fri Dec 05 2003 Fabrice Bellet <Fabrice.Bellet@creatis.insa-lyon.fr>
-- (See Fabrice's RPMs for any more comments --Spin)
