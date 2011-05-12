@@ -1,5 +1,5 @@
 Name:           python-EnthoughtBase
-Version:        3.0.6
+Version:        3.1.0
 Release:        0%{?_dist_release}
 Summary:        Core packages for the Enthought Tool Suite
 Group:          Development/Libraries
@@ -55,6 +55,9 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 %{python_sitelib}/*.pth
 
 %changelog
+* Thu May 12 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.0-0
+- update to 3.1.0
+
 * Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.6-0
 - initial build for Mac OS X WorkShop
 
