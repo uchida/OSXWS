@@ -1,5 +1,5 @@
 Name:           python-Traits
-Version:        3.5.0
+Version:        3.6.0
 Release:        0%{?_dist_release}
 Summary:        Explicitly typed attributes for Python
 Group:          Development/Libraries
@@ -83,6 +83,9 @@ done
 %{python_sitearch}/enthought/traits
 
 %changelog
+* Thu May 12 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-0
+- update to 3.6.0
+
 * Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.5.0-0
 - initial build for Mac OS X WorkShop
 

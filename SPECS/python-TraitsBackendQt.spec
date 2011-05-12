@@ -1,5 +1,5 @@
 Name:           python-TraitsBackendQt
-Version:        3.5.0
+Version:        3.6.0
 Release:        0%{?_dist_release}
 Summary:        PyQt backend for Traits and TraitsGUI (Pyface)
 Group:          Development/Libraries
@@ -42,6 +42,9 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 %{python_sitelib}/enthought/pyface/ui/qt4
 
 %changelog
+* Thu May 12 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-0
+- update to 3.6.0
+
 * Wed May  4 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.5.0-0
 - initial build for Mac OS X WorkShop
 
