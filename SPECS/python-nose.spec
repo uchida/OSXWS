@@ -15,6 +15,7 @@ URL: http://somethingaboutorange.com/mrl/projects/nose/
 
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
+Requires: python-distribute
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -34,10 +35,7 @@ one that is intended to mimic the behavior of py.test as much as is reasonably p
 python setup.py build
 %if %{with doc}
 pushd doc
-make html latex
-pushd .build/latex
-make all-pdf
-popd
+make html
 popd
 %endif
 
@@ -57,7 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS CHANGELOG NEWS README.txt lgpl.txt
 %doc examples
 %if %{with doc}
-%doc doc/.build/html doc/.build/latex/nose.pdf
+%doc doc/.build/html
 %endif
 
 %changelog

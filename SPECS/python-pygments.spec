@@ -5,7 +5,7 @@ Summary: Pygments is a syntax highlighting package written in Python.
 Summary(ja): Python で書かれた構文ハイライト用パッケージ
 Name: python-%{modulename}
 Version: 1.3.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/P/Pygments/Pygments-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
@@ -13,6 +13,8 @@ URL: http://pygments.org/
 
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
+Requires: bash-completion
+Requires: python-distribute
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRequires: python-nose
@@ -53,18 +55,29 @@ mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
 install docs/pygmentize.1 $RPM_BUILD_ROOT%{_mandir}/man1/
 mv docs/build docs/html
 
+# bash-completion
+bash_completion_dir=$RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
+mkdir -p $bash_completion_dir
+install -m 644 external/pygments.bashcomp $bash_completion_dir/pygments
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,wheel)
-%doc AUTHORS CHANGES LICENSE TODO
-%doc docs/html
 %{_bindir}/*
 %{_mandir}/man1/pygmentize.1*
 %{python_sitelib}/*
+%{_sysconfdir}/bash_completion.d/pygments
+%doc external/*.py
+%doc AUTHORS CHANGES LICENSE TODO
+%doc docs/html
 
 %changelog
+* Sat Apr 23 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-1
+- add bash_completion support for pygmentize command
+- add *.py in external to documents
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-0
 - initial build for Mac OS X WorkShop 10.6
 

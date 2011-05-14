@@ -4,10 +4,10 @@
 Summary: python code static checker
 Name: python-%{modulename}
 Version: 0.22.0
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/%{modulename}/%{modulename}-%{version}.tar.gz
 License: GPLv2
-Group: Development/Language
+Group: Development/Languages
 URL: http://www.logilab.org/project/pylint
 
 Requires: python = 2.6.6
@@ -60,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.22.0-1
+- fix type in Group
+
 * Wed Dec 22 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.22.0-0
 - initial build for Mac OS X WorkShop 10.6
 

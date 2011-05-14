@@ -5,15 +5,16 @@
 Summary: simple powerful testing with Python
 Name: python-%{modulename}
 Version: 2.0.0
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/%{modulename}/%{modulename}-%{version}.zip
 License: MIT
-Group: Development/Language
+Group: Development/Languages
 URL: http://pytest.org/
 
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
 Requires: python-py
+Requires: python-distribute
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRequires: python-distribute
@@ -56,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.0-3
+- fix type in Group
+
 * Fri Apr  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.0-2
 - replace setuptools with distribute
 

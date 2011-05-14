@@ -5,10 +5,10 @@
 Summary: library with cross-python path, ini-parsing, io, code, log facilities
 Name: python-%{modulename}
 Version: 1.4.0
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/%{modulename}/%{modulename}-%{version}.zip
 License: MIT
-Group: Development/Language
+Group: Development/Languages
 URL: http://pylib.org/
 
 Requires: python = 2.6.6
@@ -54,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4.0-3
+- fix type in Group
+
 * Fri Apr  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4.0-2
 - replace setuptools with distribute
 

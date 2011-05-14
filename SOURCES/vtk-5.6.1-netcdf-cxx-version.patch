@@ -1,0 +1,11 @@
+diff -uNr VTK.orig/Utilities/vtknetcdf/CMakeLists.txt VTK/Utilities/vtknetcdf/CMakeLists.txt
+--- VTK.orig/Utilities/vtknetcdf/CMakeLists.txt	2011-05-05 06:57:35.000000000 +0900
++++ VTK/Utilities/vtknetcdf/CMakeLists.txt	2011-05-05 07:03:41.000000000 +0900
+@@ -298,6 +298,7 @@
+ # Apply user-defined properties to the library target.
+ IF(VTK_LIBRARY_PROPERTIES)
+   SET_TARGET_PROPERTIES(vtkNetCDF PROPERTIES ${VTK_LIBRARY_PROPERTIES})
++  SET_TARGET_PROPERTIES(vtkNetCDF_cxx PROPERTIES ${VTK_LIBRARY_PROPERTIES})
+ ENDIF(VTK_LIBRARY_PROPERTIES)
+ 
+ IF(NOT VTK_INSTALL_NO_LIBRARIES)

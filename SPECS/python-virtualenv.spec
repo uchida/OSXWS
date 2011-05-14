@@ -4,7 +4,7 @@
 
 Summary: Virtual Python Environment builder
 Name: python-%{modulename}
-Version: 1.5.2
+Version: 1.6.1
 Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/v/%{modulename}/%{modulename}-%{version}.tar.gz
 License: MIT
@@ -14,6 +14,7 @@ BuildArch: noarch
 Requires: python = 2.6.6
 Requires: python-devel = 2.6.6
 Requires: /usr/osxws/bin/python2.6
+Requires: python-distribute
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 %if %{with doc}
@@ -46,6 +47,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/*.txt
 
 %changelog
+* Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-0
+- update to 1.6.1
+
 * Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.2-0
 - initial build for Mac OS X WorkShop
 

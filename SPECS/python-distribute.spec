@@ -35,7 +35,7 @@ for working with Python module distributions.
 python setup.py build
 %if %{with doc}
 pushd docs
-make html latex
+make html
 popd
 %endif
 
@@ -51,11 +51,14 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 %doc CHANGES.txt CONTRIBUTORS.txt DEVGUIDE.txt README.txt
 %if %{with doc}
-%doc docs/build/html docs/build/latex/Distribute.pdf
+%doc docs/build/html
 %endif
 
 
 %changelog
+* Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.15-1
+ - build with doc generate only html docs
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.15-0
 - initial build for Mac OS X WorkShop
 

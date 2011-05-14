@@ -6,11 +6,10 @@ Summary: Scientific Library for Python
 Summary(ja): Python 科学技術計算ライブラリ
 Name: python-%{modulename}
 Version: 0.9.0
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
-Group: Applications/Edutainment
 URL: http://www.scipy.org
 
 Requires: apple-gcc
@@ -24,9 +23,6 @@ BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRequires: python-numpy
 BuildRequires: suitesparse-devel
-%if %{with doc}
-BuildRequires: python-sphinx python-matplotlib
-%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
@@ -40,6 +36,18 @@ Scipy は NumPy 配列と共にビルドされ、多くのユーザーフレン�
 全ての一般的なな OS で動作し、インストールも高速で、ライセンス料等の支払いの必要もありません。
 Numpy と Scipy は簡単に利用できる上に科学、工学の先端をリードするだけのパワーも持っています。
 計算機上で数値を操作し、結果を表示し、発表する必要があれば、Scipy を試してみましょう。
+
+%if %{with doc}
+%package doc
+Summary: Documentation files for SuiteSparse
+Group: Documentation
+BuildArch: noarch
+Requires: %{name} = %{version}-%{release}
+BuildRequires: python-sphinx python-matplotlib
+
+%description doc
+This package contains documentation files for %{name}.
+%endif
 
 %prep
 %setup -q -n %{modulename}-%{version}
@@ -64,7 +72,6 @@ popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export ARCHFLAGS='-arch i386 -arch x86_64'
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT
 
 %clean
@@ -74,11 +81,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,wheel)
 %{python_sitelib}/*
 %if %{with doc}
+%files doc
 %doc doc/build/html
 %doc doc/build/latex/scipy*.pdf
 %endif
 
 %changelog
+* Mon Apr 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-2
+- put documents into a doc subpackage
+
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-1
+- fix typo in Group
+
 * Thu Mar  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-0
 - update to 0.9.0
 
