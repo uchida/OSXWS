@@ -1,6 +1,6 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Engineering
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
@@ -79,10 +79,14 @@ python setup.py build
 %install
 python setup.py install --skip-build --root $RPM_BUILD_ROOT \
                         --install-scripts=%{_bindir} --install-data=%{_prefix}
+
 # remove useless files
 rm -f $RPM_BUILD_ROOT%{python_sitearch}/enthought/tvtk/setup.py*
 find $RPM_BUILD_ROOT%{python_sitearch}/enthought -name \.buildinfo \
     -type f -print | xargs rm -f -
+
+# remove mayavi2 script
+rm -rf $RPM_BUILD_ROOT%{_bindir}/mayavi2
 
 # non-executable-script
 chmod +x $RPM_BUILD_ROOT%{python_sitearch}/enthought/mayavi/tests/runtests.py
@@ -96,9 +100,7 @@ chmod +x $RPM_BUILD_ROOT%{python_sitearch}/enthought/mayavi/tests/runtests.py
 %{python_sitearch}/enthought/tvtk/[_a-gi-z]*
 %{python_sitearch}/*.egg-info
 %{python_sitearch}/*.pth
-%{_bindir}/mayavi2
 %{_bindir}/tvtk_doc
-%{_mandir}/man1/mayavi2.1.*
 
 %files doc
 %doc build/docs/html
@@ -106,6 +108,7 @@ chmod +x $RPM_BUILD_ROOT%{python_sitearch}/enthought/mayavi/tests/runtests.py
 %changelog
 * Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-0
 - update to 3.4.1
+- remove mayavi2 script does not work with qt4 backend
 
 * Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-0
 - initial build for Mac OS X
