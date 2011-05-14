@@ -1,5 +1,5 @@
 Name:           python-mayavi
-Version:        3.4.0
+Version:        3.4.1
 Release:        0%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Engineering
@@ -87,9 +87,6 @@ find $RPM_BUILD_ROOT%{python_sitearch}/enthought -name \.buildinfo \
 # non-executable-script
 chmod +x $RPM_BUILD_ROOT%{python_sitearch}/enthought/mayavi/tests/runtests.py
 
-mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
-cp -p docs/mayavi2.man $RPM_BUILD_ROOT/%{_mandir}/man1/mayavi2.1
-
 %files
 %defattr(-,root,wheel)
 %doc *.txt docs/*.txt examples/
@@ -105,9 +102,11 @@ cp -p docs/mayavi2.man $RPM_BUILD_ROOT/%{_mandir}/man1/mayavi2.1
 
 %files doc
 %doc build/docs/html
-%doc %{python_sitearch}/enthought/tvtk/html
 
 %changelog
+* Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-0
+- update to 3.4.1
+
 * Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-0
 - initial build for Mac OS X
 
