@@ -35,7 +35,7 @@ popd
 python setup.py install --skip-build --root $RPM_BUILD_ROOT
 
 # fix wrong-file-end-of-line-encoding
-for file in `find build/docs -name "*.txt"`; do
+for file in `find docs/build -name "*.txt"`; do
     sed "s|\r||g" $file > $file.new && \
     touch -r $file $file.new && \
     mv $file.new $file
@@ -49,6 +49,9 @@ done
 %{python_sitelib}/enthought/envisage
 
 %changelog
+* Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-1
+- fix path of wrong-file-end-of-line-encoding
+
 * Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-0
 - update to 3.2.0
 

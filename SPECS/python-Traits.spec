@@ -1,6 +1,6 @@
 Name:           python-Traits
 Version:        3.6.0
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Explicitly typed attributes for Python
 Group:          Development/Libraries
 # Images have different licenses. For image license breakdown check
@@ -65,24 +65,19 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{python_sitearch}/enthought/traits/protocols/_speedups.c
 rm $RPM_BUILD_ROOT%{python_sitearch}/enthought/traits/ctraits.c
 
-# fix wrong-file-end-of-line-encoding
-for file in `find build/docs -name "*.txt" -o -name "*.css" -o -name \
- "*.py"`; do
-    sed "s|\r||g" $file > $file.new && \
-    touch -r $file $file.new && \
-    mv $file.new $file
-done
-
 %files
 %defattr(-,root,wheel)
 %doc *.txt docs/*.pdf examples
-%doc docs/traitsdocreadme.txt docs/CHANGES.txt build/docs/html
+%doc docs/traitsdocreadme.txt docs/CHANGES.txt
 %dir %{python_sitearch}/enthought
 %{python_sitearch}/*.egg-info
 %{python_sitearch}/*.pth
 %{python_sitearch}/enthought/traits
 
 %changelog
+* Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-1
+- remove absent documents
+
 * Thu May 12 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-0
 - update to 3.6.0
 

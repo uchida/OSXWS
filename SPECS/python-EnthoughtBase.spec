@@ -1,6 +1,6 @@
 Name:           python-EnthoughtBase
 Version:        3.1.0
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Core packages for the Enthought Tool Suite
 Group:          Development/Libraries
 # enthought/util/guid.py and images are LGPLv2+
@@ -49,12 +49,15 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
  
 %files
 %defattr(-,root,wheel)
-%doc *.txt docs/*.txt examples build/docs/html
+%doc *.txt docs/*.txt examples
 %{python_sitelib}/enthought
 %{python_sitelib}/*.egg-info
 %{python_sitelib}/*.pth
 
 %changelog
+* Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.0-1
+- fix path to documents
+
 * Thu May 12 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.0-0
 - update to 3.1.0
 

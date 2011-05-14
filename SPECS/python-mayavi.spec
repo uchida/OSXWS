@@ -1,6 +1,6 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        1%{?_dist_release}
+Release:        0%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Engineering
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
@@ -91,6 +91,11 @@ rm -rf $RPM_BUILD_ROOT%{_bindir}/mayavi2
 # non-executable-script
 chmod +x $RPM_BUILD_ROOT%{python_sitearch}/enthought/mayavi/tests/runtests.py
 
+# move documents
+mkdir -p build/docs
+mv docs/build/mayavi/html build/docs/mayavi
+mv docs/build/tvtk/html build/docs/tvtk
+
 %files
 %defattr(-,root,wheel)
 %doc *.txt docs/*.txt examples/
@@ -103,12 +108,13 @@ chmod +x $RPM_BUILD_ROOT%{python_sitearch}/enthought/mayavi/tests/runtests.py
 %{_bindir}/tvtk_doc
 
 %files doc
-%doc build/docs/html
+%doc build/docs/html/*
 
 %changelog
 * Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-0
 - update to 3.4.1
 - remove mayavi2 script does not work with qt4 backend
+- fix path to documents
 
 * Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-0
 - initial build for Mac OS X
