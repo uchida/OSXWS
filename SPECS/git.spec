@@ -2,7 +2,7 @@
 Summary: the fast version control system
 Summary(ja): 高速なバージョン管理システム
 Name: git
-Version: 1.7.4.2
+Version: 1.7.5.1
 Release: 0%{?_dist_release}
 Source0: http://kernel.org/pub/software/scm/git/%{name}-%{version}.tar.bz2
 Source1: http://kernel.org/pub/software/scm/git/%{name}-htmldocs-%{version}.tar.bz2
@@ -435,6 +435,9 @@ fi
 # No files for you!
 
 %changelog
+* Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-0
+- update to 1.7.5.1
+
 * Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.4.2-0
 - update to 1.7.4.2
 
