@@ -2,7 +2,7 @@ Summary: a terminal multiplexer
 Summary(ja): 端末多重化ユーティリティ
 Name: tmux
 Version: 1.4
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # based on zsh patch http://www.zsh.org/mla/workers/2009/msg01145.html
 Source1: tmux_zshcomp
@@ -64,6 +64,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES FAQ NOTES TODO
 
 %changelog
+* Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4-1
+- rebuild with libevent 2.0.10
+
 * Wed Jan  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4-0
 - update to tmux 1.4
 
