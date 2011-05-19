@@ -4,7 +4,7 @@
 Summary: Mercurial source control management
 Summary(ja): Mercurial ソースコード管理
 Name: mercurial
-Version: 1.7.5
+Version: 1.8.3
 Release: 0%{?_dist_release}
 Source0: http://mercurial.selenic.com/release/mercurial-%{version}.tar.gz
 Source1: mercurial-init.el
@@ -185,6 +185,9 @@ fi
 %dir %{shared_dir}/mercurial
 
 %changelog
+* Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-0
+- update to 1.8.3
+
 * Wed Feb 16 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5-0
 - update to 1.7.5
 
