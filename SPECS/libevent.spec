@@ -3,7 +3,7 @@
 Summary: an event notification library
 Summary(ja): イベント通知ライブラリ
 Name: libevent
-Version: 1.4.14b
+Version: 2.0.11
 Release: 0%{?_dist_release}
 Source0: http://www.monkey.org/~provos/%{name}-%{version}-%{alphatag}.tar.gz
 License: BSD
@@ -53,7 +53,6 @@ make verify
 rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT
-make install-man DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 
 %clean
@@ -65,18 +64,25 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}-*.dylib
 %{_libdir}/%{name}_core-*.dylib
 %{_libdir}/%{name}_extra-*.dylib
+%{_libdir}/%{name}_pthreads-*.dylib
+%{_libdir}/%{name}_openssl-*.dylib
 
 %files devel
 %defattr(-,root,wheel)
 %{_bindir}/*
 %{_includedir}/*
-%{_mandir}/man3/*.3*
 %{_libdir}/%{name}.dylib
 %{_libdir}/%{name}_core.dylib
 %{_libdir}/%{name}_extra.dylib
+%{_libdir}/%{name}_openssl.dylib
+%{_libdir}/%{name}_pthreads.dylib
 %{_libdir}/%{name}*.a
+%{_libdir}/pkgconfig/%{name}*.pc
 
 %changelog
+* Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.11-0
+- update to 2.0.11
+
 * Thu Nov  4 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4.14b-0
 - initial build for Mac OS X WorkShop
 
