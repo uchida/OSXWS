@@ -4,8 +4,8 @@
 
 Summary: NumPy: array processing for numbers, strings, records, and objects.
 Name: python-%{modulename}
-Version: 1.5.1
-Release: 3%{?_dist_release}
+Version: 1.6.0
+Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Source1: numpy-site.cfg
 License: BSD
@@ -86,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri May 20 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.0-0
+- update tp 1.6.0
+
 * Mon Apr 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.1-4
 - put documents into a doc subpackage
 

@@ -4,7 +4,7 @@
 
 Summary: Enhancements to virtualenv
 Name: python-%{modulename}
-Version: 2.6.3
+Version: 2.7.1
 Release: 0%{?_dist_release}
 Source0: http://www.doughellmann.com/downloads/%{modulename}-%{version}.tar.gz
 License: MIT
@@ -44,6 +44,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/html/*
 
 %changelog
-* Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5.2-0
+* Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.7.1-0
+- update to 2.7.1
+
+* Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.3-0
 - initial build for Mac OS X WorkShop
 
