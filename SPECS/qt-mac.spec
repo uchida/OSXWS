@@ -42,6 +42,7 @@ Provides: QtOpenGL QtTest QtSvg phonon
 Provides: QtXml QtXmlPatterns QtSql
 Provides: QtDesigner QtDesignerComponents
 Provides: QtHelp QtDeclarative Qt3Support
+Provides: QtWebKit
 
 %description
 Qt is a software toolkit for developing applications.
@@ -173,6 +174,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_qt4_plugindir}/sqldrivers/libqsqlite*
 
 %changelog
+* Fri May 20 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-1
+- fix dependency problem with QtWebKit framework
+
 * Wed May  4 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-0
 - initial build for Mac OS X WorkShop
 
