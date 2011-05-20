@@ -86,6 +86,7 @@ programming languages.
 
 %prep
 %setup -q -n VTK
+%patch0 -p1
 
 # Replace relative path ../../../VTKData with %{_datadir}/vtkdata-%{version}
 # otherwise it will break on symlinks.
