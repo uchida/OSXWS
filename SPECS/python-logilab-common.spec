@@ -3,7 +3,7 @@
 
 Summary: collection of low-level Python packages and modules used by Logilab projects
 Name: python-%{modulename}
-Version: 0.55.0
+Version: 0.55.2
 Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
