@@ -108,7 +108,7 @@ mv docs/build/tvtk/html build/docs/tvtk
 %{_bindir}/tvtk_doc
 
 %files doc
-%doc build/docs/html/*
+%doc build/docs/*
 
 %changelog
 * Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-0
