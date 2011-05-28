@@ -4,7 +4,7 @@ Summary: an event notification library
 Summary(ja): イベント通知ライブラリ
 Name: libevent
 Version: 2.0.11
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://www.monkey.org/~provos/%{name}-%{version}-%{alphatag}.tar.gz
 License: BSD
 Group: System Environment/Libraries
@@ -31,21 +31,81 @@ documentation for %{name}. If you like to develop programs using %{name},
 you will need to install %{name}-devel.
 
 %prep
-%setup -q -n %{name}-%{version}-%{alphatag}
+%setup -q -c %{name}-%{version}-%{alphatag}
+
+mv %{name}-%{version}-%{alphatag} INTEL
+cp -Rp  INTEL X86_64
 
 %build
-export CFLAGS='-arch i386 -arch x86_64'
-export LDFLAGS='-arch i386 -arch x86_64'
-%configure CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' CPP='/usr/bin/gcc-4.2 -E'
+pushd INTEL
+export CFLAGS="-O3 -arch i386 -mtune=pentium-m"
+export CXXFLAGS="$CFLAGS" \
+%configure \
+           --host=%{_rpm_platform32} \
+           --build=%{_rpm_platform32} \
+           --target=%{_rpm_platform32}
 make
+popd
+
+pushd X86_64
+export CFLAGS="-O3 -arch x86_64 -mtune=core2"
+export CXXFLAGS="$CFLAGS" \
+%configure \
+           --host=%{_rpm_platform64} \
+           --build=%{_rpm_platform64} \
+           --target=%{_rpm_platform64}
+make
+cp -fRP README CHANGELOG ..
+popd
 
 %check
-make verify
+for arch in INTEL X86_64; do
+    pushd $arch
+    make verify
+    popd
+done
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make install DESTDIR=$RPM_BUILD_ROOT
+PWD=`pwd`
+for arch in INTEL X86_64; do
+    pushd $arch
+    rm -rf ${PWD}-root
+    make install DESTDIR=${PWD}-root
+    popd
+done
+
+## Make Universal Binaries
+filelist=$(find ./INTEL-root -type f | xargs file | sed -e 's,^\./INTEL-root/,,g' | \
+        grep -E \(Mach-O\)\|\(ar\ archive\) |sed -e 's,:.*,,g' -e '/\for\ architecture/d')
+for i in $filelist; do
+    /usr/bin/lipo -create INTEL-root/$i X86_64-root/$i -output `basename $i`
+    cp -f `basename $i` INTEL-root/$i
+done
+
+# check header files
+for i in `find INTEL-root -name "*.h" -type f`; do
+    TARGET=`echo $i | sed -e "s,.*INTEL-root,,"`
+    TEMP=`diff -u INTEL-root/$TARGET X86_64-root/$TARGET > /dev/null || echo different`
+    if [ -n "$TEMP" ]; then
+        mv X86_64-root/$TARGET INTEL-root/${TARGET%.*}-x86_64.h
+        mv INTEL-root/$TARGET INTEL-root/${TARGET%.*}-i386.h
+        FILE=${TARGET##*/}
+        FILE=${FILE%.*}
+        cat <<EOF > INTEL-root/$TARGET
+#if defined (__i386__)
+#include "${FILE}-i386.h"
+#elif defined( __x86_64__ )
+#include "${FILE}-x86_64.h"
+#endif
+EOF
+    fi
+done
+
+# install
+mkdir -p %{buildroot}
+tar cf - -C INTEL-root . | tar xpf - -C $RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 
 %clean
@@ -73,6 +133,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/%{name}*.pc
 
 %changelog
+* Sat May 28 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.11-1
+- make libevent headers architecture-independent
+
 * Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.11-0
 - update to 2.0.11
 
