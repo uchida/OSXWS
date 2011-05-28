@@ -230,13 +230,13 @@ ETC_GITCONFIG=%{_sysconfdir}/gitconfig
 EOF
 
 %build
-make CC="gcc-4.2 -arch i386 -arch x86_64" \
+make CC="/usr/bin/gcc-4.2 -arch i386 -arch x86_64" \
      AR="libtool -static" \
      all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make CC="gcc-4.2 -arch i386 -arch x86_64" \
+make CC="/usr/bin/gcc-4.2 -arch i386 -arch x86_64" \
      AR="libtool -static" \
      gitwebdir_SQ=/Library/WebServer/CGI-Executables \
      gitwebstaticdir_SQ=/Library/WebServer/Documents/gitweb/static \

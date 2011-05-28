@@ -24,20 +24,14 @@ The groff (GNU troff) software is a typesetting package which reads plain text m
 %patch1 -p1
 
 %build
+export CFLAGS='-arch i386 -arch x86_64'
+export CXXFLAGS='-arch i386 -arch x86_64'
 export LDFLAGS='-liconv'
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            --without-x \
-            --enable-multibyte \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CXX='g++-4.2 -arch i386 -arch x86_64' \
-            CPP='gcc-4.2 -E'
+%configure --without-x \
+           --enable-multibyte \
+           CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+           CXX='/usr/bin/g++-4.2 -arch i386 -arch x86_64' \
+           CPP='/usr/bin/gcc-4.2 -E' CXXPP='/usr/bin/g++-4.2 -E'
 make
 
 %install

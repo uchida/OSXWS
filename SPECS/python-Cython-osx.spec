@@ -39,12 +39,11 @@ code.
 %patch1 -p1
 
 %build
-export CC='gcc-4.2'
-export CXX='g++-4.2'
+export CC='/usr/bin/gcc-4.2'
 export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 
-# In v0.4.1, runtests.py fails with 1 declarations and 2 numpy error
+# In v0.14.1, runtests.py fails with 1 declarations and 2 numpy error
 #%check
 #python runtests.py
 

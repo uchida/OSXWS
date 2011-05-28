@@ -79,7 +79,7 @@ sed -i.osxws 's|/path/to/repo/or/config|%{_sysconfdir}/hgweb.conf|g' hgweb.cgi
 sed -i.osxws 's|#!/usr/bin/env python|#!%{_bindir}/python|g' hgweb.cgi
 
 %build
-export CC="gcc-4.2"
+export CC="/usr/bin/gcc-4.2"
 export ARCHFLAGS="-arch i386 -arch x86_64"
 export CFLAGS="-I%{_includedir}"
 export LDFLAGS="-L%{_libdir}"

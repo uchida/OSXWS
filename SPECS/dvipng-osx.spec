@@ -25,17 +25,10 @@ If GIF support is enabled, GIF output is chosen by using the
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir} -no-cpp-precomp"
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CXX='gcc-4.2 -arch i386 -arch x86_64' \
-            CPP="gcc-4.2 -E" CXXCPP="g++-4.2 -E"
+%configure \
+    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+    CXX='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+    CPP="/usr/bin/gcc-4.2 -E" CXXCPP="/usr/bin/g++-4.2 -E"
 make
 
 %install

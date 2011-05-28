@@ -34,16 +34,9 @@ you will need to install %{name}-devel.
 %setup -q -n %{name}-%{version}-%{alphatag}
 
 %build
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CPP="gcc-4.2 -E"
+export CFLAGS='-arch i386 -arch x86_64'
+export LDFLAGS='-arch i386 -arch x86_64'
+%configure CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' CPP='/usr/bin/gcc-4.2 -E'
 make
 
 %check

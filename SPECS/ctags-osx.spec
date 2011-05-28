@@ -32,16 +32,15 @@ to make sure you are using this package.
 %build
 export CFLAGS='-arch i386 -arch x86_64'
 export LDFLAGS='-arch i386 -arch x86_64'
-./configure --mandir=$RPM_BUILD_ROOT%{_mandir}
+%configure
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make install prefix=$RPM_BUILD_ROOT%{_prefix}
+%makeinstall prefix=$RPM_BUILD_ROOT%{_prefix}
 mv $RPM_BUILD_ROOT%{_bindir}/ctags $RPM_BUILD_ROOT%{_bindir}/ctags-exuberant
 mv $RPM_BUILD_ROOT%{_mandir}/man1/ctags.1 $RPM_BUILD_ROOT%{_mandir}/man1/ctags.1-exuberant
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT

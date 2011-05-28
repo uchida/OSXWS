@@ -49,7 +49,8 @@ This package contains documentation files for %{name}.
 cp -pf %{SOURCE1} site.cfg
 
 %build
-export CC='gcc' CXX='g++' F77='gfortran' F90='gfortran'
+export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
+export F77='/usr/osxws/bin/gfortran-4.2' F90='/usr/osxws/bin/gfortran-4.2'
 export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 

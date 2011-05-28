@@ -46,41 +46,32 @@ Provides some additional PDF and HTML documentation for graphviz.
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir}"
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            --disable-static \
-            --with-quartz \
-            --with-libgd \
-            --with-ghostscript \
-            --with-pangocairo \
-            --without-x \
-            --without-gtk \
-            --without-gdk-pixbuf \
-            --without-lasi \
-            --without-gtkgl \
-            --without-gtkglext \
-            --without-glade \
-            --without-glitz \
-            --without-rsvg \
-            --without-mylibgd \
-            --without-gts \
-            --disable-python \
-            --disable-java \
-            --disable-r \
-            --disable-lua \
-            --disable-tcl \
-            --disable-ruby \
-            --disable-perl \
-            --disable-php \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CXX='g++-4.2 -arch i386 -arch x86_64' \
-            CPP='gcc-4.2 -E' CXXCPP='g++-4.2 -E'
+%configure --disable-static \
+           --with-quartz \
+           --with-libgd \
+           --with-ghostscript \
+           --with-pangocairo \
+           --without-x \
+           --without-gtk \
+           --without-gdk-pixbuf \
+           --without-lasi \
+           --without-gtkgl \
+           --without-gtkglext \
+           --without-glade \
+           --without-glitz \
+           --without-rsvg \
+           --without-mylibgd \
+           --without-gts \
+           --disable-python \
+           --disable-java \
+           --disable-r \
+           --disable-lua \
+           --disable-tcl \
+           --disable-ruby \
+           --disable-perl \
+           --disable-php \
+           CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+           CPP='/usr/bin/gcc-4.2 -E'
 sed -i.tag 's|LTOBJCCOMPILE = $(LIBTOOL)|LTOBJCCOMPILE = $(LIBTOOL) --tag=CC|g' plugin/quartz/Makefile
 make
 

@@ -44,7 +44,7 @@ rm -rf $RPM_BUILD_ROOT
 %patch0 -p1
 
 %build
-export CC='gcc-4.2' ARCHFLAGS='-arch i386 -arch x86_64'
+export CC='/usr/bin/gcc-4.2' ARCHFLAGS='-arch i386 -arch x86_64'
 python setup.py build
 
 %check

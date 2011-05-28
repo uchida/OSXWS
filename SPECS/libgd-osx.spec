@@ -56,17 +56,9 @@ gd-devel パッケージは高速な画像生成ライブラリ gd の開発ラ�
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir}"
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            --with-jpeg=%{_prefix} \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CPP='gcc-4.2 -E'
+%configure --with-jpeg=%{_prefix} \
+           CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+           CPP='/usr/bin/gcc-4.2 -E'
 make
 
 %check

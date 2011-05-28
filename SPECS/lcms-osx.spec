@@ -65,19 +65,13 @@ popd
 
 
 %build
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            --with-python --disable-static \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CPP="gcc-4.2 -E" \
-            CXX='g++-4.2 -arch i386 -arch x86_64' \
-            CXXCPP="g++-4.2 -E" \
+CFLAGS='-arch i386 -arch x86_64'
+CXXFLAGS='-arch i386 -arch x86_64'
+%configure --with-python --disable-static \
+           CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+           CPP="/usr/bin/gcc-4.2 -E" \
+           CXX='/usr/bin/g++-4.2 -arch i386 -arch x86_64' \
+           CXXCPP="/usr/bin/g++-4.2 -E" \
 
 # remove rpath from libtool
 sed -i.rpath 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
