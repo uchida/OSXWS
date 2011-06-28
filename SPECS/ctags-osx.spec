@@ -1,7 +1,7 @@
-Summary: Exuberant Ctags - a multi-language source code indexing tool
+Summary: A C programming language indexing and/or cross-reference tool.
 Name: ctags
 Version: 5.8
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 License: GPLv2
 Group: Development/Tools
 Source: http://prdownloads.sourceforge.net/ctags/ctags-%{version}.tar.gz
@@ -9,19 +9,29 @@ Source: http://prdownloads.sourceforge.net/ctags/ctags-%{version}.tar.gz
 Patch0: ctags-japanese.patch
 URL: http://ctags.sourceforge.net
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Requires(post): alternatives
+Requires(postun): alternatives
 BuildArch: fat
 
 %description
-Exuberant Ctags generates an index (or tag) file of language objects
-found in source files for many popular programming languages. This index
-makes it easy for text editors and other tools to locate the indexed
-items. Exuberant Ctags improves on traditional ctags because of its
-multilanguage support, its ability for the user to define new languages
-searched by regular expressions, and its ability to generate emacs-style
-TAGS files.
+Ctags generates an index (or tag) file of C language objects found in
+C source and header files.  The index makes it easy for text editors or
+other utilities to locate the indexed items.  Ctags can also generate a
+cross reference file which lists information about the various objects
+found in a set of C language files in human readable form.  Exuberant
+Ctags improves on ctags because it can find all types of C language tags,
+including macro definitions, enumerated values (values inside enum{...}),
+function and method definitions, enum/struct/union tags, external
+function prototypes, typedef names and variable declarations.  Exuberant
+Ctags is far less likely to be fooled by code containing #if preprocessor
+conditional constructs than ctags.  Exuberant ctags supports output of
+Emacs style TAGS files and can be used to print out a list of selected
+objects found in source files.
 
-Ues update-alternatives so as not to conflict with the Mac OS X system default ctags.
-You may have to run 
+Install ctags if you are going to use your system for C programming.
+
+To evade the conflict with one of Mac OS X system, use update-alternatives,
+so you may have to run 
     sudo update-alternatives --config ctags
 to make sure you are using this package.
 
@@ -77,6 +87,9 @@ fi
 %{_mandir}/man1/ctags*
 
 %changelog
+* Tue Jun 28 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.8-1
+- change summary and description for Vine Linux compatibility
+
 * Mon Dec 20 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.8-0
 - initial build for Mac OS X WorkShop
 
