@@ -51,25 +51,87 @@ files for gd, a graphics library for creating PNG and JPEG graphics.
 gd-devel パッケージは高速な画像生成ライブラリ gd の開発ライブラリとヘッダファイルを提供します。
 
 %prep
-%setup -q -n %{libname}-%{version}
+%setup -q -c %{libname}-%{version}
+mv %{libname}-%{version} INTEL
+cp -Rp  INTEL X86_64
 
 %build
-export CFLAGS="-I/usr/X11/include -I%{_includedir}"
+pushd INTEL
+export CFLAGS="-O3 -arch i386 -mtune=pentium-m -I/usr/X11/include -I%{_includedir}"
+export CXXFLAGS="$CFLAGS" \
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
 %configure --with-jpeg=%{_prefix} \
-           CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
-           CPP='/usr/bin/gcc-4.2 -E'
+           --host=%{_rpm_platform32} \
+           --build=%{_rpm_platform32} \
+           --target=%{_rpm_platform32}
 make
+popd
+
+pushd X86_64
+export CFLAGS="-O3 -arch x86_64 -mtune=core2 -I/usr/X11/include -I%{_includedir}"
+export CXXFLAGS="$CFLAGS" \
+export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
+%configure --with-jpeg=%{_prefix} \
+           --host=%{_rpm_platform64} \
+           --build=%{_rpm_platform64} \
+           --target=%{_rpm_platform64}
+make
+cp -fRp COPYING INSTALL NEWS ..
+cp -fRP README-JPEG.txt readme.jpn README.TESTING README.TXT ..
+cp -fRP index.html ..
+popd
 
 %check
-make check
+for arch in INTEL X86_64; do
+    pushd $arch
+    make check
+    popd
+done
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make install DESTDIR=$RPM_BUILD_ROOT
-make install-man DESTDIR=$RPM_BUILD_ROOT
+PWD=`pwd`
+for arch in INTEL X86_64; do
+    pushd $arch
+    rm -rf ${PWD}-root
+    make install DESTDIR=${PWD}-root
+    make install-man DESTDIR=${PWD}-root
+    popd
+done
 
+# make Universal Binaries concatnate by lipo
+filelist=$(find ./INTEL-root -type f | xargs file | sed -e 's,^\./INTEL-root/,,g' | \
+        grep -E \(Mach-O\)\|\(ar\ archive\) |sed -e 's,:.*,,g' -e '/\for\ architecture/d')
+for i in $filelist; do
+    /usr/bin/lipo -create INTEL-root/$i X86_64-root/$i -output `basename $i`
+    cp -f `basename $i` INTEL-root/$i
+done
+
+# check header files
+for i in `find INTEL-root -name "*.h" -type f`; do
+    TARGET=`echo $i | sed -e "s,.*INTEL-root,,"`
+    TEMP=`diff -u INTEL-root/$TARGET X86_64-root/$TARGET > /dev/null || echo different`
+    if [ -n "$TEMP" ]; then
+        mv X86_64-root/$TARGET INTEL-root/${TARGET%.*}-x86_64.h
+        mv INTEL-root/$TARGET INTEL-root/${TARGET%.*}-i386.h
+        FILE=${TARGET##*/}
+        FILE=${FILE%.*}
+        cat <<EOF > INTEL-root/$TARGET
+#if defined (__i386__)
+#include "${FILE}-i386.h"
+#elif defined( __x86_64__ )
+#include "${FILE}-x86_64.h"
+#endif
+EOF
+    fi
+done
+
+# install
+mkdir -p $RPM_BUILD_ROOT
+tar cf - -C INTEL-root . | tar xpf - -C $RPM_BUILD_ROOT
+
+# clean extraneous
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
