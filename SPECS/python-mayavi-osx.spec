@@ -1,12 +1,12 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Engineering
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
 URL:            http://code.enthought.com/projects/mayavi/
 Source0:        http://www.enthought.com/repo/ETS/Mayavi-%{version}.tar.gz
-BuildRequires:  python-devel, python-distribute, python-setupdocs
+BuildRequires:  python-devel, python-setuptools, python-setupdocs
 BuildRequires:  python-numpy, python-vtk
 BuildArch:      fat
 Requires:       python-vtk, python-AppTools
@@ -111,6 +111,9 @@ mv docs/build/tvtk/html build/docs/tvtk
 %doc build/docs/*
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-1
+- requires python-setuptools
+
 * Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-0
 - update to 3.4.1
 - remove mayavi2 script does not work with qt4 backend

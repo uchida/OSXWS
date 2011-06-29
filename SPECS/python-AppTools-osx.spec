@@ -1,13 +1,13 @@
 Name:           python-AppTools
 Version:        3.4.1
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Enthough Tool Suite Application Tools
 Group:          Development/Libraries
 License:        BSD and LGPLv2+
 URL:            http://code.enthought.com/projects/app_tools.php
 Source0:        http://www.enthought.com/repo/ETS/AppTools-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python-distribute, python-devel, python-setupdocs
+BuildRequires:  python-setuptools, python-devel, python-setupdocs
 Requires:       python-TraitsGUI, python-configobj
 # EnthoughtBase, Traits[ui] and numpy come with TraitsGUI
 
@@ -61,6 +61,9 @@ rm -rf $RPM_BUILD_ROOT%{python_sitelib}/integrationtests
 %{python_sitelib}/enthought/*
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-1
+- requires python-setuptools
+
 * Tue Apr 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-0
 - initial build for Mac OS X WorkShop
 

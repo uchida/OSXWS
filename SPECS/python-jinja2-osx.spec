@@ -6,7 +6,7 @@ Summary: A small but fast and easy to use stand-alone template engine written in
 Summary(ja): Python で書かれた小さく軽量で易しいスタンドアローンテンプレートエンジン
 Name: python-%{modulename}
 Version: 2.5.5
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/J/Jinja2/Jinja2-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
@@ -16,7 +16,7 @@ Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-BuildRequires: python-distribute
+BuildRequires: python-setuptools
 %if %{with doc}
 BuildRequires: python-sphinx
 %endif
@@ -61,6 +61,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.5.5-2
+- requires python-setuptools
+
 * Fri Apr  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.5.5-1
 - replace setuptools with distribute
 

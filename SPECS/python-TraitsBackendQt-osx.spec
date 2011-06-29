@@ -1,6 +1,6 @@
 Name:           python-TraitsBackendQt
 Version:        3.6.0
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        PyQt backend for Traits and TraitsGUI (Pyface)
 Group:          Development/Libraries
 # Confirmed from upstream that some files are BSD and most are GPLed
@@ -8,7 +8,7 @@ License:        BSD and (GPLv2 or GPLv3 with exceptions)
 URL:            http://code.enthought.com/projects/traits_gui
 Source0:        http://www.enthought.com/repo/ETS/TraitsBackendQt-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python-devel, python-distribute
+BuildRequires:  python-devel, python-setuptools
 Requires:       python-TraitsGUI
 # EnthoughtBase and Traits come with TraitsGUI
 Requires:       python-PyQt
@@ -42,6 +42,9 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 %{python_sitelib}/enthought/pyface/ui/qt4
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-1
+- requires python-setuptools
+
 * Thu May 12 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-0
 - update to 3.6.0
 
