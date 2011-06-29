@@ -1,35 +1,33 @@
-%define __python /usr/osxws/bin/python
-%define modulename pygments
+Name:           python-pygments
+Version:        1.3.1
+Release:        2%{?_dist_release}
+Summary:        A syntax highlighting engine written in Python
 
-Summary: Pygments is a syntax highlighting package written in Python.
-Summary(ja): Python で書かれた構文ハイライト用パッケージ
-Name: python-%{modulename}
-Version: 1.3.1
-Release: 1%{?_dist_release}
-Source0: http://pypi.python.org/packages/source/P/Pygments/Pygments-%{version}.tar.gz
-License: BSD
-Group: Development/Languages
-URL: http://pygments.org/
+Group:          Development/Libraries
+License:        BSD
+URL:            http://pygments.org/
+Source0:        http://pypi.python.org/packages/source/P/Pygments/Pygments-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-Requires: bash-completion
-Requires: python-distribute
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-BuildRequires: python-nose
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: noarch
+BuildArch:      noarch
+BuildRequires:  python-devel >= 2.4, python-setuptools, python-nose
+Requires:       python-setuptools, python-imaging
+
 
 %description
-It is a generic syntax highlighter for general use in all kinds of software such as forum systems, 
-wikis or other applications that need to prettify source code. Highlights are:
-- a wide range of common languages and markup formats is supported
-- special attention is paid to details, increasing quality by a fair amount
-- support for new languages and formats are added easily
-- a number of output formats, presently HTML, LaTeX, RTF, SVG, all image formats that PIL supports and ANSI sequences
-- it is usable as a command-line tool and as a library
-- .. and it highlights even Brainfuck!
+Pygments is a generic syntax highlighter for general use in all kinds
+of software such as forum systems, wikis or other applications that
+need to prettify source code. Highlights are:
+
+  * a wide range of common languages and markup formats is supported
+  * special attention is paid to details that increase highlighting
+    quality
+  * support for new languages and formats are added easily; most
+    languages use a simple regex-based lexing mechanism
+  * a number of output formats is available, among them HTML, RTF,
+    LaTeX and ANSI sequences
+  * it is usable as a command-line tool and as a library
+  * ... and it highlights even Brainf*ck!
 
 %description -l ja
 ソースコードの装飾が必要となるフォーラム、Wiki 等の全てのソフトウェアのための構文ハイライトパッケージです。
@@ -41,19 +39,25 @@ wikis or other applications that need to prettify source code. Highlights are:
 - コマンドラインツールやライブラリとしても利用可能
 - Brainfuck! にさえ対応
 
+
 %prep
-%setup -q -n %{modulename}-%{version}
+%setup -q -n Pygments-%{version}
 
 %build
 python setup.py build
-make test
+sed -i.tmp 's/\r//' LICENSE
+rm -f LICENSE.tmp
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
-mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
-install docs/pygmentize.1 $RPM_BUILD_ROOT%{_mandir}/man1/
-mv docs/build docs/html
+pushd docs
+mkdir -p %{buildroot}%{_mandir}/man1
+mv pygmentize.1 $RPM_BUILD_ROOT%{_mandir}/man1/pygmentize.1
+mv build html
+mv src reST
+popd
 
 # bash-completion
 bash_completion_dir=$RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d
@@ -63,17 +67,26 @@ install -m 644 external/pygments.bashcomp $bash_completion_dir/pygments
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+
+%check
+make test
+
+
 %files
 %defattr(-,root,wheel)
-%{_bindir}/*
-%{_mandir}/man1/pygmentize.1*
-%{python_sitelib}/*
-%{_sysconfdir}/bash_completion.d/pygments
+%doc AUTHORS CHANGES docs/html docs/reST LICENSE TODO
 %doc external/*.py
-%doc AUTHORS CHANGES LICENSE TODO
-%doc docs/html
+# For noarch packages: sitelib
+%{python_sitelib}/*
+%{_bindir}/pygmentize
+%lang(en) %{_mandir}/man1/pygmentize.1.gz
+%{_sysconfdir}/bash_completion.d/pygments
+
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-2
+- make more compatible with Vine Linux
+
 * Sat Apr 23 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-1
 - add bash_completion support for pygmentize command
 - add *.py in external to documents
