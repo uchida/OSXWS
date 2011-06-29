@@ -1,34 +1,36 @@
 %define alphatag stable
 
-Summary: an event notification library
-Summary(ja): イベント通知ライブラリ
-Name: libevent
-Version: 2.0.11
-Release: 1%{?_dist_release}
-Source0: http://www.monkey.org/~provos/%{name}-%{version}-%{alphatag}.tar.gz
-License: BSD
-Group: System Environment/Libraries
-URL: http://tmux.sourceforge.net/
+Summary:        Abstract asynchronous event notification library
+Summary(ja):	非同期イベント通知ライブラリ
+Name:           libevent
+Version:        2.0.11
+Release:        2%{?_dist_release}
+Group:          System Environment/Libraries
+License:        BSD
+URL:            http://monkey.org/~provos/libevent/
+Source0:        http://www.monkey.org/~provos/%{name}-%{version}-%{alphatag}.tar.gz
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
+BuildRoot:      %{_tmppath}/%{name}-%{version}-root
+BuildArch:      fat
+BuildRequires:	openssl-devel
 
 %description
-The libevent API provides a mechanism to execute a callback function when a specific event occurs on a file descriptor or after a timeout has been reached.
-Furthermore, libevent also support callbacks due to signals or regular timeouts.
-libevent is meant to replace the event loop found in event driven network servers.
-An application just needs to call event_dispatch() and then add or remove events dynamically without having to change the event loop.
+The libevent API provides a mechanism to execute a callback function
+when a specific event occurs on a file descriptor or after a timeout
+has been reached. libevent is meant to replace the asynchronous event
+loop found in event driven network servers. An application just needs
+to call event_dispatch() and can then add or remove events dynamically
+without having to change the event loop.
 
 %package devel
-Summary: The development libraries and header files for libevent
-Summary(ja): libevent 開発ライブラリ、ヘッダファイル
+Summary: Header files, libraries and development documentation for %{name}
+Summary(ja): libevent 開発ライブラリ、ヘッダファイル、ドキュメント
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 
 %description devel
 This package contains the header files, static libraries and development
 documentation for %{name}. If you like to develop programs using %{name},
-you will need to install %{name}-devel.
 
 %prep
 %setup -q -c %{name}-%{version}-%{alphatag}
@@ -43,7 +45,9 @@ export CXXFLAGS="$CFLAGS" \
 %configure \
            --host=%{_rpm_platform32} \
            --build=%{_rpm_platform32} \
-           --target=%{_rpm_platform32}
+           --target=%{_rpm_platform32} \
+           --disable-static \
+           --disable-dependency-tracking
 make
 popd
 
@@ -53,7 +57,9 @@ export CXXFLAGS="$CFLAGS" \
 %configure \
            --host=%{_rpm_platform64} \
            --build=%{_rpm_platform64} \
-           --target=%{_rpm_platform64}
+           --target=%{_rpm_platform64} \
+           --disable-static \
+           --disable-dependency-tracking
 make
 cp -fRP README CHANGELOG ..
 popd
@@ -106,7 +112,7 @@ done
 # install
 mkdir -p %{buildroot}
 tar cf - -C INTEL-root . | tar xpf - -C $RPM_BUILD_ROOT
-rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -129,10 +135,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}_extra.dylib
 %{_libdir}/%{name}_openssl.dylib
 %{_libdir}/%{name}_pthreads.dylib
-%{_libdir}/%{name}*.a
 %{_libdir}/pkgconfig/%{name}*.pc
+%doc INTEL/sample/*.c
 
 %changelog
+* Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.11-2
+- make more compatible with Vine Linux
+
 * Sat May 28 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.11-1
 - make libevent headers architecture-independent
 
