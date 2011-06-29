@@ -1,26 +1,24 @@
-%define __python /usr/osxws/bin/python
-%define modulename virtualenv
-%bcond_with doc
+%global oname virtualenv
 
-Summary: Virtual Python Environment builder
-Name: python-%{modulename}
-Version: 1.6.1
-Release: 0%{?_dist_release}
-Source0: http://pypi.python.org/packages/source/v/%{modulename}/%{modulename}-%{version}.tar.gz
-License: MIT
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: noarch
-Requires: python = 2.6.6
-Requires: python-devel = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-Requires: python-distribute
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-%if %{with doc}
-BuildRequires: python-sphinx
-%endif
-URL: http://www.virtualenv.org
+Summary:        Tool to create isolated Python environments
+Summary(ja):    隔離されたPython環境を構築するためのツール
+Name:           python-%{oname}
+Version:        1.6.1
+Release:        1%{?_dist_release}
+
+Group:          Development/Languages
+License:        MIT
+URL:            http://pypi.python.org/pypi/%{oname}
+Source0:        http://pypi.python.org/packages/source/v/%{oname}/%{oname}-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+
+BuildArch:      noarch
+BuildRequires:  python-devel
+Requires:       python-setuptools, python-devel
+
+BuildRequires:  python-setuptools
+Requires:       python-setuptools
+
 
 %description
 virtualenv is a tool to create isolated Python environments. virtualenv
@@ -28,25 +26,35 @@ is a successor to workingenv, and an extension of virtual-python. It is
 written by Ian Bicking, and sponsored by the Open Planning Project. It is
 licensed under an MIT-style permissive license.
 
+
 %prep
-%setup -q -n %{modulename}-%{version}
+%setup -q -n %{oname}-%{version}
+sed -i.tmp -e "1s|#!/usr/bin/env python||" virtualenv.py 
+rm -f virtualenv.py.tmp
 
 %build
 python setup.py build
 
+
 %install
+rm -rf $RPM_BUILD_ROOT
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 
+ 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,wheel)
-%{_bindir}/virtualenv
-%{python_sitelib}/*
+%defattr(-,root,root,-)
 %doc docs/*.txt
+# For noarch packages: sitelib
+%{python_sitelib}/*
+%attr(755,root,root) %{_bindir}/virtualenv
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-1
+- make more compatible with Vine Linux
+
 * Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-0
 - update to 1.6.1
 
