@@ -6,7 +6,7 @@ Summary: The Visualization Toolkit - ハイレベル3D可視化ライブラリ
 Group: System Environment/Libraries
 Name: vtk
 Version: 5.6.1
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://www.vtk.org/files/release/5.6/%{name}-%{version}.tar.gz
 Source1: http://www.vtk.org/files/release/5.6/%{name}data-%{version}.tar.gz
 Patch0: vtk-5.6.1-netcdf-cxx-version.patch
@@ -64,7 +64,7 @@ programs that use VTK to do 3D visualisation.
 
 %package tcl
 Summary: Tcl bindings for VTK.
-Group: Applications/Engineering
+Group: Applications/Edutainment
 Requires: %{name} = %{version}-%{release}
 Requires: tcl
 
@@ -84,7 +84,7 @@ building VTK. This package is relocatable.
 
 %package python
 Summary: Python bindings for VTK.
-Group: Applications/Engineering
+Group: Applications/Edutainment
 Requires: %{name} = %{version}-%{release}
 Requires: python
 
@@ -355,6 +355,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-3
+- change Group: Applications/Edutainment instead of Applications/Engineering
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-2
 - make more compatible with Vine Linux
 

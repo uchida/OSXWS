@@ -1,15 +1,15 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
-Group:          Applications/Engineering
+Group:          Applications/Edutainment
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
 URL:            http://code.enthought.com/projects/mayavi/
 Source0:        http://www.enthought.com/repo/ETS/Mayavi-%{version}.tar.gz
 BuildRequires:  python-devel, python-setuptools, python-setupdocs
-BuildRequires:  python-numpy, python-vtk
+BuildRequires:  python-numpy, vtk-python
 BuildArch:      fat
-Requires:       python-vtk, python-AppTools
+Requires:       vtk-python, python-AppTools
 # EnthoughtBase, Traits[ui] and numpy come with TraitsGUI
 # TraitsGUI comes with AppTools
 Requires:       python-EnvisageCore, python-EnvisagePlugins
@@ -111,6 +111,9 @@ mv docs/build/tvtk/html build/docs/tvtk
 %doc build/docs/*
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-2
+- change Group: Applications/Edutainment instead of Applications/Engineering
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-1
 - requires python-setuptools
 
