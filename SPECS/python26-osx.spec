@@ -1,7 +1,9 @@
 %define frameworkdir /Library/Frameworks
 %define python_version 2.6
+%define python_lib %{frameworkdir}/Python.framework/Versions/%{python_version}/lib/python%{python_version}
 
-Summary: An interpreted, interactive, object-oriented programming language
+Summary: An interpreted, interactive, object-oriented programming language.
+Summary(ja): オブジェクト指向言語 Python インタプリタ
 Name: python
 Version: 2.6.6
 Release: 1%{?_dist_release}
@@ -18,32 +20,64 @@ Requires(post): alternatives
 Requires(postun): alternatives
 Requires: alternatives
 BuildRequires: ncurses-devel readline-devel
+Provides: tkinter
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
 %description
-Python is an interpreted, interactive, object-oriented programming language 
-often compared to Tcl, Perl, Scheme or Java. 
-Python includes modules, classes, exceptions, very high level dynamic data types and dynamic typing. 
-Python supports interfaces to many system calls and libraries,
-as well as to various windowing systems (X11, Motif, Tk, Mac and MFC).
-
-Programmers can write new built-in modules for Python in C or C++.
-Python can be used as an extension language for applications that need a programmable interface.
+Python is an interpreted, interactive, object-oriented programming
+language.  It incorporates modules, exceptions, dynamic typing, very high
+level dynamic data types, and classes. Python combines remarkable power
+with very clear syntax. It has interfaces to many system calls and
+libraries, as well as to various window systems, and is extensible in C or
+C++. It is also usable as an extension language for applications that need
+a programmable interface.  Finally, Python is portable: it runs on many
+brands of UNIX, on PCs under Windows, MS-DOS, and OS/2, and on the
+Mac.
 
 %package devel
-Summary: The libraries and header files needed for Python development
+Summary: The libraries and header files needed for Python development.
+Summary(ja): Python での開発に必要なライブラリやヘッダファイル
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
-Requires: /usr/osxws/bin/python2.6
+Obsoletes: python2-devel
 
 %description devel
-The Python programming language's interpreter can be extended with dynamically loaded extensions and can be embedded in other programs.
+The Python programming language's interpreter can be extended with
+dynamically loaded extensions and can be embedded in other programs.
 This package contains the header files and libraries needed to do
 these types of tasks.
 
-Install python-devel if you want to develop Python extensions.
-The python package will also need to be installed.
+Install python-devel if you want to develop Python extensions.  The
+python package will also need to be installed.  You'll probably also
+want to install the python-docs package, which contains Python
+documentation.
+
+%package tools
+Summary: A collection of development tools included with Python.
+Summary(ja): Python に含まれる開発ツール一式
+Group: Development/Tools
+Requires: %{name} = %{version}
+Requires: tkinter = %{version}
+Obsoletes: python2-tools
+
+%description tools
+The Python package includes several development tools that are used
+to build python programs.  This package contains a selection of those
+tools, including the IDLE Python IDE.
+
+Install python-tools if you want to use these tools to develop
+Python programs.  You will also need to install the python and
+tkinter packages.
+
+%package docs
+Summary: Documentation for the Python programming language.
+Summary(ja): Python プログラミング言語のドキュメント
+Group: Applications/Documentation
+Obsoletes: python2-docs
+
+%description docs
+Documentation relating to the Python programming language in HTML and info
+formats.
 
 %prep
 %setup -q -a 1 -a 2 -n %{name}-%{version}
@@ -85,13 +119,35 @@ make maninstall DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_bindir}/{idle,pydoc,python,pythonw,python-config,smtpd.py}
 
 # make symbloc link from framework to /usr/osxws with relative path
-cur_path=%{frameworkdir}/Python.framework/Versions/Current
+cur_path=%{frameworkdir}/Python.framework/Versions/%{python_version}
 ln -s $cur_path/bin/python%{python_version}-all $RPM_BUILD_ROOT%{_bindir}/python%{python_version}-all
 ln -s $cur_path/bin/pythonw%{python_version}-all $RPM_BUILD_ROOT%{_bindir}/pythonw%{python_version}-all
+ln -s $cur_path/bin/2to3 $RPM_BUILD_ROOT%{_bindir}/2to3%{python_version}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}
 ln -s $cur_path/Python $RPM_BUILD_ROOT%{_libdir}/libpython%{python_version}.dylib
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
 ln -s $cur_path/man/man1/python%{python_version}.1 $RPM_BUILD_ROOT%{_mandir}/man1/
+
+## tools
+mkdir -p $RPM_BUILD_ROOT%{python_lib}/site-packages
+echo "#!/bin/bash
+exec $cur_path/lib/site-packages/pynche/pynche" \
+	> $RPM_BUILD_ROOT%{_bindir}/pynche
+chmod 755 $RPM_BUILD_ROOT%{_bindir}/pynche
+echo "#!/bin/bash
+exec $cur_path/lib/site-packages/modulator/modulator.py" \
+	> $RPM_BUILD_ROOT%{_bindir}/modulator
+chmod 755 $RPM_BUILD_ROOT%{_bindir}/modulator
+#modulator
+cp -r Tools/modulator ${RPM_BUILD_ROOT}%{python_lib}/site-packages/
+#pynche
+rm -f Tools/pynche/*.pyw
+cp -r Tools/pynche $RPM_BUILD_ROOT%{python_lib}/site-packages/
+(mv Tools/modulator/README Tools/modulator/README.modulator)
+(mv Tools/pynche/README Tools/pynche/README.pynche)
+#gettext
+install -m755  Tools/i18n/pygettext.py $RPM_BUILD_ROOT%{_bindir}
+install -m755  Tools/i18n/msgfmt.py $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,7 +161,9 @@ rm -rf $RPM_BUILD_ROOT
               %{_bindir}/python%{python_version}-config \
   --slave   %{_bindir}/pydoc pydoc %{_bindir}/pydoc%{python_version} \
   --slave   %{_bindir}/idle idle %{_bindir}/idle%{python_version} \
-  --slave   %{_bindir}/smtp.py smtp.py %{_bindir}/smtpd%{python_version}.py
+  --slave   %{_bindir}/2to3 2to3 %{_bindir}/2to326 \
+  --slave   %{_bindir}/smtpd.py smtpd.py %{_bindir}/smtpd%{python_version}.py
+%{_bindir}/2to3
 # Apple python 2.6
 %{_sbindir}/update-alternatives \
   --install %{_bindir}/python python /usr/bin/python2.6 20 \
@@ -113,7 +171,8 @@ rm -rf $RPM_BUILD_ROOT
   --slave   %{_bindir}/python-config python-config /usr/bin/python2.6-config \
   --slave   %{_bindir}/pydoc pydoc /usr/bin/pydoc2.6 \
   --slave   %{_bindir}/idle idle /usr/bin/idle2.6 \
-  --slave   %{_bindir}/smtp.py smtp.py /usr/bin/smtpd2.6.py
+  --slave   %{_bindir}/2to3 2to3 /usr/bin/2to3 \
+  --slave   %{_bindir}/smtpd.py smtpd.py /usr/bin/smtpd2.6.py
 # Apple python 2.5
 %{_sbindir}/update-alternatives \
   --install %{_bindir}/python python /usr/bin/python2.5 10 \
@@ -121,7 +180,7 @@ rm -rf $RPM_BUILD_ROOT
   --slave   %{_bindir}/python-config python-config /usr/bin/python2.5-config \
   --slave   %{_bindir}/pydoc pydoc /usr/bin/pydoc2.5 \
   --slave   %{_bindir}/idle idle /usr/bin/idle2.5 \
-  --slave   %{_bindir}/smtp.py smtp.py /usr/bin/smtpd2.5.py
+  --slave   %{_bindir}/smtpd.py smtpd.py /usr/bin/smtpd2.5.py
 # fix broken symlink if it's there
 if [ ! -f %{_bindir}/python ] ; then
   echo "%{_sbindir}/update-alternatives --auto python"
@@ -139,21 +198,27 @@ fi
 
 %files
 %defattr(-,root,wheel)
-%{_bindir}/*
+%{_bindir}
+%exclude %{_bindir}/modulator
+%exclude %{_bindir}/msgfmt.py
+%exclude %{_bindir}/pygettext.py
+%exclude %{_bindir}/pynche
 %{_mandir}/man1/*.1*
 %{frameworkdir}/Python.framework/Python
 %{frameworkdir}/Python.framework/Resources
 %{frameworkdir}/Python.framework/Versions/Current
 %{frameworkdir}/Python.framework/Versions/%{python_version}/bin
 %{frameworkdir}/Python.framework/Versions/%{python_version}/lib
+%exclude %{python_lib}/config
+%exclude %{python_lib}/test
+%exclude %{python_lib}/site-packages/modulator
+%exclude %{python_lib}/site-packages/pynche
 %{frameworkdir}/Python.framework/Versions/%{python_version}/Mac
 %{frameworkdir}/Python.framework/Versions/%{python_version}/Python
 %{frameworkdir}/Python.framework/Versions/%{python_version}/Resources
 %{frameworkdir}/Python.framework/Versions/%{python_version}/share
-%{_appdirmac}/*
 %doc README LICENSE
-%doc Demo Doc
-%doc html pdf
+%doc Demo
 
 %files devel
 %defattr(-,root,wheel)
@@ -161,6 +226,25 @@ fi
 %{frameworkdir}/Python.framework/Headers
 %{frameworkdir}/Python.framework/Versions/%{python_version}/Headers
 %{frameworkdir}/Python.framework/Versions/%{python_version}/include
+%{python_lib}/config
+%{python_lib}/test
+
+%files tools
+%defattr(-,root,wheel,755)
+%doc Tools/modulator/README.modulator
+%doc Tools/pynche/README.pynche
+%{python_lib}/site-packages/modulator
+%{python_lib}/site-packages/pynche
+%{_bindir}/modulator
+%{_bindir}/msgfmt.py
+%{_bindir}/pygettext.py
+%{_bindir}/pynche
+%{_appdirmac}/*
+
+%files docs
+%defattr(-,root,root,755)
+%doc Misc/HISTORY Misc/NEWS  Misc/README Misc/cheatsheet Misc/developers.txt
+%doc Doc html pdf
 
 %changelog
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.6-1
