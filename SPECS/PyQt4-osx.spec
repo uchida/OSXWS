@@ -25,7 +25,6 @@ BuildRequires: qt4-devel >= 4.5.0
 BuildRequires: sip-devel >= 4.12.1
 Requires: sip >= 4.12.1
 Requires: qt4
-Provides: python-PyQt
 BuildArch: fat
 
 %description
