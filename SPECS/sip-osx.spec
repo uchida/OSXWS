@@ -46,14 +46,10 @@ classes library.
 %setup -q
 
 %build
+export CC="/usr/bin/gcc" CXX="/usr/bin/g++"
 python configure.py -k -d %{python_sitearch} \
     -b %{_bindir} --arch i386 --arch x86_64
 make %{?_smp_mflags}
-
-%{__python} configure.py -d %{python_sitearch} \
-    -b %{_bindir} --arch i386 --arch x86_64
-make %{?_smp_mflags}
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
