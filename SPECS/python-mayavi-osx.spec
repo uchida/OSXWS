@@ -1,6 +1,6 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        2%{?_dist_release}
+Release:        3%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Edutainment
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
@@ -8,6 +8,7 @@ URL:            http://code.enthought.com/projects/mayavi/
 Source0:        http://www.enthought.com/repo/ETS/Mayavi-%{version}.tar.gz
 BuildRequires:  python-devel, python-setuptools, python-setupdocs
 BuildRequires:  python-numpy, vtk-python
+BuildRequires:  apple-gcc
 BuildArch:      fat
 Requires:       vtk-python, python-AppTools
 # EnthoughtBase, Traits[ui] and numpy come with TraitsGUI
@@ -73,7 +74,9 @@ chmod 0644 enthought/mayavi/tests/data/cellsnd.ascii.inp
 unzip docs/html.zip
 
 %build
-export ARCHFLAGS='-arch i386 -arch x86_64'
+export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
+export F77='/usr/osxws/bin/gfortran-4.2' F90='/usr/osxws/bin/gfortran-4.2'
+export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 
 %install
@@ -111,6 +114,9 @@ mv docs/build/tvtk/html build/docs/tvtk
 %doc build/docs/*
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-3
+- build with specific compiler
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-2
 - change Group: Applications/Edutainment instead of Applications/Engineering
 

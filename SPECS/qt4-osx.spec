@@ -20,7 +20,7 @@
 Summary: Qt Tool Kit
 Name: qt
 Version: 4.7.2
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-%{version}.tar.gz
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: (LGPLv2 with exceptions or GPLv3 with exceptions) and ASL 2.0 and BSD and FTL and MIT
@@ -87,6 +87,8 @@ Requires: %{name} = %{version}-%{release}
 %setup -q -n qt-everywhere-opensource-src-%{version}
 
 %build
+export CC='/usr/bin/gcc-4.2'
+export CXX='/usr/bin/g++-4.2'
 ./configure -confirm-license -release -opensource -shared \
             -prefix %{_qt4_prefix} -bindir %{_qt4_bindir} \
             -datadir %{_qt4_datadir} -demosdir %{_qt4_demosdir} \
@@ -177,6 +179,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_qt4_plugindir}/sqldrivers/libqsqlite*
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-3
+- build with specific compiler
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-2
 - change the package name from qt to qt4
 - provides including packages

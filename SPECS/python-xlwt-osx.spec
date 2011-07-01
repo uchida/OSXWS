@@ -1,20 +1,17 @@
-%define __python /usr/osxws/bin/python
 %define modulename xlwt
 
 Summary: Library to create spreadsheet files compatible with MS Excel files
 Summary(ja): MS Excel 互換表計算ファイル生成ライブラリ
 Name: python-%{modulename}
 Version: 0.7.2
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/x/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: https://secure.simplistix.co.uk/svn/xlwt/trunk
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+Requires: python
+BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 %description
@@ -46,6 +43,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc HISTORY.html licences.py README.html
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7.2-1
+- remove unnecessary requires
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7.2-0
 - initial build for Mac OS X WorkShop 10.6
 

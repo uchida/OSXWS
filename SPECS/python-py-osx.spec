@@ -1,18 +1,17 @@
-%define __python /usr/osxws/bin/python
 %define modulename py
 %bcond_with doc
 
 Summary: library with cross-python path, ini-parsing, io, code, log facilities
 Name: python-%{modulename}
 Version: 1.4.0
-Release: 4%{?_dist_release}
+Release: 5%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/%{modulename}/%{modulename}-%{version}.zip
 License: MIT
 Group: Development/Languages
 URL: http://pylib.org/
 
-Requires: python = 2.6.6
-BuildRequires: python-devel = 2.6.6
+Requires: python
+BuildRequires: python-devel
 BuildRequires: python-setuptools
 %if %{with doc}
 BuildRequires: python-sphinx python-pytest
@@ -52,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4.0-5
+- remove unnecessary requires
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4.0-4
 - requires python-setuptools
 

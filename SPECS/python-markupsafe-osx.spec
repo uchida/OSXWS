@@ -1,6 +1,6 @@
 Name: python-markupsafe
 Version: 0.12
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Summary: Implements a XML/HTML/XHTML Markup safe string for Python
 
 Group: Development/Languages
@@ -18,7 +18,7 @@ A library for safe markup escaping.
 %setup -q -n MarkupSafe-%{version}
 
 %build
-export CC='/usr/osxws/bin/gcc-4.2'
+export CC='/usr/bin/gcc-4.2'
 export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitearch}/*
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-1
+- build with specific compiler
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-0
 - initial build for Mac OS X WorkShop
 

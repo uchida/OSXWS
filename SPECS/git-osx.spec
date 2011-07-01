@@ -5,7 +5,7 @@
 # Pass --without docs to rpmbuild if you don't want the documentation
 Name: 		git
 Version: 	1.7.5.1
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 Summary:  	Core git tools
 Summary(ja):	Core git ツール
 License: 	GPLv2
@@ -189,7 +189,7 @@ Perl interface to Git.
 Summary:        Python interface to Git
 Summary(ja):    Git の python インタフェース
 Group:          Development/Libraries
-Requires:       git = %{version}-%{release}, python >= 2.6.6
+Requires:       git = %{version}-%{release}, python
 %description -n python-Git
 %{summary}.
 
@@ -442,6 +442,9 @@ fi
 # No files for you!
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-2
+- remove unnecessary requires
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-1
 - make more compatible with Vine Linux
 

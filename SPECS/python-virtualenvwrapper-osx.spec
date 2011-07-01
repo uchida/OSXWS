@@ -1,21 +1,17 @@
-%define __python /usr/osxws/bin/python
 %define modulename virtualenvwrapper
-%bcond_with doc
 
 Summary: Enhancements to virtualenv
 Name: python-%{modulename}
 Version: 2.7.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://www.doughellmann.com/downloads/%{modulename}-%{version}.tar.gz
 License: MIT
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
-Requires: python = 2.6.6
-Requires: python-devel = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+Requires: python
+Requires: python-devel
+BuildRequires: python-devel
 URL: http://www.virtualenv.org
 
 %description
@@ -44,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/html/*
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.7.1-1
+- remove unnecessary requires
+
 * Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.7.1-0
 - update to 2.7.1
 

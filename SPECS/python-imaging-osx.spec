@@ -5,17 +5,17 @@ Summary: The Python Imaging Library
 Summary(ja): Python イメージ処理ライブラリ
 Name: python-imaging
 Version: 1.1.7
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 License: MIT
 Group: Development/Languages
 URL: http://www.pythonware.com/products/pil
 Source0: http://effbot.org/downloads/Imaging-%{version}.tar.gz
 Patch0: imaging-1.1.6-osxws.patch
-BuildRequires: python-devel >= 2.6
+BuildRequires: python-devel
 BuildRequires: XOrg-devel libjpeg-devel libpng-devel zlib-devel freetype-devel
 BuildRequires: lcms-devel
 
-Requires: python = 2.6.6
+Requires: python
 Requires: libjpeg >= 6a
 Requires: libpng >= 1.0.12
 Requires: zlib >= 1.1.4
@@ -72,6 +72,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc Docs
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-2
+- remove unnecessary requires
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-1
 - make more compatible with Vine Linux
 

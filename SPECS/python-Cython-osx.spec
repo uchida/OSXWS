@@ -4,18 +4,17 @@
 Summary: The Cython compiler for writing C extensions for the Python language 
 Name: python-%{modulename}
 Version: 0.14.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://cython.org/release/%{modulename}-%{version}.tar.gz
 Patch1: Cython-mac-python.patch
 License: Apache
 Group: Development/Languages
 URL: http://numpy.scipy.org/
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+Requires: python
+BuildRequires: python-devel
 BuildRequires: python-numpy
+BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
@@ -39,7 +38,7 @@ code.
 %patch1 -p1
 
 %build
-export CC='/usr/bin/gcc-4.2'
+export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
 export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 
@@ -62,6 +61,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.txt INSTALL.txt LICENSE.txt README.txt ToDo.txt USAGE.txt
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.14.1-1
+- remove unnecessary requires
+- build with specific compiler
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.14.1-0
 - initial build for Mac OS X WorkShop 10.6
 

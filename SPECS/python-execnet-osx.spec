@@ -1,19 +1,18 @@
-%define __python /usr/osxws/bin/python
 %define modulename execnet
 %bcond_with doc
 
 Summary: rapid multi-Python deployment
 Name: python-%{modulename}
 Version: 1.0.9
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/e/%{modulename}/%{modulename}-%{version}.zip
 License: GPLv2+
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
-Requires: python = 2.6.6
-Requires: python-devel = 2.6.6
-BuildRequires: python-devel = 2.6.6
+Requires: python
+Requires: python-devel
+BuildRequires: python-devel
 %if %{with doc}
 BuildRequires: python-sphinx
 %endif
@@ -59,6 +58,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
-* Sun Feb  6 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.9
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.9-1
+- remove unnecessary requires
+
+* Sun Feb  6 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.9-0
 - initial build for Mac OS X WorkShop
 
