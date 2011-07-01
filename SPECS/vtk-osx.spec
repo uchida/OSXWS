@@ -16,8 +16,6 @@ Patch0: vtk-5.6.1-netcdf-cxx-version.patch
 License: BSD
 URL: http://vtk.org/
 
-BuildRequires: expat-devel, zlib-devel
-
 BuildRequires: cmake >= 2.0.0
 BuildRequires: python-devel
 BuildRequires: freetype-devel, libjpeg-devel, libpng-devel
