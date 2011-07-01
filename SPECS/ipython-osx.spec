@@ -9,7 +9,8 @@ URL: http://ipython.scipy.org/
 
 Requires: python
 BuildRequires: python-devel
-Provides: python-ipython
+Provides: python-ipython = %{version}-%{release}
+Obsoletes: python-ipython
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 

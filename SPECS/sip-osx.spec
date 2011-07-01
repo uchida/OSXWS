@@ -13,7 +13,8 @@ Source:      http://www.riverbankcomputing.co.uk/static/Downloads/sip4/%{name}-%
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 BuildRequires:	python-devel
-Provides: python-sip
+Provides: python-sip = %{version}-%{release}
+Obsoletes: python-sip
 BuildArch: fat
 
 %description
