@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename nose
 %bcond_with doc
 

@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename gmpy
 
 Summary: MPIR/GMP interface to Python

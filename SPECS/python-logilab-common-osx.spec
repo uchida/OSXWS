@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename logilab-common
 
 Summary: collection of low-level Python packages and modules used by Logilab projects

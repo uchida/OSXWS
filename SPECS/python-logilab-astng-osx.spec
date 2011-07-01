@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename logilab-astng
 
 Summary: rebuild a new abstract syntax tree from Python's ast

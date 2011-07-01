@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename sympy
 %bcond_with doc
 %bcond_with ipython

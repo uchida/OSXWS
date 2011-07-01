@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename Cython
 
 Summary: The Cython compiler for writing C extensions for the Python language 
