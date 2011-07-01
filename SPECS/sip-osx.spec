@@ -4,7 +4,7 @@ Name:        sip
 Summary:     SIP - Python/C++ Bindings Generator
 Summary(ja): Python/C++ インターフェイス生成ツール
 Version:     4.12.2
-Release:     1%{?_dist_release}
+Release:     2%{?_dist_release}
 
 License:     GPL
 Group:       Development/Tools
@@ -46,9 +46,14 @@ classes library.
 %setup -q
 
 %build
-export CC="/usr/bin/gcc" CXX="/usr/bin/g++"
 python configure.py -k -d %{python_sitearch} \
-    -b %{_bindir} --arch i386 --arch x86_64
+    -b %{_bindir} --arch i386 --arch x86_64 \
+    CC="/usr/bin/gcc" CXX="/usr/bin/g++"
+make %{?_smp_mflags}
+
+python configure.py -d %{python_sitearch} \
+    -b %{_bindir} --arch i386 --arch x86_64 \
+    CC="/usr/bin/gcc" CXX="/usr/bin/g++"
 make %{?_smp_mflags}
 
 %install
@@ -77,6 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/sip
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.12.1-2
+- fix build section
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.12.1-1
 - make more compatible with Vine Linux
 
