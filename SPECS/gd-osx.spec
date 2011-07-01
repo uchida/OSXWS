@@ -13,7 +13,8 @@ Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildRequires: libjpeg-devel zlib-devel freetype-devel
 BuildRequires: libpng-devel >= 2:1.2.5
-Provides: libgd
+Provides: libgd = %{version}-%{release}
+Obsoletes: libgd
 BuildArch: fat
 
 %description

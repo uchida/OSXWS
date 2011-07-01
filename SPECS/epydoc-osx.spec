@@ -11,7 +11,8 @@ Patch1: epydoc-3.0.1-giftopng.patch
 Patch2: epydoc-3.0.1-new-docutils.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: python-devel
-Provides: python-epydoc
+Provides: python-epydoc = %{version}-%{release}
+Obsoletes: python-epydoc
 BuildArch: noarch
 
 %description
