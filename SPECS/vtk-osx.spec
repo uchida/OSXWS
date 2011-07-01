@@ -15,12 +15,15 @@ Patch0: vtk-5.6.1-netcdf-cxx-version.patch
 # http://fedoraproject.org/wiki/Licensing/BSD#VTKBSDVariant
 License: BSD
 URL: http://vtk.org/
-BuildRequires: cmake
+
+BuildRequires: expat-devel, zlib-devel
+
+BuildRequires: cmake >= 2.0.0
 BuildRequires: python-devel
 BuildRequires: freetype-devel, libjpeg-devel, libpng-devel
 BuildRequires: libtiff-devel, zlib-devel
 BuildRequires: libxml2-devel
-BuildRequires: qt
+BuildRequires: qt4-devel
 BuildRequires: doxygen, graphviz
 BuildRequires: gnuplot
 BuildRequires: wget
@@ -98,7 +101,7 @@ scripts.
 Summary: QT VTK widget
 Group: System Environment/Libraries
 Requires: %{name} = %{version}-%{release}
-Requires: qt
+Requires: qt4
 
 %description qt
 The vtkQt classes combine VTK and Qt(TM) for X11.
