@@ -1,39 +1,52 @@
-Name: graphviz
-Summary: Graph Visualization Tools
-Version: 2.26.3
-Release: 0%{?_dist_release}
-Group: 	Applications/Multimedia
-License: CPL
-URL: http://www.graphviz.org/
-Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+Name:           graphviz
+Summary:        Graph Visualization Tools
+Version:        2.26.3
+Release:        1%{?_dist_release}
+Group:          Applications/Graphics
+License:        CPL
+URL:            http://www.graphviz.org/
+
+Source:         http://www.graphviz.org/pub/%{name}/stable/SOURCES/%{name}-%{version}.tar.gz
 Patch0: graphviz-ptrdiff.patch
 Patch1: graphviz-quartz-libtool.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildRequires: pkgconfig libpng-devel libgd-devel
-BuildRequires: cairo-devel freetype-devel
-BuildRequires: urw-fonts
-BuildRequires: zlib-devel
-BuildRequires: ghostscript-devel
 BuildArch: fat
 
+BuildRoot:      %{_tmppath}/%{name}-%{version}-root
+
+BuildRequires:  bison
+BuildRequires:  cairo-devel
+#BuildRequires:  pango-devel
+BuildRequires:  flex
+BuildRequires:  freetype-devel
+#BuildRequires:  gd-devel
+BuildRequires:  guile-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel 
+BuildRequires:  zlib-devel
+BuildRequires:  ghostscript-devel
+BuildRequires:  pkgconfig
+Requires:	urw-fonts
+
+# only for this release
+BuildConflicts: graphviz-devel
+
 %description
-A collection of tools for the manipulation and layout of graphs (as in nodes 
-and edges, not as in barcharts).
+A collection of tools and tcl packages for the manipulation and layout
+of graphs (as in nodes and edges, not as in barcharts).
 
 %package devel
-Group: 	Development/Libraries
-Summary: Development package for graphviz
-Requires: %{name} = %{version}-%{release}, pkgconfig
+Group:          Development/Libraries
+Summary:        Development tools for version %{version} of %{name}
+Requires:       %{name} = %{version}
 
 %description devel
-A collection of tools for the manipulation and layout of graphs (as in nodes 
-and edges, not as in barcharts). This package contains development files for 
-graphviz.
+The %{name}-devel package contains the header files
+and man3 pages necessary for developing programs
+using version %{version} of the %{name} libraries.
 
 %package doc
-Group: 	Documentation
 Summary: PDF and HTML documents for graphviz
-BuildArch: noarch
+Group:	 Applications/Documentation
 
 %description doc
 Provides some additional PDF and HTML documentation for graphviz.
@@ -45,91 +58,96 @@ Provides some additional PDF and HTML documentation for graphviz.
 
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir}"
+export CXXFLAGS="-I/usr/X11/include -I%{_includedir}"
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            --disable-static \
-            --with-quartz \
-            --with-libgd \
-            --with-ghostscript \
-            --with-pangocairo \
-            --without-x \
-            --without-gtk \
-            --without-gdk-pixbuf \
-            --without-lasi \
-            --without-gtkgl \
-            --without-gtkglext \
-            --without-glade \
-            --without-glitz \
-            --without-rsvg \
-            --without-mylibgd \
-            --without-gts \
-            --disable-python \
-            --disable-java \
-            --disable-r \
-            --disable-lua \
-            --disable-tcl \
-            --disable-ruby \
-            --disable-perl \
-            --disable-php \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CXX='g++-4.2 -arch i386 -arch x86_64' \
-            CPP='gcc-4.2 -E' CXXCPP='g++-4.2 -E'
+%configure \
+    --without-x \
+    --disable-static \
+    --with-libgd \
+    --with-ipsepcola \
+    --with-pangocairo \
+    --without-gtk \
+    --without-gdk-pixbuf \
+    --without-gtkgl \
+    --without-gtkglext \
+    --without-mylibgd \
+    --without-ming \
+    --without-lasi \
+    --disable-sharp \
+    --disable-guile \
+    --disable-io \
+    --disable-java \
+    --disable-lua \
+    --disable-ocaml \
+    --disable-perl \
+    --disable-php \
+    --disable-python \
+    --disable-r \
+    --disable-ruby \
+    --disable-tcl \
+    --with-quartz \
+    --with-ghostscript \
+    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+    CXX='/usr/bin/g++-4.2 -arch i386 -arch x86_64' \
+    CPP='/usr/bin/gcc-4.2 -E' \
+    CXXPP='/usr/bin/g++-4.2 -E'
 sed -i.tag 's|LTOBJCCOMPILE = $(LIBTOOL)|LTOBJCCOMPILE = $(LIBTOOL) --tag=CC|g' plugin/quartz/Makefile
 make
 
-%install rm -rf %{buildroot} __doc
-make DESTDIR=%{buildroot} \
- docdir=%{buildroot}%{_docdir}/%{name} \
- pkgconfigdir=%{_libdir}/pkgconfig \
- install
-find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
-chmod -x %{buildroot}%{_datadir}/%{name}/lefty/*
-cp -a %{buildroot}%{_datadir}/%{name}/doc __doc
-rm -rf %{buildroot}%{_datadir}/%{name}/doc
+%install
+rm -rf $RPM_BUILD_ROOT __doc
+make DESTDIR=$RPM_BUILD_ROOT \
+     docdir=$RPM_BUILD_ROOT%{_docdir}/%{name} \
+     pkgconfigdir=%{_libdir}/pkgconfig \
+     install
+
+find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
+chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
+cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
+rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
 
 %clean
-rm -rf %{buildroot}
+rm -rf $RPM_BUILD_ROOT
 
+# run "dot -c" to generate plugin config in %{_libdir}/%{name}/config
 %post
 %{_bindir}/dot -c
 
 # if there is no dot after everything else is done, then remove config
 %postun
 if [ $1 -eq 0 ]; then
- rm -f %{_libdir}/graphviz/config || :
+    rm -f %{_libdir}/graphviz/config || :
 fi
 
 %files
 %defattr(-,root,wheel)
 %doc AUTHORS COPYING ChangeLog NEWS README
 %{_bindir}/*
-%dir %{_libdir}/graphviz
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/lefty
+%{_mandir}/man1/*
+%{_mandir}/man7/*
+%dir %{_libdir}/%{name}
 %{_libdir}/*.*.dylib
-%{_libdir}/graphviz/*.*.dylib
-%{_mandir}/man1/*.1*
-%{_mandir}/man7/*.7*
-%{_datadir}/graphviz
+%{_libdir}/%{name}/*.*.dylib
 
 %files devel
 %defattr(-,root,wheel)
-%{_includedir}/graphviz
+%{_includedir}/%{name}
 %{_libdir}/*.dylib
-%{_libdir}/graphviz/*.dylib
+%{_libdir}/%{name}/*.dylib
 %{_libdir}/pkgconfig/*.pc
-%{_mandir}/man3/*.3*
+%{_datadir}/%{name}/graphs
+%{_mandir}/man3/*.3.gz
 
 %files doc
 %defattr(-,root,wheel)
 %doc __doc/*
 
 %changelog
-* Tue Dec 21 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.26.3-1
+- make more compatible with Vine Linux
+
+* Tue Dec 21 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.26.3-0
 - initial build for Mac OS X WorkShop 10.6
 

@@ -1,23 +1,40 @@
-Summary: A DVI-to-PNG converter
-Summary(ja): DVI ファイルから PNG ファイルへの変換ユーティリティ
-Name: dvipng
-Version: 1.13
-Release: 0%{?_dist_release}
-Source0: http://download.savannah.gnu.org/releases/dvipng/%{name}-%{version}.tar.gz
-License: LGPLv3
-Group: Applications/Publishing 
-URL: http://savannah.nongnu.org/projects/dvipng/
+Name:             dvipng
+Version:          1.13
+Release:          1%{?_dist_release}
 
-Requires: libgd, tetex, freetype, libpng, zlib
-BuildRequires: libgd-devel, tetex, freetype-devel, libpng-devel, zlib-devel
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
+Summary:          Converts DVI files to PNG/GIF format
+Summary(ja):      DVIファイルをPNG/GIF画像に変換
+Source:           %{name}-%{version}.tar.gz
+URL:              http://sourceforge.net/projects/dvipng/
+Group:            Applications/Publishing
+License:          LGPLv3
+
+BuildRequires:    libkpathsea-devel
+BuildRequires:    gd-devel
+BuildRequires:    zlib-devel
+BuildRequires:    libpng-devel
+BuildRequires:    tetex
+BuildRequires:    freetype-devel
+
+BuildRoot:        %{_tmppath}/%{name}-%{version}-root
+BuildArch:        fat
 
 %description
-This program makes PNG and/or GIF graphics from DVI files as obtained 
-from TeX and its relatives. 
-If GIF support is enabled, GIF output is chosen by using the 
-`dvigif' binary or with the `--gif' option. 
+This program makes PNG and/or GIF graphics from DVI files as obtained
+from TeX and its relatives.
+
+It is intended to produce anti-aliased screen-resolution images as
+fast as is possible. The target audience is people who need to generate
+and regenerate many images again and again. 
+
+
+%description -l ja
+TeX やその関連ツールにより作成される DVI ファイルを 
+PNG または GIF 画像に変換するプログラムです。
+
+可能な限り素早くアンチエリアスが効いた画面解像度の画像を生成します。
+このソフトの主な対象者は、多数の画像を何度も繰り返し再生成したい人です。 
+
 
 %prep
 %setup -q
@@ -25,43 +42,43 @@ If GIF support is enabled, GIF output is chosen by using the
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir} -no-cpp-precomp"
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CXX='gcc-4.2 -arch i386 -arch x86_64' \
-            CPP="gcc-4.2 -E" CXXCPP="g++-4.2 -E"
+%configure \
+    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+    CXX='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
+    CPP="/usr/bin/gcc-4.2 -E" CXXCPP="/usr/bin/g++-4.2 -E"
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT%{_infodir}/dir
+rm -rf ${RPM_BUILD_ROOT}
+make install DESTDIR=${RPM_BUILD_ROOT}
+
+rm -rf ${RPM_BUILD_ROOT}/%{_infodir}/dir
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf ${RPM_BUILD_ROOT}
 
-%files
-%defattr(-,root,wheel)
-%doc ChangeLog COPYING COPYING.LESSER INSTALL README RELEASE
-%{_bindir}/dvi*
-%{_mandir}/man1/dvi*.1*
-%{_infodir}/dvipng.info*
-
-%post
-install-info %{_infodir}/dvipng.info %{_infodir}/dir
+%post 
+/sbin/install-info %{_infodir}/dvipng.info %{_infodir}/dir 2>/dev/null || :
 
 %preun
-if [ "$1" = 0 ]; then
-    install-info --delete %{_infodir}/dvipng.info %{_infodir}/dir
+if [ "$1" = "0" ] ; then 
+    /sbin/install-info --delete %{_infodir}/dvipng.info %{_infodir}/dir 2>/dev/null || :
 fi
 
+%files
+%defattr(-,root,root,-)
+%doc COPYING ChangeLog ChangeLog.0 README RELEASE
+%{_bindir}/dvigif
+%{_bindir}/dvipng
+%{_infodir}/dvipng.info*
+%{_mandir}/man1/dvigif.1*
+%{_mandir}/man1/dvipng.1*
+
+
 %changelog
+* Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-1
+- make more compatible with Vine Linux
+
 * Thu Nov  4 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-0
 - initial build for Mac OS X WorkShop
 

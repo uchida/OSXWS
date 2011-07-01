@@ -18,7 +18,7 @@
 %define case_sensitive %(diskutil info / | grep 'Case-sensitive')
 
 Summary: Qt Tool Kit
-Name: qt4
+Name: qt
 Version: 4.7.2
 Release: 3%{?_dist_release}
 Source0: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-%{version}.tar.gz

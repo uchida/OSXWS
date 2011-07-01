@@ -1,42 +1,32 @@
-%define __python /usr/osxws/bin/python
 %define modulename dateutil
 %bcond_with doc
 
-Summary: provides extensions to the standard datetime module
-Name: python-%{modulename}
-Version: 1.5
-Release: 1%{?_dist_release}
-Source0: http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
-License: PSF
-Group: Development/Languages
-URL: http://labix.org/python-dateutil
+Name:           python-dateutil
+Version:        1.5
+Release:        2%{?_dist_release}
+Summary:        Powerful extensions to the standard datetime module
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-BuildRequires: python-distribute
+Group:          Development/Languages
+License:        PSF
+URL:            http://labix.org/python-dateutil
+Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+
+BuildArch:      noarch
+BuildRequires:  python-devel, python-setuptools
 %if %{with doc}
 BuildRequires: python-sphinx
 %endif
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: noarch
 
 %description
-The dateutil module provides powerful extensions to the standard datetime module, available in Python 2.3+.
-Features
-  - Computing of relative deltas (next month, next year, next monday, last week of month, etc);
-  - Computing of relative deltas between two given date and/or datetime objects;
-  - Computing of dates based on very flexible recurrence rules, using a superset of the
-  - iCalendar specification. Parsing of RFC strings is supported as well.
-  - Generic parsing of dates in almost any string format;
-  - Timezone (tzinfo) implementations for tzfile(5) format files (/etc/localtime, /usr/share/zoneinfo, etc), TZ environment string (in all known formats), iCalendar format files, given ranges (with help from relative deltas), local machine timezone, fixed offset timezone, UTC timezone, and Windows registry-based time zones.
-  - Internal up-to-date world timezone information based on Olson's database.
-  - Computing of Easter Sunday dates for any given year, using Western, Orthodox or Julian algorithms;
-  - More than 400 test cases.
+The dateutil module provides powerful extensions to the standard datetime
+module available in Python 2.3+.
 
 %prep
 %setup -q
+
+# Reencode this as utf8
+iconv -f ISO-8859-1 -t utf8 NEWS
 
 %build
 python setup.py build
@@ -54,6 +44,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE NEWS README
 
 %changelog
+* Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5-2
+- make more compatible with Vine Linux
+
 * Fri Apr  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5-1
 - replace setuptools with distribute
 
