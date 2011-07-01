@@ -15,11 +15,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
 BuildRequires:  bison
 BuildRequires:  cairo-devel
-#BuildRequires:  pango-devel
+BuildRequires:  pango-devel
 BuildRequires:  flex
 BuildRequires:  freetype-devel
-#BuildRequires:  gd-devel
-BuildRequires:  guile-devel
+BuildRequires:  gd-devel
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel 
 BuildRequires:  zlib-devel
