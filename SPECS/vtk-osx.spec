@@ -1,19 +1,20 @@
 %define python_inc %(%{__python} -c "from distutils.sysconfig import get_python_inc; print get_python_inc()")
+%define vtkdata_dir %{_datadir}/vtk-data-%{version}
+
 Summary: The Visualization Toolkit - A high level 3D visualization library
+Summary: The Visualization Toolkit - ハイレベル3D可視化ライブラリ
+Group: System Environment/Libraries
 Name: vtk
 Version: 5.6.1
-Release: 0%{?_dist_release}
+Release: 3%{?_dist_release}
+Source0: http://www.vtk.org/files/release/5.6/%{name}-%{version}.tar.gz
+Source1: http://www.vtk.org/files/release/5.6/%{name}data-%{version}.tar.gz
+Patch0: vtk-5.6.1-netcdf-cxx-version.patch
 # This is a variant BSD license, a cross between BSD and ZLIB.
 # For all intents, it has the same rights and restrictions as BSD.
 # http://fedoraproject.org/wiki/Licensing/BSD#VTKBSDVariant
 License: BSD
-Group: System Environment/Libraries
-Source: http://www.vtk.org/files/release/5.6/%{name}-%{version}.tar.gz
-Patch0: vtk-5.6.1-netcdf-cxx-version.patch
-
 URL: http://vtk.org/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildArch: fat
 BuildRequires: cmake
 BuildRequires: python-devel
 BuildRequires: freetype-devel, libjpeg-devel, libpng-devel
@@ -24,6 +25,9 @@ BuildRequires: doxygen, graphviz
 BuildRequires: gnuplot
 BuildRequires: wget
 
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildArch: fat
+
 %description
 VTK is an open-source software system for image processing, 3D
 graphics, volume rendering and visualization. VTK includes many
@@ -31,58 +35,104 @@ advanced algorithms (e.g., surface reconstruction, implicit modelling,
 decimation) and rendering techniques (e.g., hardware-accelerated
 volume rendering, LOD control).
 
+%description
+VTK - the Visualization Toolkit is an object oriented, high
+level library that allows one to easily write C++ programs, Tcl,
+Python and Java scripts that do 3D visualization.  This package
+provides the shared libraries needed to run C++ programs that use VTK.
+To compile C++ code that uses VTK you have to install vtk-devel.
+
+VTK enables users to concentrate on their work by providing a
+large number of excellent and feature packed high level functions that
+do visualization.  The library needs OpenGL to render the graphics and
+for Linux machines Mesa is necessary. The terms/copyright can be read
+in %{_docdir}/vtk-%{version}-%{release}/README.html. VTK-Linux-HOWTO has
+information about using vtk, getting documentataion or help and
+instructions on building VTK. This package is relocatable.
+
 %package devel
-Summary: VTK header files for building C++ code
-Requires: vtk = %{version}-%{release}
+Summary: VTK header files for building C++ code.
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
 Requires: libjpeg-devel, libpng-devel
 Requires: libtiff-devel
-Group: Development/Libraries
 
-%description devel 
-This provides the VTK header files required to compile C++ programs that
-use VTK to do 3D visualisation.
+%description devel
+This provides the VTK header files required to compile C++
+programs that use VTK to do 3D visualisation.
+
 
 %package tcl
-Summary: Tcl bindings for VTK
-Requires: vtk = %{version}-%{release}
-Group: System Environment/Libraries
+Summary: Tcl bindings for VTK.
+Group: Applications/Edutainment
+Requires: %{name} = %{version}-%{release}
+Requires: tcl
 
 %description tcl
-tcl bindings for VTK
+VTK - the Visualization Toolkit is an object oriented, high level
+library that allows one to easily write C++ programs, Tcl, Python and Java
+scripts that do 3D visualization.  This package provides the shared
+libraries that enable one to use VTK via Tcl scripts.  This version also
+provides the vtkTkRenderWindow class. This package does not require the vtk
+package to be installed.  The library needs OpenGL to render the graphics and
+for Linux machines Mesa is necessary.
 
-%package -n python-%{name}
-Summary: Python bindings for VTK
-Requires: vtk = %{version}-%{release}
-Group: System Environment/Libraries
+The terms/copyright can be read in
+%{datadir}/doc/vtk-tcl-%{version}-%{release}/README.html. VTK-Linux-HOWTO has
+information about using vtk, getting documentation or help and instructions on
+building VTK. This package is relocatable.
 
-%description -n python-%{name}
-python bindings for VTK
+%package python
+Summary: Python bindings for VTK.
+Group: Applications/Edutainment
+Requires: %{name} = %{version}-%{release}
+Requires: python
+
+%description python 
+This provides the shared libraries that enable one to use VTK from
+python scripts.  You will need python and vtk installed to use this.
+Remember to set your PYTHONPATH variable properly before running your
+scripts.
 
 %package qt
-Summary: Qt bindings for VTK
-Requires: vtk = %{version}-%{release}
+Summary: QT VTK widget
 Group: System Environment/Libraries
+Requires: %{name} = %{version}-%{release}
+Requires: qt
 
 %description qt
-Qt bindings for VTK
-
-%package testing
-Summary: Testing programs for VTK
-Requires: vtk = %{version}-%{release}, vtkdata = %{version}
-Group: Applications/Engineering
-
-%description testing
-Testing programs for VTK
+The vtkQt classes combine VTK and Qt(TM) for X11.
 
 %package examples
-Summary: Examples for VTK
-Requires: vtk = %{version}-%{release}, vtkdata = %{version}
-Group: Applications/Engineering
+Summary: C++, Tcl and Python example programs/scripts for VTK.
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
 
 %description examples
-This package contains many well-commented examples showing how to use
-VTK. Examples are available in the C++, Tcl, Python and Java
-programming languages.
+This package contains all the examples from the VTK source.
+To compile the C++ examples you will need to install the vtk-devel
+package as well. The Python and Tcl examples can be run with the
+corresponding packages (vtk-python, vtk-tcl).
+
+%package testing-progs
+Summary: Tests programs for VTK.
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
+
+%description testing-progs
+This package contains all testing programs from the VTK
+source. The source code of these programs can be found in the
+vtk-examples package.
+
+
+%package data
+Summary: Data for VTK.
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
+
+%description data
+This package contains all the data from the VTKData repository.
+These data are required to run various examples from the examples package.
 
 %prep
 %setup -q -n VTK
@@ -101,6 +151,8 @@ rm -rf vtk-examples-5.6/Examples/GUI/Win32
 find vtk-examples-5.6 -type f | xargs chmod -R a-x
 
 %build
+export CC="/usr/bin/gcc-4.2"
+export CXX="/usr/bin/g++-4.2"
 export CFLAGS="-D_UNICODE -I%{_includedir}"
 export CXXFLAGS="-D_UNICODE -I%{_includedir}"
 
@@ -157,6 +209,17 @@ for l in *.so; do
      done
 done
 popd
+
+tar zxvf %{SOURCE1}
+install -d $RPM_BUILD_ROOT%{_datadir}
+cp -r VTKData $RPM_BUILD_ROOT/%{vtkdata_dir}
+# (Verbosely) fix 0555 permissions
+find $RPM_BUILD_ROOT%{vtkdata_dir} -type f -perm 0555 -print0 | xargs -0 echo chmod 0755 | sh -x
+# Remove execute bits from not-scripts
+for file in `find $RPM_BUILD_ROOT%{vtkdata_dir} -type f -perm 0755`; do
+    head -1 $file | grep '^#!' > /dev/null && continue
+    chmod 0644 $file
+done
 
 # List of executable utilities
 cat > utils.list << EOF
@@ -265,7 +328,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/vtk-5.6/pkgIndex.tcl
 %{_libdir}/vtk-5.6/tcl
 
-%files -n python-%{name}
+%files python
 %defattr(-,root,wheel)
 %{python_sitearch}/*
 %{_libdir}/vtk-5.6/*PythonD*.dylib
@@ -278,7 +341,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/vtk-5.6/libQVTK.*.dylib
 %{_libdir}/qt4/plugins/designer
 
-%files testing -f build/testing.list
+%files testing-progs -f build/testing.list
 %defattr(-,root,wheel)
 %{_libdir}/vtk-5.6/testing
 
@@ -286,7 +349,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,wheel)
 %doc vtk-examples-5.6/Examples
 
+%files data
+%defattr(-,root,wheel)
+%{vtkdata_dir}
+
+
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-3
+- change Group: Applications/Edutainment instead of Applications/Engineering
+
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-2
+- make more compatible with Vine Linux
+
 * Thu May  5 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-1
 - fix the version of libvtkNetCDF_cxx
 

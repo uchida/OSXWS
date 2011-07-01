@@ -14,10 +14,10 @@ URL: http://pytest.org/
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
 Requires: python-py
-Requires: python-distribute
+Requires: python-setuptools
 BuildRequires: python-devel = 2.6.6
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-BuildRequires: python-distribute
+BuildRequires: python-setuptools
 %if %{with doc}
 BuildRequires: python-sphinx python-py
 %endif
@@ -57,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.0-4
+- requires python-setuptools
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.0-3
 - fix type in Group
 

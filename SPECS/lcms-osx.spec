@@ -1,31 +1,45 @@
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
 Name: lcms
+Summary: Little CMS - color management engine
+Summary(ja): Little CMS - カラーマネージメントエンジン
 Version: 1.19
-Release: 0%{?_dist_release}
-Summary: Color Management System
-Group: Applications/Productivity
+Release: 1%{?_dist_release}
+
+Group: System Environment/Libraries
 License: MIT
 URL: http://www.littlecms.com/
-Source0: http://www.littlecms.com/lcms-%{version}.tar.gz
+
+Source0: http://www.littlecms.com/%{name}-%{version}.tar.gz
 Patch0: lcms-1.19-rhbz675186.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch: fat
-BuildRequires: libjpeg-devel
+Patch100: lcms-1.18_cmsxfrom_CVE-2009-0793.patch
+
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRequires: zlib-devel
 BuildRequires: libtiff-devel
+BuildRequires: libjpeg-devel
 BuildRequires: pkgconfig
 BuildRequires: python-devel
-BuildRequires: zlib-devel
-Requires: %{name}-libs = %{version}-%{release}
+BuildArch: fat
+
 %description
-LittleCMS intends to be a small-footprint, speed optimized color management
+Little cms intends to be a small-footprint, speed optimized color management
 engine in open source form.
 
-%package libs
-Summary: Library for %{name}
-Group: System Environment/Libraries
-%description libs
-The %{name}-libs package contains library for %{name}.
+%package devel
+Summary: Header files and library for development with LCMS
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
+
+%description devel
+Development files for development with LCMS
+
+%package utils
+Summary: Additional Command Line Utilities for littlecms
+Group: Applications/Graphics
+Requires: %{name} = %{version}-%{release}
+
+%description utils
+Command line utilities which can perform icc transforms and provide info 
+about icc profiles.
 
 %package -n python-%{name}
 Summary: Python interface to LittleCMS
@@ -34,18 +48,10 @@ Requires: python
 %description -n python-%{name}
 Python interface to LittleCMS.
 
-%package devel
-Summary: Development files for LittleCMS
-Group: Development/Libraries
-Requires: %{name}-libs = %{version}-%{release}
-Requires: pkgconfig
-%description devel
-Development files for LittleCMS.
-
-
 %prep
 %setup -q -c %{name}-%{version}
 pushd %{name}-%{version}
+%patch100 -p1 -b .CVE-2009-0793
 pushd samples
 %patch0 -p0
 popd
@@ -152,30 +158,32 @@ find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 rm -rf ${RPM_BUILD_ROOT}
 
 %files
-%defattr(-,root,root,-)
-%doc README.1ST TUTORIAL.TXT
-%{_bindir}/*
-%{_mandir}/man1/*
-
-%files libs
-%defattr(-,root,root,-)
-%doc AUTHORS COPYING NEWS
+%defattr(-,root,wheel)
+%doc AUTHORS COPYING ChangeLog README.1ST TUTORIAL.TXT NEWS
 %{_libdir}/*.*.dylib
 
 %files devel
-%defattr(-,root,root,-)
-%doc LCMSAPI.TXT
+%defattr(-,root,wheel)
 %{_includedir}/*
 %{_libdir}/*.dylib
-%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/pkgconfig/lcms.pc
+%doc LCMSAPI.TXT doc/ 
+
+%files utils
+%defattr(-,root,wheel)
+%{_bindir}/*
+%{_mandir}/man1/*
 
 %files -n python-%{name}
-%defattr(-,root,root,-)
+%defattr(-,root,wheel)
 %{python_sitearch}/lcms.py*
 %{python_sitearch}/_lcms.so
 
-
 %changelog
-* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp>
+* Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.19-1
+- make more compatible with Vine Linux
+
+* Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.19-0
 - initial build for Mac OS X WorkShop
+
 

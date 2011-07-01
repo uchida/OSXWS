@@ -1,7 +1,8 @@
 Name:           python-configobj
 Version:        4.7.2
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Config file reading, writing, and validation
+Summary(ja):	設定ファイルの読み込み、書き込み、及び評価用のPython ツール
 
 Group:          System Environment/Libraries
 License:        BSD
@@ -56,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 
 %changelog
+* Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-1
+- add summary in Japanese
+
 * Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-0
 - initial build for Mac OS X WorkShop
 

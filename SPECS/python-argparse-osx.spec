@@ -5,7 +5,7 @@
 Summary: Python command-line parsing library
 Name: python-%{modulename}
 Version: 1.2.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0:http://argparse.googlecode.com/files/argparse-%{version}.tar.gz
 License: PSL
 Group: Development/Languages
@@ -14,7 +14,7 @@ URL: http://code.google.com/p/argparse/
 Requires: python = 2.6.6
 Requires: /usr/osxws/bin/python2.6
 BuildRequires: python-devel = 2.6.6
-BuildRequires: python-distribute
+BuildRequires: python-setuptools
 BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
-* Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.2.1
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.2.1-1
+- requires python-setuptools
+
+* Sun Apr  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.2.1-0
 - initial build for Mac OS X WorkShop 10.6
 
