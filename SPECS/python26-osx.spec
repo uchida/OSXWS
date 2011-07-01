@@ -6,7 +6,7 @@ Summary: An interpreted, interactive, object-oriented programming language.
 Summary(ja): オブジェクト指向言語 Python インタプリタ
 Name: python
 Version: 2.6.6
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 Source1: http://docs.python.org/ftp/python/doc/%{version}/python-%{version}-docs-pdf-a4.tar.bz2
 Source2: http://docs.python.org/ftp/python/doc/%{version}/python-%{version}-docs-html.tar.bz2
@@ -247,8 +247,11 @@ fi
 %doc Doc html pdf
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.6-2
+- add subpackages (tools, docs)
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.6-1
-- fix type in Group
+- fix typo in Group
 
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.6-0
 - initial build for Mac OS X WorkShop
