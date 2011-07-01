@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename scipy
 %bcond_with doc
 
@@ -6,21 +5,19 @@ Summary: Scientific Library for Python
 Summary(ja): Python 科学技術計算ライブラリ
 Name: python-%{modulename}
 Version: 0.9.0
-Release: 1%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: http://www.scipy.org
 
 Requires: apple-gcc
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
+Requires: python
 Requires: python-numpy
 Requires: suitesparse-devel
 Requires: python-nose
 BuildRequires: apple-gcc
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+BuildRequires: python-devel
 BuildRequires: python-numpy
 BuildRequires: suitesparse-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -53,6 +50,8 @@ This package contains documentation files for %{name}.
 %setup -q -n %{modulename}-%{version}
 
 %build
+export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
+export F77='/usr/osxws/bin/gfortran-4.2' F90='/usr/osxws/bin/gfortran-4.2'
 export ARCHFLAGS='-arch i386 -arch x86_64'
 python setup.py build
 
@@ -87,6 +86,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-3
+- remove unnecessary requires
+- build with specific compiler
+
 * Mon Apr 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-2
 - put documents into a doc subpackage
 

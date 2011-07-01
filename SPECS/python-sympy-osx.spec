@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename sympy
 %bcond_with doc
 %bcond_with ipython
@@ -12,13 +11,11 @@ License: BSD
 Group: Development/Languages
 URL: http://code.google.com/p/sympy/
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
+Requires: python
 %if %{with ipython}
-Requires: python-ipython
+Requires: ipython
 %endif
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 
@@ -83,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.7-1
+- requires ipython
+
 * Tue Apr 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.7-0
 - initial build for Mac OS X WorkShop 10.6
 

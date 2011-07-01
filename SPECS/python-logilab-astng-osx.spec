@@ -1,20 +1,17 @@
-%define __python /usr/osxws/bin/python
 %define modulename logilab-astng
 
 Summary: rebuild a new abstract syntax tree from Python's ast
 Name: python-%{modulename}
 Version: 0.21.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
 Group: Development/Languages
 URL: http://www.logilab.org/project/%{name}
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
+Requires: python
 Requires: python-logilab-common
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 
@@ -54,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog COPYING COPYING.LESSER README
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21.1-1
+- remove unnecessary requires
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21.1-0
 - update to 0.21.1
 

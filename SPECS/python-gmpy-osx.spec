@@ -1,20 +1,17 @@
-%define __python /usr/osxws/bin/python
 %define modulename gmpy
 
 Summary: MPIR/GMP interface to Python
 Name: python-%{modulename}
 Version: 1.14
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://gmpy.googlecode.com/files/%{modulename}-%{version}.zip
 License: LGPLv2+
 Group: Development/Languages
 URL: http://code.google.com/p/gmpy/
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
+Requires: python
 BuildRequires: gmp-devel
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
@@ -29,6 +26,7 @@ and more.
 %setup -q -n %{modulename}-%{version}
 
 %build
+export CC='/usr/bin/gcc-4.2'
 export CFLAGS='-I%{_includedir}'
 export LDFLAGS='-L%{_libdir}'
 export ARCHFLAGS="-arch i386 -arch x86_64"
@@ -52,6 +50,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc changes.txt lgpl-2.1.txt mac_build.txt mutable_mpz.txt README
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-2
+- remove unnecessary requires
+- build with specific compiler
+
 * Sun Apr 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-1
 - fix type in Group
 

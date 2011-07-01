@@ -1,13 +1,13 @@
 Name:           python-EnvisageCore
 Version:        3.2.0
-Release:        0%{?_dist_release}
+Release:        2%{?_dist_release}
 Summary:        Extensible Application Framework
 Group:          Development/Libraries
 License:        BSD
 URL:            http://code.enthought.com/projects/envisage/
 Source0:        http://www.enthought.com/repo/ETS/EnvisageCore-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python-distribute, python-devel, python-setupdocs
+BuildRequires:  python-setuptools, python-devel, python-setupdocs
 Requires:       python-AppTools
 # EnthoughtBase and Traits come with AppTools
 
@@ -49,6 +49,9 @@ done
 %{python_sitelib}/enthought/envisage
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-2
+- requires python-setuptools
+
 * Sat May 14 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-1
 - fix path of wrong-file-end-of-line-encoding
 

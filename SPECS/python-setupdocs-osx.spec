@@ -2,7 +2,7 @@
 
 Name:           python-setupdocs
 Version:        1.0.5
-Release:        0%{?_dist_release}
+Release:        1%{?_dist_release}
 Summary:        Setuptools plugin
 Group:          Development/Languages
 License:        BSD
@@ -10,8 +10,8 @@ URL:            http://pypi.python.org/pypi/setupdocs
 Source0:        http://pypi.python.org/packages/source/s/setupdocs/SetupDocs-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
-BuildRequires:  python-devel, python-distribute
-Requires:       python-distribute
+BuildRequires:  python-devel, python-setuptools
+Requires:       python-setuptools
 Requires:       python-sphinx
 
 %description
@@ -43,6 +43,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.5-1
+- requires python-setuptools
+
 * Tue Apr 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.5-0
 - initial build for Mac OS X WorkShop
 

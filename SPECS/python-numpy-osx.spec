@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename numpy
 %bcond_with doc
 
@@ -13,12 +12,10 @@ Group: Development/Languages
 URL: http://numpy.scipy.org/
 
 Requires: apple-gcc
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
+Requires: python
 Requires: python-nose
 BuildRequires: apple-gcc
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 %description
@@ -49,7 +46,8 @@ This package contains documentation files for %{name}.
 cp -pf %{SOURCE1} site.cfg
 
 %build
-export CC='gcc' CXX='g++' F77='gfortran' F90='gfortran'
+export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
+export F77='/usr/osxws/bin/gfortran-4.2' F90='/usr/osxws/bin/gfortran-4.2'
 export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 
@@ -86,6 +84,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.0-1
+- remove unnecessary requires
+
 * Fri May 20 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.0-0
 - update tp 1.6.0
 

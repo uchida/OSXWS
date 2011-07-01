@@ -1,20 +1,17 @@
-%define __python /usr/osxws/bin/python
 %define modulename mpmath
 %bcond_with doc
 
 Summary: a Python library for arbitrary-precision floating-point arithmetic
 Name: python-%{modulename}
 Version: 0.16
-Release: 1%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://%{modulename}.googlecode.com/files/%{modulename}-all-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: http://code.google.com/p/mpmath/
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+Requires: python
+BuildRequires: python-devel
 BuildRequires: python-pytest
 BuildRequires: python-gmpy
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -72,6 +69,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-3
+- remove unnecessary requires
+
 * Wed Apr 27 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-2
 - put documents into a doc subpackage
 

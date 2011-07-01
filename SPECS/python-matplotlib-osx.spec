@@ -1,4 +1,3 @@
-%define __python /usr/osxws/bin/python
 %define modulename matplotlib
 %bcond_with doc
 
@@ -16,18 +15,17 @@ License: PSF
 Group: Development/Languages
 URL: http://matplotlib.sourceforge.net
 
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
+Requires: python
 Requires: python-numpy
 Requires: python-dateutil
 Requires: python-pytz
 Requires: freetype libpng
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
+BuildRequires: python-devel
 BuildRequires: freetype-devel libpng-devel pkgconfig
 BuildRequires: python-pytz
 BuildRequires: python-dateutil
 BuildRequires: tetex ghostscript dvipng
+BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
@@ -66,6 +64,7 @@ This package contains documentation files for %{name}.
 %patch1 -p1
 
 %build
+export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
 export ARCHFLAGS='-arch i386 -arch x86_64'
 python setup.py build
 %if %{with doc}
@@ -95,6 +94,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.1-0
+- remove unnecessary requires
+- build with specific compiler
+
 * Mon Dec 20 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.0-0
 - initial build for Mac OS X WorkShop 10.6
 

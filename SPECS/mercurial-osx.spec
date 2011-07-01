@@ -1,54 +1,66 @@
-%define __python /usr/osxws/bin/python
 %define shared_dir /Users/Shared
 
-Summary: Mercurial source control management
-Summary(ja): Mercurial ソースコード管理
+Summary: A fast, lightweight distributed source control management system 
+Summary(ja): 軽量で高速な分散構成管理システム
 Name: mercurial
 Version: 1.8.3
-Release: 0%{?_dist_release}
-Source0: http://mercurial.selenic.com/release/mercurial-%{version}.tar.gz
+Release: 1%{?_dist_release}
+License: GPLv2
+Group: Development/Tools
+URL: http://mercurial.selenic.com/
+Source0: http://www.selenic.com/mercurial/release/%{name}-%{version}.tar.gz
 Source1: mercurial-init.el
 Source10: mercurial-el-install.sh
 Source11: mercurial-el-remove.sh
 Source20: hgweb.conf
 Patch1: mercurial-hgk-fontsize.patch
-License: GPLv2
-Group: Development/Tools
-URL: http://mercurial.selenic.com/
-
-Requires: python = 2.6.6
-Requires: /usr/osxws/bin/python2.6
-Requires: bash-completion
-BuildRequires: python-devel = 2.6.6
-BuildRequires: /Library/Frameworks/Python.framework/Versions/2.6/include
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRequires: python python-devel
+BuildRequires: python-docutils
+BuildRequires: emacsen-common pkgconfig
+Requires: python
+Provides: hg = %{version}-%{release}
 BuildArch: fat
 
 %description
-Mercurial is a free, distributed source control management tool.
-It offers you the power to efficiently handle projects of any size while using an intuitive interface.
-It is easy to use and hard to break, making it ideal for anyone working with versioned files.
+Mercurial is a fast, lightweight source control management system designed
+for efficient handling of very large distributed projects.
 
-For mercurial beginner, see http://mercurial.selenic.com/wiki/BeginnersGuides
+Quick start: http://www.selenic.com/mercurial/wiki/index.cgi/QuickStart
+Tutorial: http://www.selenic.com/mercurial/wiki/index.cgi/Tutorial
+Extensions: http://www.selenic.com/mercurial/wiki/index.cgi/CategoryExtension
 
-%description -l ja
-Mercurial はフリーで配布されているソースコード管理ツールです。
-直感的なインターフェースであらゆる規模のプロジェクトを効率良く扱う能力を提供します。
-使いやすく、壊れにくく、バージョン管理されたファイルを扱うのに最適です。
-
-mercurial 初心者の方は http://mercurial.selenic.com/wiki/JapaneseBeginnersGuides をみてみましょう。
 
 %package el
-Summary: Mercurial version control system support for Emacs
-Summary(ja): Mercurial バージョン管理システム用 Emacs サポート
-Group: Applications/Editors
-Requires: %{name} = %{version}-%{release}, emacsen-common
-Requires: emacsen
+Summary:	Mercurial version control system support for Emacs
+Summary(ja):	Mercurial バージョン管理システム用 Emacs サポート
+Group:		Applications/Editors
+Requires:	hg = %{version}-%{release}, emacsen-common
+Requires:       emacsen
+
 
 %description el
 Contains byte compiled elisp packages for mercurial.
-To get started: start emacs, load hg-mode with M-x hg-mode, and show
+To get started: start emacs, load hg-mode with M-x hg-mode, and show 
 help with C-c h h
+
+
+%package hgk
+Summary:	Hgk interface for mercurial
+Summary(ja):	Mercurial 用 Hgk インタフェース
+Group:		Development/Tools
+Requires:	hg = %{version}-%{release}, tk
+
+
+%description hgk
+A Mercurial extension for displaying the change history graphically
+using Tcl/Tk.  Displays branches and merges in an easily
+understandable way and shows diffs for each revision.  Based on
+gitk for the git SCM.
+
+Adds the "hg view" command.  See 
+http://www.selenic.com/mercurial/wiki/index.cgi/UsingHgk for more
+documentation.
 
 %package hgweb
 Summary: Simple web interface to mercurial repositories
@@ -71,7 +83,7 @@ Mac OS X WorkShop のデフォルトでは、「システム環境設定」で �
 公開されたレポジトリは http://<IP-Address>/cgi-bin/hgweb.cgi から見ることができます。
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 %patch1 -p1
 sed -i.osxws 's|/usr/local/bin/hg|%{_bindir}/hg|g' contrib/mercurial.el
 sed -i.osxws 's|/home/user/hg/hg/contrib/hgk|%{_libexecdir}/mercurial/hgk|g' contrib/sample.hgrc
@@ -79,7 +91,7 @@ sed -i.osxws 's|/path/to/repo/or/config|%{_sysconfdir}/hgweb.conf|g' hgweb.cgi
 sed -i.osxws 's|#!/usr/bin/env python|#!%{_bindir}/python|g' hgweb.cgi
 
 %build
-export CC="gcc-4.2"
+export CC="/usr/bin/gcc-4.2"
 export ARCHFLAGS="-arch i386 -arch x86_64"
 export CFLAGS="-I%{_includedir}"
 export LDFLAGS="-L%{_libdir}"
@@ -87,12 +99,16 @@ make all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-# install
+
+
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-script=%{_bindir}  --record=%{name}.files
 make install-doc DESTDIR=$RPM_BUILD_ROOT MANDIR=%{_mandir}
 
 # install contrib
 mkdir -p $RPM_BUILD_ROOT%{_libexecdir}/mercurial
+grep -v 'hgk.py*' < %{name}.files > %{name}-base.files
+grep 'hgk.py*' < %{name}.files > %{name}-hgk.files
+
 install -m 755 contrib/hgk $RPM_BUILD_ROOT%{_libexecdir}/mercurial/hgk
 install -m 755 contrib/hg-ssh $RPM_BUILD_ROOT%{_bindir}
 install -m 755 contrib/convert-repo $RPM_BUILD_ROOT%{_bindir}/mercurial-convert-repo
@@ -105,21 +121,23 @@ zsh_completion_dir=$RPM_BUILD_ROOT%{_datadir}/zsh/site-functions
 mkdir -p $zsh_completion_dir
 install -m 644 contrib/zsh_completion $zsh_completion_dir/_mercurial
 
-hgrc_dir=$RPM_BUILD_ROOT%{_sysconfdir}/mercurial/hgrc.d
-mkdir -p $hgrc_dir
-install -m 644 contrib/mergetools.hgrc $hgrc_dir/mergetools.hgrc.sample
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/mercurial
 
-emacs_lisp_dir=$RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
-mkdir -p $emacs_lisp_dir
-install -p -m 644 contrib/{mercurial,mq}.el $emacs_lisp_dir
-install -p -m 644 %{SOURCE1} $emacs_lisp_dir
+pushd contrib
+for file in mercurial.el mq.el %{SOURCE1}; do
+  install -p -m 644 $file $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/%{name}/
+done
+popd
 
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/emacsen-common/packages/install
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/emacsen-common/packages/remove
+%__mkdir_p %{buildroot}%{_prefix}/lib/emacsen-common/packages/install
+%__mkdir_p %{buildroot}%{_prefix}/lib/emacsen-common/packages/remove
 
 %_installemacsenscript %{name} %{SOURCE10}
 
-%_removeemacsenscript %{name} %{SOURCE11}
+%_removeemacsenscript  %{name} %{SOURCE11}
+
+
+mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/mercurial/hgrc.d
 
 cat >hgk.rc <<EOF
 [extensions]
@@ -129,53 +147,64 @@ hgk=
 [hgk]
 path=%{_libexecdir}/mercurial/hgk
 EOF
-install hgk.rc $RPM_BUILD_ROOT%{_sysconfdir}/mercurial/hgrc.d
+install hgk.rc $RPM_BUILD_ROOT/%{_sysconfdir}/mercurial/hgrc.d
+
+install contrib/mergetools.hgrc $RPM_BUILD_ROOT%{_sysconfdir}/mercurial/hgrc.d/mergetools.rc.sample
 
 mkdir -p $RPM_BUILD_ROOT%{shared_dir}/mercurial
 install -m 644 %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}
 mkdir -p $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables
 install -m 755 hgweb.cgi $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables
 
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post el
-if [ $1 = $2 ]; then
 
-    %_emacsenPackageRemove %{name}
+%post el
+if [ $1 = 2 ] ; then
+        %_emacsenPackageRemove %{name}
 
 fi
-
 %_addemacsenlist %{name}
 
 %_emacsenPackageInstall %{name}
 
+
 %preun el
-if [ $1 = 0 ]; then
+if [ $1 = 0 ] ; then
+        %_emacsenPackageRemove %{name}
 
-    %_emacsenPackageRemove %{name}
-
-    %_removeemacsenlist %{name}
+        %_removeemacsenlist %{name}
 
 fi
 
-%files
-%defattr(-,root,wheel)
-%{_bindir}
-%{python_sitelib}
-%{_sysconfdir}/mercurial
-%{_libexecdir}/mercurial
+
+%files -f %{name}-base.files
+%defattr(-,root,root,-)
+%doc CONTRIBUTORS COPYING doc/README doc/hg*.txt doc/hg*.html *.cgi contrib/*.fcgi
+%doc %attr(644,root,root) %{_mandir}/man?/hg*.gz
+%doc %attr(644,root,root) contrib/*.svg contrib/sample.hgrc
 %{_sysconfdir}/bash_completion.d/mercurial.sh
 %{_datadir}/zsh/site-functions/_mercurial
-%{_mandir}/man?/hg*
-%doc CONTRIBUTORS COPYING doc/README
-%doc *.cgi contrib/*.fcgi contrib/*.wsgi
-%doc contrib/sample.hgrc contrib/*.svg
+%{_bindir}/hg-ssh
+%{_bindir}/mercurial-convert-repo
+%dir %{_sysconfdir}/mercurial
+%dir %{_sysconfdir}/mercurial/hgrc.d
+%{_sysconfdir}/mercurial/hgrc.d/mergetools.rc.sample
+%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%dir %{python_sitearch}/mercurial
+%dir %{python_sitearch}/hgext
+
 
 %files el
-%defattr(-,root,wheel)
-%{_datadir}/emacs/site-lisp/*.el
+%{_datadir}/emacs/site-lisp/mercurial
 %{_prefix}/lib/emacsen-common/packages/*/mercurial
+
+
+%files hgk -f %{name}-hgk.files
+%{_libexecdir}/mercurial/
+%{_sysconfdir}/mercurial/hgrc.d/hgk.rc
 
 %files hgweb
 %defattr(-,root,wheel)
@@ -185,6 +214,9 @@ fi
 %dir %{shared_dir}/mercurial
 
 %changelog
+* Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-1
+- make more compatible with Vine Linux
+
 * Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-0
 - update to 1.8.3
 

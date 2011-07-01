@@ -24,18 +24,11 @@ tmux may be detached from a screen and continue running in the background, then 
 %patch0 -p1
 
 %build
+export CFLAGS="-arch i386 -arch x86_64"
 export CPPFLAGS="-I%{_includedir}"
-export LDFLAGS="-L%{_libdir}"
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
-            --bindir=%{_bindir} --sbindir=%{_sbindir} \
-            --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
-            --includedir=%{_includedir} \
-            --libdir=%{_libdir} --libexecdir=%{_libexecdir} \
-            --localstatedir=%{_localstatedir} \
-            --sharedstatedir=%{_sharedstatedir} \
-            --mandir=%{_mandir} --infodir=%{_infodir} \
-            CC='gcc-4.2 -arch i386 -arch x86_64' \
-            CPP="gcc-4.2 -E"
+export LDFLAGS="-L%{_libdir} -arch i386 -arch x86_64"
+%configure \
+    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' CPP="/usr/bin/gcc-4.2 -E"
 make
 
 %install

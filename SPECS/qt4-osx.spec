@@ -20,7 +20,7 @@
 Summary: Qt Tool Kit
 Name: qt
 Version: 4.7.2
-Release: 0%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-%{version}.tar.gz
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: (LGPLv2 with exceptions or GPLv3 with exceptions) and ASL 2.0 and BSD and FTL and MIT
@@ -35,10 +35,13 @@ BuildConflicts: libevent-devel
 BuildConflicts: pcre-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
+# Provides packages for compatibility
+Provides: qt %{name}-devel %{name}-config %{name}-Designer %{name}-tools
+Provides: WebKit-qt WebKit-qt-devel
 # Provides framework
 Provides: QtCore QtGui QtNetwork QtMultimedia 
 Provides: QtScript QtScriptTools
-Provides: QtOpenGL QtTest QtSvg phonon
+Provides: QtOpenGL QtTest QtSvg
 Provides: QtXml QtXmlPatterns QtSql
 Provides: QtDesigner QtDesignerComponents
 Provides: QtHelp QtDeclarative Qt3Support
@@ -84,6 +87,8 @@ Requires: %{name} = %{version}-%{release}
 %setup -q -n qt-everywhere-opensource-src-%{version}
 
 %build
+export CC='/usr/bin/gcc-4.2'
+export CXX='/usr/bin/g++-4.2'
 ./configure -confirm-license -release -opensource -shared \
             -prefix %{_qt4_prefix} -bindir %{_qt4_bindir} \
             -datadir %{_qt4_datadir} -demosdir %{_qt4_demosdir} \
@@ -174,6 +179,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_qt4_plugindir}/sqldrivers/libqsqlite*
 
 %changelog
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-3
+- build with specific compiler
+
+* Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-2
+- change the package name from qt to qt4
+- provides including packages
+
 * Fri May 20 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-1
 - fix dependency problem with QtWebKit framework
 
