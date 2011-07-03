@@ -5,13 +5,12 @@
 %define _qt4_version %(pkg-config --modversion --silence-errors Qt 2>/dev/null || echo 4.7.2)
 %define _qt4_prefix %(pkg-config --variable prefix --silence-errors Qt 2>/dev/null || echo %{_libdir}/qt-%{qt4_ver})
 %define _qt4_plugindir %(pkg-config --variable plugindir --silence-errors Qt 2>/dev/null || echo %{_qt4_prefix}/plugins)
-%define qt4qmake %{_qt4_prefix}/bin/qmake
 
 Name: 	 PyQt4
 Summary: Python bindings for Qt4
 Summary(ja): Qt4 の Python バインディング
 Version: 4.8.4
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 
 # GPLv2 exceptions(see GPL_EXCEPTIONS*.txt)
 License: GPLv3 or GPLv2 with exceptions
@@ -53,10 +52,11 @@ chmod a+rx pyuic/uic/pyuic.py
 python configure.py --assume-shared \
                     --confirm-license \
                     --no-timestamp \
-                    --qmake=%{qt4qmake} \
+                    --qmake=%{_bindir}/qmake \
                     --use-arch i386 --use-arch x86_64 \
                     --no-qsci-api \
-                    --verbose 
+                    --verbose \
+                    CC="/usr/bin/gcc" CXX="/usr/bin/g++"
 make
 
 %install
@@ -95,6 +95,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_data}/sip/PyQt4/
 
 %changelog
+* Sun Jul  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.4-2
+- fix path to qmake
+- build with specific compiler
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.4-1
 - make more compatible with Vine Linux
 
