@@ -1,14 +1,14 @@
 #! /bin/sh -e
-# /usr/lib/emacsen-common/packages/install/rst-el
+# /usr/osxws/lib/emacsen-common/packages/install/rst-el
 
 FLAVOR=$1
 PACKAGE=rst-el
 
 FLAGS="${SITEFLAG} -q -batch -f batch-byte-compile"
 
-ELDIR="/usr/share/emacs/site-lisp/${PACKAGE}"
-ELCDIR="/usr/share/${FLAVOR}/site-lisp/${PACKAGE}"
-STARTDIR=/etc/${FLAVOR}/site-start.d
+ELDIR="/usr/osxws/share/emacs/site-lisp/${PACKAGE}"
+ELCDIR="/usr/osxws/share/${FLAVOR}/site-lisp/${PACKAGE}"
+STARTDIR=/usr/osxws/etc/${FLAVOR}/site-start.d
 STARTFILE="${PACKAGE}-init.el"
 
 SOURCES="rst.el"

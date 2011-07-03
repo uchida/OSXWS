@@ -7,7 +7,7 @@ Summary: an open-source text processing system written in Python
 Summary(ja): Pythonで書かれたテキスト処理システム
 Name: python-%{srcname}
 Version: 0.7
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Group: Development/Languages
 License: Public Domain and MIT and Python and GPLv2
 URL: http://docutils.sourceforge.net/
@@ -150,6 +150,9 @@ fi
 
 
 %changelog
+* Sun Jul  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7-3
+- fix path in rst-el-{install,remove}.sh
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7-2
 - make more compatible with Vine Linux
 

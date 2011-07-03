@@ -1,9 +1,9 @@
 #!/bin/sh -e
-# /usr/lib/emacsen-common/packages/remove/rst-el
+# /usr/osxws/lib/emacsen-common/packages/remove/rst-el
 
 FLAVOR=$1
 PACKAGE=rst-el
-STARTDIR=/etc/${FLAVOR}/site-start.d
+STARTDIR=/usr/osxws/etc/${FLAVOR}/site-start.d
 STARTFILE="${PACKAGE}-init.el"
 
 if [ "X${FLAVOR}" = "X" ]; then
@@ -16,7 +16,7 @@ if [ "X${PACKAGE}" = "X" ]; then
     exit 1;
 fi
 
-ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
+ELCDIR=/usr/osxws/share/${FLAVOR}/site-lisp/${PACKAGE}
 
 case "${FLAVOR}" in
     emacs)
