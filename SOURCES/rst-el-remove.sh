@@ -6,8 +6,10 @@ PACKAGE=rst-el
 STARTDIR=/usr/osxws/etc/${FLAVOR}/site-start.d
 STARTFILE="${PACKAGE}-init.el"
 
+ECHO="/usr/bin/echo"
+
 if [ "X${FLAVOR}" = "X" ]; then
-    echo Need argument to determin FLAVOR of emacs;
+    $ECHO Need argument to determin FLAVOR of emacs;
     exit 1
 fi
 
@@ -22,10 +24,10 @@ case "${FLAVOR}" in
     emacs)
     ;;
     *)
-    echo -n "remove/${PACKAGE}: Handling removal of emacsen flavor ${FLAVOR} ..."
+    $ECHO -n "remove/${PACKAGE}: Handling removal of emacsen flavor ${FLAVOR} ..."
     rm -rf ${ELCDIR}
     rm -f ${STARTDIR}/95${STARTFILE}*
-    echo " done."
+    $ECHO " done."
     ;;
 esac
 
