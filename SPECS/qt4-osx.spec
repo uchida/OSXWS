@@ -20,7 +20,7 @@
 Summary: Qt Tool Kit
 Name: qt4
 Version: 4.7.2
-Release: 4%{?_dist_release}
+Release: 5%{?_dist_release}
 Source0: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-%{version}.tar.gz
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: (LGPLv2 with exceptions or GPLv3 with exceptions) and ASL 2.0 and BSD and FTL and MIT
@@ -85,6 +85,11 @@ Requires: %{name} = %{version}-%{release}
 
 %prep
 %setup -q -n qt-everywhere-opensource-src-%{version}
+for d in `find ./mkspecs -name 'macx-g++*'`; do
+    sed -i.bak 's| = gcc| = /usr/bin/gcc|g' $d/qmake.conf
+    sed -i.bak 's| = g++| = /usr/bin/g++|g' $d/qmake.conf
+    rm -f $d/qmake.conf.bak
+done
 
 %build
 export CC='/usr/bin/gcc-4.2'
@@ -179,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_qt4_plugindir}/sqldrivers/libqsqlite*
 
 %changelog
+* Tue Aug 23 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-5
+- specify compiler path in mkspecs/macx-g++{,40,42} for qt4 applications
+
 * Thu Jul 14 2011 KOBAYASHI Taizo <tkoba965@me.com> 4.7.2-4
 - fix case_sensitive judgement
 - enable sses
