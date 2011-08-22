@@ -15,12 +15,12 @@
 %define _qt4_translationdir %{_datadir}/qt4/translations
 
 # check root File system is case sensitive or not
-%define case_sensitive %(diskutil info / | grep 'Case-sensitive')
+%define case_sensitive %(diskutil info / | grep -q 'Case-sensitive' && echo 1 || echo 0)
 
 Summary: Qt Tool Kit
 Name: qt4
 Version: 4.7.2
-Release: 3%{?_dist_release}
+Release: 4%{?_dist_release}
 Source0: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-%{version}.tar.gz
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: (LGPLv2 with exceptions or GPLv3 with exceptions) and ASL 2.0 and BSD and FTL and MIT
@@ -29,7 +29,7 @@ URL: http://www.qtsoftware.com/
 BuildRequires: zlib-devel, libtiff-devel, libpng-devel, libjpeg-devel
 # For Mac OS X non-Case sensitive HFS+ system,
 # conflicts with event.h in libevent and Event.h in qt4
-%if "%{case_sensitive}" == ""
+%if "%{case_sensitive}" == "0"
 BuildConflicts: libevent-devel
 %endif
 BuildConflicts: pcre-devel
@@ -100,8 +100,8 @@ export CXX='/usr/bin/g++-4.2'
             -arch "i386 x86_64" \
             -I/usr/X11/include -L/usr/X11/lib \
             -I%{_includedir} -L%{_libdir} \
-            -no-ssse3 -no-sse4.1 -no-sse4.2 \
             -no-dbus -no-phonon -no-pch
+
 make
 
 %install
@@ -179,6 +179,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_qt4_plugindir}/sqldrivers/libqsqlite*
 
 %changelog
+* Thu Jul 14 2011 KOBAYASHI Taizo <tkoba965@me.com> 4.7.2-4
+- fix case_sensitive judgement
+- enable sses
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-3
 - build with specific compiler
 
