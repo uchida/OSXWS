@@ -5,7 +5,7 @@ Summary: Python plotting package
 Summary(ja): Python プロットパッケージ
 Name: python-%{modulename}
 Version: 1.0.1
-Release: 0%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Patch0: matplotlib-setup.cfg.patch
 # sphinx >= 1.0.6 compatible patch
@@ -24,7 +24,8 @@ BuildRequires: python-devel
 BuildRequires: freetype-devel libpng-devel pkgconfig
 BuildRequires: python-pytz
 BuildRequires: python-dateutil
-BuildRequires: tetex ghostscript dvipng
+BuildRequires: texlive-collection-basic, dvipng
+BuildRequires: ghostscript
 BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
@@ -94,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-2
+- switchover from tetex to texlive
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.1-0
 - remove unnecessary requires
 - build with specific compiler

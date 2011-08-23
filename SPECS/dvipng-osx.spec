@@ -1,6 +1,6 @@
 Name:             dvipng
 Version:          1.13
-Release:          1%{?_dist_release}
+Release:          2%{?_dist_release}
 
 Summary:          Converts DVI files to PNG/GIF format
 Summary(ja):      DVIファイルをPNG/GIF画像に変換
@@ -13,7 +13,7 @@ BuildRequires:    libkpathsea-devel
 BuildRequires:    gd-devel
 BuildRequires:    zlib-devel
 BuildRequires:    libpng-devel
-BuildRequires:    tetex
+BuildRequires:    texlive-collection-basic
 BuildRequires:    freetype-devel
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-root
@@ -76,6 +76,9 @@ fi
 
 
 %changelog
+* Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-2
+- switchover from tetex to texlive
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-1
 - make more compatible with Vine Linux
 

@@ -16,7 +16,7 @@ diff -r 080d33f56352 sphinx/texinputs/Makefile
 -	dvipdfmx '$(basename $<).dvi'
 +
 +all-pdf-ja:
-+	for f in *.pdf *.png *.gif *.jpg *.jpeg; do ebb $$f; done
++	for f in *.pdf *.png *.gif *.jpg *.jpeg; do ebbx $$f; done
 +	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
 +	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
 +	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
@@ -51,9 +51,9 @@ diff -r 080d33f56352 sphinx/writers/latex.py
 -                    r'\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}'
 +                self.elements['preamble'] += r'''
 +                \ifnum 42146=\euc"A4A2
-+                \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}
++                \AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
 +                \else
-+                \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
++                \AtBeginShipoutFirst{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
 +                \fi'''
              else:
                  self.builder.warn('no Babel option known for language %r' %

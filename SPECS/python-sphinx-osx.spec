@@ -1,6 +1,6 @@
 Name:       python-sphinx
 Version:    1.0.7
-Release:    1%{?_dist_release}
+Release:    2%{?_dist_release}
 Summary:    Python documentation generator
 
 Group:      Development/Tools
@@ -34,10 +34,10 @@ Requires:      python-docutils
 Requires:      python-jinja2
 Requires:      python-pygments
 Requires:      python-setuptools
-BuildRequires:  tetex, dvipng
-BuildRequires:  texmacro-unicode, texmacro-expdlist
-Requires:      tetex, dvipng
-Requires:      texmacro-unicode, texmacro-expdlist
+BuildRequires:  texlive-collection-basic, dvipng
+BuildRequires:  texlive-collection-latexextra
+Requires:  texlive-collection-basic, dvipng
+Requires:  texlive-collection-latexextra
 
 %description
 Sphinx is a tool that makes it easy to create intelligent and
@@ -168,6 +168,9 @@ make test
 %doc docjp/html docjp/sphinx.pdf
 
 %changelog
+* Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-2
+- switchover from tetex to texlive
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-1
 - make more compatible with Vine Linux
 
