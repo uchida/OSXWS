@@ -74,6 +74,7 @@ Summary: Documentation for the Python programming language.
 Summary(ja): Python プログラミング言語のドキュメント
 Group: Applications/Documentation
 Obsoletes: python2-docs
+BuildArch: noarch
 
 %description docs
 Documentation relating to the Python programming language in HTML and info
@@ -105,6 +106,8 @@ mv python-%{version}-docs-html html
 mv docs-pdf pdf
 
 %build
+export CC="/usr/bin/gcc-4.2"
+export CXX="/usr/bin/g++-4.2"
 ./configure --prefix=/usr/osxws --enable-framework=/Library/Frameworks \
             --enable-universalsdk --with-universal-archs="intel" --enable-ipv6
 make
@@ -163,7 +166,6 @@ rm -rf $RPM_BUILD_ROOT
   --slave   %{_bindir}/idle idle %{_bindir}/idle%{python_version} \
   --slave   %{_bindir}/2to3 2to3 %{_bindir}/2to326 \
   --slave   %{_bindir}/smtpd.py smtpd.py %{_bindir}/smtpd%{python_version}.py
-%{_bindir}/2to3
 # Apple python 2.6
 %{_sbindir}/update-alternatives \
   --install %{_bindir}/python python /usr/bin/python2.6 20 \
@@ -247,6 +249,11 @@ fi
 %doc Doc html pdf
 
 %changelog
+* Thu Aug 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.7-1
+- fix postinstall script
+- give paths to CC and CXX
+- make python-docs noarch
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.7-0
 - update to 2.6.7
 
