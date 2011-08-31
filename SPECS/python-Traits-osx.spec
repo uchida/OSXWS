@@ -1,6 +1,6 @@
 Name:           python-Traits
 Version:        3.6.0
-Release:        2%{?_dist_release}
+Release:        3%{?_dist_release}
 Summary:        Explicitly typed attributes for Python
 Group:          Development/Libraries
 # Images have different licenses. For image license breakdown check
@@ -10,7 +10,14 @@ Group:          Development/Libraries
 License:        BSD and EPL and LGPLv2 and GPLv2+
 URL:            http://code.enthought.com/projects/traits/
 Source0:        http://www.enthought.com/repo/ETS/Traits-%{version}.tar.gz
-BuildRequires:  python-setupdocs, python-setuptools, python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires:  python-setupdocs, python-setuptools
 Requires:       python-numpy
 BuildArch:      fat
 
@@ -75,6 +82,9 @@ rm $RPM_BUILD_ROOT%{python_sitearch}/enthought/traits/ctraits.c
 %{python_sitearch}/enthought/traits
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-3
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-2
 - requires python-setuptools
 

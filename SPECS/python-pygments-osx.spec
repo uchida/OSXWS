@@ -1,6 +1,6 @@
 Name:           python-pygments
 Version:        1.3.1
-Release:        2%{?_dist_release}
+Release:        3%{?_dist_release}
 Summary:        A syntax highlighting engine written in Python
 
 Group:          Development/Libraries
@@ -10,7 +10,14 @@ Source0:        http://pypi.python.org/packages/source/P/Pygments/Pygments-%{ver
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  python-devel >= 2.4, python-setuptools, python-nose
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python >= 2.4
+BuildRequires: python-devel >= 2.4
+%endif
+BuildRequires:  python-setuptools, python-nose
 Requires:       python-setuptools, python-imaging
 
 
@@ -84,6 +91,9 @@ make test
 
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-3
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-2
 - make more compatible with Vine Linux
 

@@ -10,7 +10,7 @@ Name: 	 PyQt4
 Summary: Python bindings for Qt4
 Summary(ja): Qt4 の Python バインディング
 Version: 4.8.4
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 
 # GPLv2 exceptions(see GPL_EXCEPTIONS*.txt)
 License: GPLv3 or GPLv2 with exceptions
@@ -19,7 +19,13 @@ URL:     http://www.riverbankcomputing.com/software/pyqt/
 Source0: http://www.riverbankcomputing.com/static/Downloads/PyQt4/PyQt-mac-gpl-%{version}.tar.gz
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
 BuildRequires: python-devel
+%endif
 BuildRequires: qt4-devel >= 4.5.0
 BuildRequires: sip-devel >= 4.12.1
 Requires: sip >= 4.12.1
@@ -95,6 +101,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_data}/sip/PyQt4/
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.4-3
+- mofify python requirements for OSXWS
+
 * Sun Jul  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.4-2
 - fix path to qmake
 - build with specific compiler

@@ -1,7 +1,7 @@
 Summary: A collection of tools for internationalizing Python applications
 Name: python-babel
 Version: 0.9.4
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://ftp.edgewall.com/pub/babel/Babel-%{version}.tar.bz2
 License: modified BSD-style License
 Group: Development/Libraries
@@ -9,6 +9,13 @@ URL: http://babel.edgewall.org/
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
 
 %description
 Babel is composed of two major parts:
@@ -39,6 +46,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{python_sitelib}/babel
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.4-1
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.4-0
 - initial build for Mac OS X WorkShop
 

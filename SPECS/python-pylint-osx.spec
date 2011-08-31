@@ -3,15 +3,20 @@
 Summary: python code static checker
 Name: python-%{modulename}
 Version: 0.22.0
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/%{modulename}/%{modulename}-%{version}.tar.gz
 License: GPLv2
 Group: Development/Languages
 URL: http://www.logilab.org/project/pylint
 
-Requires: python
 Requires: python-logilab-common python-logilab-astng
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
 BuildRequires: python-devel
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 
@@ -57,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.22.0-3
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.22.0-2
 - remove unnecessary requires
 

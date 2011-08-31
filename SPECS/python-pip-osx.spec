@@ -4,7 +4,7 @@ Summary:        Pip installs Python packages.  An easy_install replacement
 Summary(ja):    Pip は easy_install を置き換える Python パッケージインストーラです。
 Name:           python-%{srcname}
 Version:        0.8.3
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 
 Group:          Development/Libraries
 License:        MIT
@@ -13,7 +13,13 @@ Source0:        http://pypi.python.org/packages/source/p/pip/%{srcname}-%{versio
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildArch:      noarch
-BuildRequires:  python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
 BuildRequires:  python-setuptools
 Requires:       python-setuptools
 
@@ -50,6 +56,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/pip*
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.8.3-2
+- mofify python requirements for OSXWS
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.8.3-1
 - make more compatible with Vine Linux
 

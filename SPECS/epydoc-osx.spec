@@ -2,7 +2,7 @@ Summary: Automatic API documentation generation tool for Python
 Summary(ja): Python 用の自動 API ドキュメント生成ツール
 Name: epydoc
 Version: 3.0.1
-Release: 3%{?_dist_release}
+Release: 4%{?_dist_release}
 Group: Development/Tools
 License: MIT
 URL: http://epydoc.sourceforge.net/
@@ -10,7 +10,13 @@ Source0: http://pypi.python.org/packages/source/e/%{name}/%{name}-%{version}.tar
 Patch1: epydoc-3.0.1-giftopng.patch
 Patch2: epydoc-3.0.1-new-docutils.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
 BuildRequires: python-devel
+%endif
 Provides: python-epydoc = %{version}-%{release}
 Obsoletes: python-epydoc
 BuildArch: noarch
@@ -56,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.1-4
+- mofify python requirements for OSXWS
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.0.1-3
 - make more compatible with Vine Linux
 

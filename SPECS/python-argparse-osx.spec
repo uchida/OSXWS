@@ -4,14 +4,19 @@
 Summary: Python command-line parsing library
 Name: python-%{modulename}
 Version: 1.2.1
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0:http://argparse.googlecode.com/files/argparse-%{version}.tar.gz
 License: PSL
 Group: Development/Languages
 URL: http://code.google.com/p/argparse/
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
 BuildRequires: python-devel
+%endif
 BuildRequires: python-setuptools
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
@@ -52,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.2.1-3
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.2.1-2
 - remove unnecessary requires
 

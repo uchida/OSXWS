@@ -5,7 +5,7 @@
 # Pass --without docs to rpmbuild if you don't want the documentation
 Name: 		git
 Version: 	1.7.5.1
-Release:        3%{?_dist_release}
+Release:        4%{?_dist_release}
 Summary:  	Core git tools
 Summary(ja):	Core git ツール
 License: 	GPLv2
@@ -186,7 +186,14 @@ Perl interface to Git.
 Summary:        Python interface to Git
 Summary(ja):    Git の python インタフェース
 Group:          Development/Libraries
-Requires:       git = %{version}-%{release}, python
+Requires:       git = %{version}-%{release}
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python > 2.6.1
+%else
+Requires: python
+BuildRequires: python
+%endif
 %description -n python-Git
 %{summary}.
 
@@ -439,6 +446,9 @@ fi
 # No files for you!
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-4
+- mofify python requirements for OSXWS
+
 * Sun Jul  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-3
 - remove unnecessary requires in perl-Git, git-svn
 

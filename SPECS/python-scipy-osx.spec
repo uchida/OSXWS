@@ -5,19 +5,24 @@ Summary: Scientific Library for Python
 Summary(ja): Python 科学技術計算ライブラリ
 Name: python-%{modulename}
 Version: 0.9.0
-Release: 3%{?_dist_release}
+Release: 4%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: http://www.scipy.org
 
 Requires: apple-gcc
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 Requires: python-numpy
 Requires: suitesparse-devel
 Requires: python-nose
 BuildRequires: apple-gcc
-BuildRequires: python-devel
 BuildRequires: python-numpy
 BuildRequires: suitesparse-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -86,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-4
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-3
 - remove unnecessary requires
 - build with specific compiler

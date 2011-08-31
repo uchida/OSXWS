@@ -1,7 +1,7 @@
 Summary: Structured Terminal Forms Language/Library
 Name: stfl
 Version: 0.21
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://www.clifford.at/stfl/stfl-0.21.tar.gz
 Patch0: stfl-macosx.patch
 Patch1: stfl-iconv.patch
@@ -11,6 +11,12 @@ URL: http://www.clifford.at/stfl/
 
 BuildRequires: ncurses-devel
 BuildRequires: pkgconfig
+%if "%{?_dist_release}" == "osx10.6"
+BuildRequires: python-devel > 2.6.1
+%else
+BuildRequires: python-devel
+%endif
+BuildRequires: perl, ruby
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
@@ -80,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21-2
+- mofify python requirements for OSXWS
+
 * Sun Jan  9 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21-1
 - remove extraneous objects
 

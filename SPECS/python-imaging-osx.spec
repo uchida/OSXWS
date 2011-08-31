@@ -5,17 +5,22 @@ Summary: The Python Imaging Library
 Summary(ja): Python イメージ処理ライブラリ
 Name: python-imaging
 Version: 1.1.7
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 License: MIT
 Group: Development/Languages
 URL: http://www.pythonware.com/products/pil
 Source0: http://effbot.org/downloads/Imaging-%{version}.tar.gz
 Patch0: imaging-1.1.6-osxws.patch
-BuildRequires: python-devel
 BuildRequires: XOrg-devel libjpeg-devel libpng-devel zlib-devel freetype-devel
 BuildRequires: lcms-devel
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 Requires: libjpeg >= 6a
 Requires: libpng >= 1.0.12
 Requires: zlib >= 1.1.4
@@ -72,6 +77,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc Docs
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-3
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-2
 - remove unnecessary requires
 

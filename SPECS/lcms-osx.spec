@@ -2,7 +2,7 @@ Name: lcms
 Summary: Little CMS - color management engine
 Summary(ja): Little CMS - カラーマネージメントエンジン
 Version: 1.19
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 
 Group: System Environment/Libraries
 License: MIT
@@ -17,7 +17,11 @@ BuildRequires: zlib-devel
 BuildRequires: libtiff-devel
 BuildRequires: libjpeg-devel
 BuildRequires: pkgconfig
+%if "%{?_dist_release}" == "osx10.6"
+BuildRequires: python-devel > 2.6.1
+%else
 BuildRequires: python-devel
+%endif
 BuildArch: fat
 
 %description
@@ -44,7 +48,11 @@ about icc profiles.
 %package -n python-%{name}
 Summary: Python interface to LittleCMS
 Group: Development/Libraries
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+%else
 Requires: python
+%endif
 %description -n python-%{name}
 Python interface to LittleCMS.
 
@@ -180,6 +188,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %{python_sitearch}/_lcms.so
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.19-2
+- mofify python requirements for OSXWS
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.19-1
 - make more compatible with Vine Linux
 

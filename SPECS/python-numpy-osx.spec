@@ -4,7 +4,7 @@
 Summary: NumPy: array processing for numbers, strings, records, and objects.
 Name: python-%{modulename}
 Version: 1.6.0
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Source1: numpy-site.cfg
 License: BSD
@@ -12,10 +12,15 @@ Group: Development/Languages
 URL: http://numpy.scipy.org/
 
 Requires: apple-gcc
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 Requires: python-nose
 BuildRequires: apple-gcc
-BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 %description
@@ -84,6 +89,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.0-2
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.0-1
 - remove unnecessary requires
 
