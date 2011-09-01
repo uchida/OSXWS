@@ -4,15 +4,19 @@
 Summary: rapid multi-Python deployment
 Name: python-%{modulename}
 Version: 1.0.9
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/e/%{modulename}/%{modulename}-%{version}.zip
 License: GPLv2+
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
-Requires: python
-Requires: python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1, python-devel > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python, python-devel
 BuildRequires: python-devel
+%endif
 %if %{with doc}
 BuildRequires: python-sphinx
 %endif
@@ -58,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.9-2
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.9-1
 - remove unnecessary requires
 

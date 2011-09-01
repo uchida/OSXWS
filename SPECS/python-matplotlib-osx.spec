@@ -5,7 +5,7 @@ Summary: Python plotting package
 Summary(ja): Python プロットパッケージ
 Name: python-%{modulename}
 Version: 1.0.1
-Release: 0%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Patch0: matplotlib-setup.cfg.patch
 # sphinx >= 1.0.6 compatible patch
@@ -15,16 +15,22 @@ License: PSF
 Group: Development/Languages
 URL: http://matplotlib.sourceforge.net
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 Requires: python-numpy
 Requires: python-dateutil
 Requires: python-pytz
 Requires: freetype libpng
-BuildRequires: python-devel
 BuildRequires: freetype-devel libpng-devel pkgconfig
 BuildRequires: python-pytz
 BuildRequires: python-dateutil
-BuildRequires: tetex ghostscript dvipng
+BuildRequires: texlive-collection-basic, dvipng
+BuildRequires: ghostscript
 BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
@@ -94,6 +100,12 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-3
+- mofify python requirements for OSXWS
+
+* Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-2
+- switchover from tetex to texlive
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.1-0
 - remove unnecessary requires
 - build with specific compiler

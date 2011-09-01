@@ -1,6 +1,6 @@
 Name:           python-EnthoughtBase
 Version:        3.1.0
-Release:        2%{?_dist_release}
+Release:        3%{?_dist_release}
 Summary:        Core packages for the Enthought Tool Suite
 Group:          Development/Libraries
 # enthought/util/guid.py and images are LGPLv2+
@@ -8,7 +8,14 @@ License:        BSD and LGPLv2+
 URL:            http://code.enthought.com/projects/enthought_base.php
 Source0:        http://www.enthought.com/repo/ETS/EnthoughtBase-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python-setuptools, python-devel, python-setupdocs
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires:  python-setuptools, python-setupdocs
 
 %description
 
@@ -55,6 +62,9 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 %{python_sitelib}/*.pth
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.0-3
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.0-2
 - requires python-setuptools
 

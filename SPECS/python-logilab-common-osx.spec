@@ -3,14 +3,19 @@
 Summary: collection of low-level Python packages and modules used by Logilab projects
 Name: python-%{modulename}
 Version: 0.55.2
-Release: 0%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/l/%{modulename}/%{modulename}-%{version}.tar.gz
 License: LGPLv2+
 Group: Development/Languages
 URL: http://www.logilab.org/project/%{name}
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
 BuildRequires: python-devel
+%endif
 BuildRequires: epydoc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
@@ -56,6 +61,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/apidoc
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.55.2-2
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.55.2-1
 - requires epydoc
 

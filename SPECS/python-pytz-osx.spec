@@ -4,14 +4,19 @@ Summary: World timezone definitions, modern and historical of python
 Summary(ja): Python 版の世界同時帯の現代的、歴史的な定義
 Name: python-%{modulename}
 Version: 2010l
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/pytz/pytz-%{version}.tar.gz
 License: MIT
 Group: Development/Languages
 URL: http://pytz.sourceforge.net
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
 BuildRequires: python-devel
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 
@@ -41,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES.txt LICENSE.txt README.txt
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2010l-3
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2010l-2
 - remove unnecessary requires
 

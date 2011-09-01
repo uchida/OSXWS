@@ -42,6 +42,8 @@ generation, code generation, and template instantiation.
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 %else
+export CC="/usr/bin/gcc-4.2"
+export CXX="/usr/bin/g++-4.2"
 export CFLAGS="-arch i386 -arch x86_64"
 export CXXFLAGS="-arch i386 -arch x86_64"
 %endif

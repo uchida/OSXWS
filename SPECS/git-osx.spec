@@ -5,7 +5,7 @@
 # Pass --without docs to rpmbuild if you don't want the documentation
 Name: 		git
 Version: 	1.7.5.1
-Release:        2%{?_dist_release}
+Release:        4%{?_dist_release}
 Summary:  	Core git tools
 Summary(ja):	Core git ツール
 License: 	GPLv2
@@ -129,9 +129,7 @@ Mac OS X WorkShop のデフォルトでは、「システム環境設定」で �
 Summary:        Git tools for importing Subversion repositories
 Summary(ja):    Subversion リポジトリを git へインポートするためのツール
 Group:          Development/Tools
-Requires:       git = %{version}-%{release}, subversion, perl(Term::ReadKey)
-Requires:       perl(SVN::Core)
-Requires:       perl-Git = %{version}-%{release}
+Requires:       git = %{version}-%{release}, subversion
 %description svn
 Git tools for importing Subversion repositories.
 
@@ -179,8 +177,7 @@ Git revision tree visualiser.
 Summary:        Perl interface to Git
 Summary(ja):    Git の perl インタフェース
 Group:          Development/Libraries
-Requires:       git = %{version}-%{release}, perl(Error)
-Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+Requires:       git = %{version}-%{release}
 
 %description -n perl-Git
 Perl interface to Git.
@@ -189,7 +186,14 @@ Perl interface to Git.
 Summary:        Python interface to Git
 Summary(ja):    Git の python インタフェース
 Group:          Development/Libraries
-Requires:       git = %{version}-%{release}, python
+Requires:       git = %{version}-%{release}
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python > 2.6.1
+%else
+Requires: python
+BuildRequires: python
+%endif
 %description -n python-Git
 %{summary}.
 
@@ -442,6 +446,12 @@ fi
 # No files for you!
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-4
+- mofify python requirements for OSXWS
+
+* Sun Jul  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-3
+- remove unnecessary requires in perl-Git, git-svn
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-2
 - remove unnecessary requires
 

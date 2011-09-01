@@ -3,7 +3,7 @@
 
 Name:		python-nose
 Version:    0.11.3
-Release:    2%{?_dist_release}
+Release:    3%{?_dist_release}
 Summary:	A discovery-based unittest extension for Python
 Summary(ja):	Python 用の発見型ユニットテスト・エクステンション
 
@@ -15,7 +15,14 @@ Patch0:     nose-0.11.3-osxws.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-BuildRequires: python-devel, python-setuptools
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires: python-setuptools
 %if %{with doc}
 BuildRequires: python-sphinx
 %endif
@@ -64,6 +71,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/nose
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.11.3-3
+- mofify python requirements for OSXWS
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.11.3-2
 - make more compatible with Vine Linux
 

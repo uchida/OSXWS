@@ -6,7 +6,7 @@ Summary: The Visualization Toolkit - ハイレベル3D可視化ライブラリ
 Group: System Environment/Libraries
 Name: vtk
 Version: 5.6.1
-Release: 3%{?_dist_release}
+Release: 5%{?_dist_release}
 Source0: http://www.vtk.org/files/release/5.6/%{name}-%{version}.tar.gz
 Source1: http://www.vtk.org/files/release/5.6/%{name}data-%{version}.tar.gz
 Patch0: vtk-5.6.1-netcdf-cxx-version.patch
@@ -17,7 +17,11 @@ License: BSD
 URL: http://vtk.org/
 
 BuildRequires: cmake >= 2.0.0
+%if "%{?_dist_release}" == "osx10.6"
+BuildRequires: python-devel > 2.6.1
+%else
 BuildRequires: python-devel
+%endif
 BuildRequires: freetype-devel, libjpeg-devel, libpng-devel
 BuildRequires: libtiff-devel, zlib-devel
 BuildRequires: libxml2-devel
@@ -87,7 +91,11 @@ building VTK. This package is relocatable.
 Summary: Python bindings for VTK.
 Group: Applications/Edutainment
 Requires: %{name} = %{version}-%{release}
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+%else
 Requires: python
+%endif
 
 %description python 
 This provides the shared libraries that enable one to use VTK from
@@ -163,6 +171,11 @@ cmake .. \
  -DBUILD_DOCUMENTATION:BOOL=ON \
  -DBUILD_EXAMPLES:BOOL=ON \
  -DBUILD_TESTING:BOOL=ON \
+ -DVTK_USE_RPATH:BOOL=ON \
+ -DCMAKE_INSTALL_RPATH:STRING="%{_libdir}/vtk-5.6" \
+ -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON \
+ -DVTK_INSTALL_PREFIX:PATH=%{_prefix} \
+ -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON \
  -DVTK_INSTALL_INCLUDE_DIR:PATH=/include/vtk \
  -DVTK_INSTALL_LIB_DIR:PATH=/%{_lib}/vtk-5.6 \
  -DVTK_INSTALL_QT_DIR=/%{_lib}/qt4/plugins/designer \
@@ -356,6 +369,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-5
+- mofify python requirements for OSXWS
+
+* Wed Aug 24 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-4
+- use RPATH for dynamic linking
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.6.1-3
 - change Group: Applications/Edutainment instead of Applications/Engineering
 

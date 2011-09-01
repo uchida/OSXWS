@@ -5,17 +5,22 @@
 Summary: Python library for symbolic mathematics
 Name: python-%{modulename}
 Version: 0.6.7
-Release: 0%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/s/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: http://code.google.com/p/sympy/
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 %if %{with ipython}
 Requires: ipython
 %endif
-BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 
@@ -80,6 +85,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.7-2
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.7-1
 - requires ipython
 

@@ -7,7 +7,7 @@ Summary: an open-source text processing system written in Python
 Summary(ja): Pythonで書かれたテキスト処理システム
 Name: python-%{srcname}
 Version: 0.7
-Release: 2%{?_dist_release}
+Release: 4%{?_dist_release}
 Group: Development/Languages
 License: Public Domain and MIT and Python and GPLv2
 URL: http://docutils.sourceforge.net/
@@ -20,10 +20,15 @@ Source4: %{elisppkgname}-init.el
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: noarch
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
 BuildRequires: python-devel
+%endif
 BuildRequires: python-setuptools
 BuildRequires: python-imaging
-Requires: python
 Requires: python-imaging
 
 Provides: docutils = %{version}-%{release}
@@ -150,6 +155,12 @@ fi
 
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7-4
+- mofify python requirements for OSXWS
+
+* Sun Jul  3 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7-3
+- fix path in rst-el-{install,remove}.sh
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7-2
 - make more compatible with Vine Linux
 

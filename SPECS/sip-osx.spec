@@ -4,7 +4,7 @@ Name:        sip
 Summary:     SIP - Python/C++ Bindings Generator
 Summary(ja): Python/C++ インターフェイス生成ツール
 Version:     4.12.2
-Release:     2%{?_dist_release}
+Release:     3%{?_dist_release}
 
 License:     GPL
 Group:       Development/Tools
@@ -12,7 +12,13 @@ URL:         http://www.riverbankcomputing.co.uk/software/sip/intro
 Source:      http://www.riverbankcomputing.co.uk/static/Downloads/sip4/%{name}-%{version}.tar.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-BuildRequires:	python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
 Provides: python-sip = %{version}-%{release}
 Obsoletes: python-sip
 BuildArch: fat
@@ -34,7 +40,11 @@ Summary:     Files needed to generate Python bindings for any C++ class library
 Summary(ja): Python/C++ インタフェース作成に必要なライブラリやヘッダファイル
 Group:       Development/Libraries
 Requires:    %{name} = %{version}-%{release}
-Requires:    python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python-devel > 2.6.1
+%else
+Requires: python-devel
+%endif
 Provides:    libsip-devel = %{version}-%{release}
 
 %description devel
@@ -82,6 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/sip
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.12.1-3
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.12.1-2
 - fix build section
 
