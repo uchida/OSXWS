@@ -4,7 +4,7 @@ Summary: A fast, lightweight distributed source control management system
 Summary(ja): 軽量で高速な分散構成管理システム
 Name: mercurial
 Version: 1.8.3
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 License: GPLv2
 Group: Development/Tools
 URL: http://mercurial.selenic.com/
@@ -15,10 +15,15 @@ Source11: mercurial-el-remove.sh
 Source20: hgweb.conf
 Patch1: mercurial-hgk-fontsize.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: python python-devel
 BuildRequires: python-docutils
 BuildRequires: emacsen-common pkgconfig
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 Provides: hg = %{version}-%{release}
 BuildArch: fat
 
@@ -214,6 +219,9 @@ fi
 %dir %{shared_dir}/mercurial
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-2
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-1
 - make more compatible with Vine Linux
 

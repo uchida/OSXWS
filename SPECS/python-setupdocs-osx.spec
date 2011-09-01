@@ -2,7 +2,7 @@
 
 Name:           python-setupdocs
 Version:        1.0.5
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 Summary:        Setuptools plugin
 Group:          Development/Languages
 License:        BSD
@@ -10,7 +10,14 @@ URL:            http://pypi.python.org/pypi/setupdocs
 Source0:        http://pypi.python.org/packages/source/s/setupdocs/SetupDocs-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
-BuildRequires:  python-devel, python-setuptools
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires:  python-setuptools
 Requires:       python-setuptools
 Requires:       python-sphinx
 
@@ -43,6 +50,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.5-2
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.5-1
 - requires python-setuptools
 

@@ -4,14 +4,19 @@ Summary: Library to create spreadsheet files compatible with MS Excel files
 Summary(ja): MS Excel 互換表計算ファイル生成ライブラリ
 Name: python-%{modulename}
 Version: 0.7.2
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/x/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: https://secure.simplistix.co.uk/svn/xlwt/trunk
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
 BuildRequires: python-devel
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
 %description
@@ -43,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc HISTORY.html licences.py README.html
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7.2-2
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7.2-1
 - remove unnecessary requires
 

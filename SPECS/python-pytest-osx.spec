@@ -4,16 +4,21 @@
 Summary: simple powerful testing with Python
 Name: python-%{modulename}
 Version: 2.0.0
-Release: 5%{?_dist_release}
+Release: 6%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/p/%{modulename}/%{modulename}-%{version}.zip
 License: MIT
 Group: Development/Languages
 URL: http://pytest.org/
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
+BuildRequires: python-devel
+%endif
 Requires: python-py
 Requires: python-setuptools
-BuildRequires: python-devel
 BuildRequires: python-setuptools
 %if %{with doc}
 BuildRequires: python-sphinx python-py
@@ -54,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.0-6
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.0-5
 - remove unnecessary requires
 

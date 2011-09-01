@@ -3,15 +3,23 @@
 Summary: The Cython compiler for writing C extensions for the Python language 
 Name: python-%{modulename}
 Version: 0.14.1
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://cython.org/release/%{modulename}-%{version}.tar.gz
 Patch1: Cython-mac-python.patch
 License: Apache
 Group: Development/Languages
 URL: http://numpy.scipy.org/
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+%else
 Requires: python
+%endif
+%if "%{?_dist_release}" == "osx10.6"
+BuildRequires: python-devel > 2.6.1
+%else
 BuildRequires: python-devel
+%endif
 BuildRequires: python-numpy
 BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -60,6 +68,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.txt INSTALL.txt LICENSE.txt README.txt ToDo.txt USAGE.txt
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.14.1-2
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.14.1-1
 - remove unnecessary requires
 - build with specific compiler

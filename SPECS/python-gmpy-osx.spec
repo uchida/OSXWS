@@ -3,15 +3,20 @@
 Summary: MPIR/GMP interface to Python
 Name: python-%{modulename}
 Version: 1.14
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://gmpy.googlecode.com/files/%{modulename}-%{version}.zip
 License: LGPLv2+
 Group: Development/Languages
 URL: http://code.google.com/p/gmpy/
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
-BuildRequires: gmp-devel
 BuildRequires: python-devel
+%endif
+BuildRequires: gmp-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
 
@@ -50,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc changes.txt lgpl-2.1.txt mac_build.txt mutable_mpz.txt README
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-3
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-2
 - remove unnecessary requires
 - build with specific compiler

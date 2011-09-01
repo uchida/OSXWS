@@ -1,6 +1,6 @@
 Name:           python-configobj
 Version:        4.7.2
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 Summary:        Config file reading, writing, and validation
 Summary(ja):	設定ファイルの読み込み、書き込み、及び評価用のPython ツール
 
@@ -11,7 +11,13 @@ Source0:        http://www.voidspace.org.uk/downloads/configobj-%{version}.zip
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 BuildArch:      noarch
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
 BuildRequires: python-devel
+%endif
 
 %description
 ConfigObj is a simple but powerful config file reader and writer: an ini file
@@ -57,6 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-2
+- mofify python requirements for OSXWS
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-1
 - add summary in Japanese
 

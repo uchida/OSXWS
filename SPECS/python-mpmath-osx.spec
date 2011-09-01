@@ -4,14 +4,19 @@
 Summary: a Python library for arbitrary-precision floating-point arithmetic
 Name: python-%{modulename}
 Version: 0.16
-Release: 3%{?_dist_release}
+Release: 4%{?_dist_release}
 Source0: http://%{modulename}.googlecode.com/files/%{modulename}-all-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
 URL: http://code.google.com/p/mpmath/
 
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
 Requires: python
 BuildRequires: python-devel
+%endif
 BuildRequires: python-pytest
 BuildRequires: python-gmpy
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -69,6 +74,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-4
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-3
 - remove unnecessary requires
 

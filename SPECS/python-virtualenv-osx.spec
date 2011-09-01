@@ -4,7 +4,7 @@ Summary:        Tool to create isolated Python environments
 Summary(ja):    隔離されたPython環境を構築するためのツール
 Name:           python-%{oname}
 Version:        1.6.1
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 
 Group:          Development/Languages
 License:        MIT
@@ -13,8 +13,13 @@ Source0:        http://pypi.python.org/packages/source/v/%{oname}/%{oname}-%{ver
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildArch:      noarch
-BuildRequires:  python-devel
-Requires:       python-setuptools, python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
 
 BuildRequires:  python-setuptools
 Requires:       python-setuptools
@@ -52,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/virtualenv
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-2
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-1
 - make more compatible with Vine Linux
 

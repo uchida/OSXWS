@@ -1,13 +1,20 @@
 Name:           python-EnvisageCore
 Version:        3.2.0
-Release:        2%{?_dist_release}
+Release:        3%{?_dist_release}
 Summary:        Extensible Application Framework
 Group:          Development/Libraries
 License:        BSD
 URL:            http://code.enthought.com/projects/envisage/
 Source0:        http://www.enthought.com/repo/ETS/EnvisageCore-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python-setuptools, python-devel, python-setupdocs
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires:  python-setuptools, python-setupdocs
 Requires:       python-AppTools
 # EnthoughtBase and Traits come with AppTools
 
@@ -49,6 +56,9 @@ done
 %{python_sitelib}/enthought/envisage
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-3
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-2
 - requires python-setuptools
 

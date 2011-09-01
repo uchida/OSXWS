@@ -1,13 +1,20 @@
 Name:           python-EnvisagePlugins
 Version:        3.2.0
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 Summary:        Plug-ins for the Envisage framework
 Group:          Development/Libraries
 License:        BSD and CC-BY-SA and Python and LGPLv2+
 URL:            http://code.enthought.com/projects/envisage_plugins.php
 Source0:        http://www.enthought.com/repo/ETS/EnvisagePlugins-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python-setuptools, python-devel, python-setupdocs
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires:  python-setuptools, python-setupdocs
 Requires:       python-EnvisageCore
 
 %description
@@ -60,6 +67,9 @@ python setup.py install --skip-build --root $RPM_BUILD_ROOT
 %{python_sitelib}/enthought/plugins
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-2
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.0-1
 - requires python-setuptools
 

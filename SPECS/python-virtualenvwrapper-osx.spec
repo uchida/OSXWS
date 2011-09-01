@@ -3,15 +3,19 @@
 Summary: Enhancements to virtualenv
 Name: python-%{modulename}
 Version: 2.7.1
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Source0: http://www.doughellmann.com/downloads/%{modulename}-%{version}.tar.gz
 License: MIT
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: noarch
-Requires: python
-Requires: python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1, python-devel > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python, python-devel
 BuildRequires: python-devel
+%endif
 URL: http://www.virtualenv.org
 
 %description
@@ -40,6 +44,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/html/*
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.7.1-2
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.7.1-1
 - remove unnecessary requires
 

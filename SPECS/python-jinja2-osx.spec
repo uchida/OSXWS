@@ -1,6 +1,6 @@
 Name:		python-jinja2
 Version:	2.5.5
-Release:	3%{?_dist_release}
+Release:	4%{?_dist_release}
 Summary:	General purpose template engine
 Group:		Development/Languages
 License:	BSD
@@ -8,7 +8,13 @@ URL:		http://jinja.pocoo.org/
 Source0:	http://pypi.python.org/packages/source/J/Jinja2/Jinja2-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch:	noarch
-BuildRequires:	python-devel
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
 BuildRequires:	python-setuptools
 BuildRequires:	python-markupsafe
 %if %{with doc}
@@ -75,6 +81,9 @@ make test
 %exclude %{python_sitelib}/jinja2/_debugsupport.c
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.5.5-4
+- mofify python requirements for OSXWS
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.5.5-3
 - make more compatible with Vine Linux
 

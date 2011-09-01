@@ -1,6 +1,6 @@
 Name:       python-sphinx
 Version:    1.0.7
-Release:    2%{?_dist_release}
+Release:    3%{?_dist_release}
 Summary:    Python documentation generator
 
 Group:      Development/Tools
@@ -25,7 +25,13 @@ Patch3: sphinx-1.0.7-idescape.patch
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch:     noarch
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python >= 2.4
 BuildRequires: python-devel >= 2.4
+%endif
 BuildRequires: python-setuptools
 BuildRequires: python-docutils
 BuildRequires: python-jinja2
@@ -168,6 +174,9 @@ make test
 %doc docjp/html docjp/sphinx.pdf
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-3
+- mofify python requirements for OSXWS
+
 * Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-2
 - switchover from tetex to texlive
 

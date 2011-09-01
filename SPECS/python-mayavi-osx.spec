@@ -1,12 +1,19 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        3%{?_dist_release}
+Release:        4%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Edutainment
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
 URL:            http://code.enthought.com/projects/mayavi/
 Source0:        http://www.enthought.com/repo/ETS/Mayavi-%{version}.tar.gz
-BuildRequires:  python-devel, python-setuptools, python-setupdocs
+%if "%{?_dist_release}" == "osx10.6"
+Requires: python > 2.6.1
+BuildRequires: python-devel > 2.6.1
+%else
+Requires: python
+BuildRequires: python-devel
+%endif
+BuildRequires:  python-setuptools, python-setupdocs
 BuildRequires:  python-numpy, vtk-python
 BuildRequires:  apple-gcc
 BuildArch:      fat
@@ -114,6 +121,9 @@ mv docs/build/tvtk/html build/docs/tvtk
 %doc build/docs/*
 
 %changelog
+* Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-4
+- mofify python requirements for OSXWS
+
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-3
 - build with specific compiler
 
