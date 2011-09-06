@@ -2,7 +2,7 @@
 
 Name:           python-setuptools
 Version:        0.6.15
-Release:        3%{?_dist_release}
+Release:        4%{?_dist_release}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 Summary(ja):     Python パッケージのダウンロード、ビルド、インストール、アップグレードおよびアンインストール用ツール
 Group:          Development/Tools
@@ -13,10 +13,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
 BuildArch:      noarch
 %if "%{?_dist_release}" == "osx10.6"
-Requires: python > 2.6.1
+Requires: python > 2.6.1, python-devel > 2.6.1
 BuildRequires: python-devel > 2.6.1
 %else
-Requires: python
+Requires: python, python-devel
 BuildRequires: python-devel
 %endif
 %if %{with doc}
@@ -61,6 +61,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Sep  6 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.15-4
+- add python-devel requirements
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.6.15-3
 - mofify python requirements for OSXWS
 
