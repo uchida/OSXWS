@@ -1,0 +1,11 @@
+--- ddskk-11.4/skk-vars.el.orig	Tue Dec 19 00:36:26 2000
++++ ddskk-11.4/skk-vars.el	Wed Dec 12 13:45:04 2001
+@@ -1879,7 +1879,7 @@
+   (cond ((eq skk-emacs-type 'xemacs)
+ 	 (locate-data-file "SKK.tut"))
+ 	(t
+-	 "/usr/local/share/skk/SKK.tut"))
++	 "/usr/share/skk/SKK.tut"))
+   "*SKK チュートリアルのファイル名。
+ The English version is SKK.tut.E."
+   :type 'file
