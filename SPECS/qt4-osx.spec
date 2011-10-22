@@ -19,8 +19,8 @@
 
 Summary: Qt Tool Kit
 Name: qt4
-Version: 4.7.2
-Release: 5%{?_dist_release}
+Version: 4.7.4
+Release: 0%{?_dist_release}
 Source0: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-%{version}.tar.gz
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: (LGPLv2 with exceptions or GPLv3 with exceptions) and ASL 2.0 and BSD and FTL and MIT
@@ -184,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_qt4_plugindir}/sqldrivers/libqsqlite*
 
 %changelog
+* Sat Oct 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.4-0
+- update to 4.7.4
+
 * Tue Aug 23 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.7.2-5
 - specify compiler path in mkspecs/macx-g++{,40,42} for qt4 applications
 
