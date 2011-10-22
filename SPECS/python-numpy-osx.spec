@@ -3,8 +3,8 @@
 
 Summary: NumPy: array processing for numbers, strings, records, and objects.
 Name: python-%{modulename}
-Version: 1.6.0
-Release: 1%{?_dist_release}
+Version: 1.6.1
+Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Source1: numpy-site.cfg
 License: BSD
@@ -89,6 +89,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Oct 19 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-0
+- update to 1.6.1 
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.0-2
 - mofify python requirements for OSXWS
 
