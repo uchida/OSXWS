@@ -3,8 +3,8 @@
 Name:        sip
 Summary:     SIP - Python/C++ Bindings Generator
 Summary(ja): Python/C++ インターフェイス生成ツール
-Version:     4.12.2
-Release:     3%{?_dist_release}
+Version:     4.12.4
+Release:     0%{?_dist_release}
 
 License:     GPL
 Group:       Development/Tools
@@ -92,6 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/sip
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 4.12.4-0
+- update to 4.12.4
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.12.1-3
 - mofify python requirements for OSXWS
 
