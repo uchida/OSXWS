@@ -9,8 +9,8 @@
 Name: 	 PyQt4
 Summary: Python bindings for Qt4
 Summary(ja): Qt4 の Python バインディング
-Version: 4.8.4
-Release: 3%{?_dist_release}
+Version: 4.8.5
+Release: 0%{?_dist_release}
 
 # GPLv2 exceptions(see GPL_EXCEPTIONS*.txt)
 License: GPLv3 or GPLv2 with exceptions
@@ -101,6 +101,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_data}/sip/PyQt4/
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.5-0
+- updat to 4.8.5
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.4-3
 - mofify python requirements for OSXWS
 
