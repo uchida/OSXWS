@@ -1,5 +1,5 @@
 #! /bin/sh -e
-#  /usr/lib/emacsen-common/packages/install/skk
+#  /usr/osxws/lib/emacsen-common/packages/install/skk
 # [ This particular script hasn't been tested, so be careful. ]
 
 set -e
@@ -9,26 +9,26 @@ PACKAGE="skk"
 VERSION=13.1
 
 if [ "X${FLAVOR}" = "X" ]; then
-    echo Need argument to determin FLAVOR of emacs;
+    /bin/echo Need argument to determin FLAVOR of emacs;
     exit 1
 fi
 
 if [ "X${PACKAGE}" = "X" ]; then
-    echo Internal error: need package name;
+    /bin/echo Internal error: need package name;
     exit 1;
 fi
 
-ELDIR=/usr/share/emacs/site-lisp/${PACKAGE}
-ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
+ELDIR=/usr/osxws/share/emacs/site-lisp/${PACKAGE}
+ELCDIR=/usr/osxws/share/${FLAVOR}/site-lisp/${PACKAGE}
 
-STARTDIR=/etc/${FLAVOR}/site-start.d
+STARTDIR=/usr/osxws/etc/${FLAVOR}/site-start.d
 STARTFILE="${PACKAGE}-init.el";
 
-SITELISP=/usr/share/${FLAVOR}/site-lisp
-PACKAGEDIR=/usr/share/${FLAVOR}
-EMACSTUTDIR=/usr/share/skk
-XEMACSTUTDIR=/usr/share/${FLAVOR}/etc/${PACKAGE}
-NICOLAELCDIR=/usr/share/${FLAVOR}/site-lisp/nicola-ddskk
+SITELISP=/usr/osxws/share/${FLAVOR}/site-lisp
+PACKAGEDIR=/usr/osxws/share/${FLAVOR}
+EMACSTUTDIR=/usr/osxws/share/skk
+XEMACSTUTDIR=/usr/osxws/share/${FLAVOR}/etc/${PACKAGE}
+NICOLAELCDIR=/usr/osxws/share/${FLAVOR}/site-lisp/nicola-ddskk
 
 EFLAGS="-batch -q -l SKK-MK"
 COMPILE="-batch -q -f batch-byte-compile"
@@ -42,16 +42,16 @@ case "${FLAVOR}" in
 	*)
 
 	  if [ ! -d ${EMACSTUTDIR} ] ; then
-	    echo " exited."
-	    echo "W: Please install \`skkdic' package for ${FLAVOR}." ;
+	    /bin/echo " exited."
+	    /bin/echo "W: Please install \`skkdic' package for ${FLAVOR}." ;
 	    exit 0;
 	  fi
 
-	  echo -n "install/${PACKAGE}: Byte-compiling for ${FLAVOR} ..."
+	  /bin/echo -n "install/${PACKAGE}: Byte-compiling for ${FLAVOR} ..."
 
 	  case "${FLAVOR}" in
 	       xemacs-*)
-		 if [ -f /usr/lib/xemacs/mule-packages/lisp/skk/skk.elc ]; then
+		 if [ -f /usr/osxws/lib/xemacs/mule-packages/lisp/skk/skk.elc ]; then
 		   exit
 		 fi
 	       ;;
@@ -62,7 +62,7 @@ case "${FLAVOR}" in
 
 	  if [ -e ${STAMP} ]; then
 	    if [ "${VERSION}" = "`cat ${STAMP}`" ]; then
-	      echo " exited. (already compiled)" 
+	      /bin/echo " exited. (already compiled)" 
 	      exit
 	    fi
 	  fi
@@ -113,11 +113,11 @@ case "${FLAVOR}" in
 	  )
 
 	  gzip -9 ${ELCDIR}/CompilationLog
-	  echo ${VERSION} > ${STAMP}
+	  /bin/echo ${VERSION} > ${STAMP}
 
-	  install -p -m644 ${ELDIR}/vine-default-${PACKAGE}.el ${ELCDIR}
+	  install -p -m644 ${ELDIR}/osxws-default-${PACKAGE}.el ${ELCDIR}
 	  cp -f ${ELDIR}/${STARTFILE} ${STARTDIR}/70${STARTFILE};
-	  echo " done."
+	  /bin/echo " done."
 	;;
 esac
 

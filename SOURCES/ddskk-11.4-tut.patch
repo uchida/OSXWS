@@ -5,7 +5,7 @@
  	 (locate-data-file "SKK.tut"))
  	(t
 -	 "/usr/local/share/skk/SKK.tut"))
-+	 "/usr/share/skk/SKK.tut"))
++	 "/usr/osxws/share/skk/SKK.tut"))
    "*SKK チュートリアルのファイル名。
  The English version is SKK.tut.E."
    :type 'file

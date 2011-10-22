@@ -1,8 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  -*- coding: utf-8-unix -*-
-;;  FSF Emacs 23 用 Vine Linux SKK 設定
-;;    Munehiro Yamamoto <munepi@cg8.so-net.ne.jp>
-;;	$Id: vine-default-skk.el,v 1.1 2009/04/23 00:02:56 munepi Exp $	
+;;  FSF Emacs 23 用  Linux SKK 設定
+;;    Akuhiro Uchida <uchida@ike-dyn.ritsumei.ac.jp>
+;;    Original Author: Munehiro Yamamoto <munepi@cg8.so-net.ne.jp>
+;;	$Id: osxws-default-skk.el,v 1.1 2011/10/22 12:00:56 uchida Exp $	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,16 +17,15 @@
 ;;;;;;;;;; 使用する辞書の設定 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; SKK-JISYO.L をメモリ上に読み込んで利用する場合
-(setq skk-large-jisyo "/usr/share/skk/SKK-JISYO.L")
+(setq skk-large-jisyo "/usr/osxws/share/skk/SKK-JISYO.L")
 
 ;;; SKK-JISYO.M をメモリ上に読み込み、
 ;;; 見付からない場合は skkserv を起動して SKK-JISYO.L から検索する場合
 ;;; (skkexdic パッケージが必要です)
-;;(setq skk-large-jisyo "/usr/share/skk/SKK-JISYO.M")
-;;(setq skk-aux-large-jisyo "/usr/share/skk/SKK-JISYO.L")
+;;(setq skk-large-jisyo "/usr/osxws/share/skk/SKK-JISYO.M")
+;;(setq skk-aux-large-jisyo "/usr/osxws/share/skk/SKK-JISYO.L")
 ;;(setq skk-server-portnum 1178)
 ;;(setq skk-server-host "localhost")
-;;(setq skk-server-prog "/usr/libexec/skkserv")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -50,7 +50,7 @@
 ))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(provide 'vine-default-skk)
+(provide 'osxws-default-skk)
 
 ;; Local Variables:
 ;; mode: emacs-lisp

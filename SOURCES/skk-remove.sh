@@ -1,5 +1,5 @@
 #!/bin/sh
-# /usr/lib/emacsen-common/packages/remove/skk
+# /usr/osxws/lib/emacsen-common/packages/remove/skk
 # [ This particular script hasn't been tested either, so be careful. ]
 set -e
 
@@ -16,15 +16,15 @@ if [ "X${PACKAGE}" = "X" ]; then
     exit 1;
 fi
 
-ELDIR=/usr/share/emacs/site-lisp/${PACKAGE}
-ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
-STARTDIR=/etc/${FLAVOR}/site-start.d
+ELDIR=/usr/osxws/share/emacs/site-lisp/${PACKAGE}
+ELCDIR=/usr/osxws/share/${FLAVOR}/site-lisp/${PACKAGE}
+STARTDIR=/usr/osxws/etc/${FLAVOR}/site-start.d
 STARTFILE="${PACKAGE}-init.el";
 
-SITELISP=/usr/share/${FLAVOR}/site-lisp
-EMACSTUTDIR=/usr/share/skk
-XEMACSTUTDIR=/usr/share/${FLAVOR}/etc/${PACKAGE}
-NICOLAELCDIR=/usr/share/${FLAVOR}/site-lisp/nicola-ddskk
+SITELISP=/usr/osxws/share/${FLAVOR}/site-lisp
+EMACSTUTDIR=/usr/osxws/share/skk
+XEMACSTUTDIR=/usr/osxws/share/${FLAVOR}/etc/${PACKAGE}
+NICOLAELCDIR=/usr/osxws/share/${FLAVOR}/site-lisp/nicola-ddskk
 
 case "${FLAVOR}" in
 	emacs)

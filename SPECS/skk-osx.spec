@@ -1,6 +1,7 @@
 %define _noVersionedDependencies        1
-%define prereq_ge()  %(LC_ALL="C" rpm -q --queryformat 'PreReq:%%{NAME} >= %%{VERSION}' %1| grep -v "is not")
+%define prereq_ge()  %(LC_ALL="C" rpm -q --queryformat 'Requires(pre):%%{NAME} >= %%{VERSION}' %1| grep -v "is not")
 %define _libdir %{_prefix}/lib
+%define emacsen_pkgdir %{_libdir}/emacsen-common/packages
 
 Summary:      SKK for emacs
 Summary(ja):  Emacs 用 SKK (かな漢字変換プログラム)
@@ -12,7 +13,7 @@ Source0:      http://openlab.ring.gr.jp/skk/maintrunk/ddskk-%{version}.tar.gz
 Source1:      %{name}-install.sh
 Source2:      %{name}-remove.sh
 Source3:      %{name}-init.el
-Source4:      vine-default-%{name}.el
+Source4:      osxws-default-%{name}.el
 Patch0:       ddskk-11.4-tut.patch
 Patch1:       ddskk-11.6.0-make.patch
 Patch2:       ddskk-info.patch
@@ -22,14 +23,12 @@ Group:        Applications/Editors/Emacs
 BuildRoot:    %{_tmppath}/%{name}-%{version}-root
 BuildArch:    noarch
 
-PreReq:       emacsen, make, install-info, skkdic
+Requires(pre):       emacsen, skkdic
 %prereq_ge    emacsen-common
 %prereq_ge    apel
 BuildPreReq:  emacsen-common, apel
 
 Obsoletes:    ddskk
-Vendor:       Project Vine
-Distribution: Vine Linux
 
 %description
 Daredevil SKK is a branch of SKK (Simple Kana to Kanji conversion
@@ -92,6 +91,8 @@ cp -f nicola/{Makefile,NICOLA-DDSKK-*,*.el} \
 #
 # install  script( bytecompile el and install elc , remove )   
 #
+mkdir -p $RPM_BUILD_ROOT%{emacsen_pkgdir}/install
+mkdir -p $RPM_BUILD_ROOT%{emacsen_pkgdir}/remove
 
 %_installemacsenscript %{name} %{SOURCE1} 
 
@@ -103,13 +104,10 @@ cp -f nicola/{Makefile,NICOLA-DDSKK-*,*.el} \
 mkdir -p ${RPM_BUILD_ROOT}%{_infodir}
 install -m 644 doc/skk.info* ${RPM_BUILD_ROOT}%{_infodir}
 
-( cd ${RPM_BUILD_ROOT}%{_infodir}
-  for i in skk.info skk.info-1 skk.info-2 skk.info-3 skk.info-4 ; do
-    nkf -Je $i > $i.euc
-    mv -f $i.euc $i
-    gzip -9 $i
-  done
-)
+pushd ${RPM_BUILD_ROOT}%{_infodir}
+nkf -Je skk.info > skk.info.euc
+mv -f skk.info.euc skk.info
+popd
 
 %post 
 #
@@ -126,7 +124,7 @@ fi
 
 %_emacsenPackageInstall %{name}
 
-/sbin/install-info %{_infodir}/skk.info.gz %{_infodir}/dir
+/usr/bin/install-info %{_infodir}/skk.info.gz %{_infodir}/dir
 
 %preun
 
@@ -136,7 +134,7 @@ if [ "$1" = 0 ]; then
 
 %_removeemacsenlist %{name}
 
-/sbin/install-info --delete %{_infodir}/skk.info.gz %{_infodir}/dir
+/usr/bin/install-info --delete %{_infodir}/skk.info.gz %{_infodir}/dir
 
 fi
 
@@ -145,7 +143,7 @@ fi
 
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,wheel)
 %doc READMEs ChangeLog* etc/Emacs.ad
 %doc nicola-ddskk
 %{_infodir}/*.info*
@@ -155,6 +153,9 @@ fi
 
 
 %changelog
+* Sat Oct 22 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 13.1-2
+- initial build for Mac OS X WorkShop 
+
 * Sun Aug 29 2010 IWAI, Masaharu <iwai@alib.jp> 13.1-1
 - new upstream release
  - update skk-install.sh: update VERSION
