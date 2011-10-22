@@ -1,6 +1,6 @@
 Name:           python-pygments
-Version:        1.3.1
-Release:        3%{?_dist_release}
+Version:        1.4
+Release:        0%{?_dist_release}
 Summary:        A syntax highlighting engine written in Python
 
 Group:          Development/Libraries
@@ -91,6 +91,9 @@ make test
 
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4-0
+- update to 1.4
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.3.1-3
 - mofify python requirements for OSXWS
 
