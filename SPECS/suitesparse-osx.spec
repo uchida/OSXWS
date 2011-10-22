@@ -1,6 +1,6 @@
 Name: suitesparse
-Version: 3.4.0
-Release: 3%{?_dist_release}
+Version: 3.6.1
+Release: 0%{?_dist_release}
 Summary: A collection of sparse matrix libraries
 
 Group: System Environment/Libraries
@@ -28,6 +28,7 @@ matrices.  The package includes the following libraries:
               factorization method
   UMFPACK     sparse LU factorization
   UFconfig    configuration file for all the above packages.
+  RBio        read/write files in Rutherford/Boeing format
 
 
 %package devel
@@ -64,30 +65,34 @@ This package contains documentation files for %{name}.
 %patch0 -p1
 
 %build
-%define amd_version 2.2.0
+%define amd_version 2.2.2
 %define amd_version_major 2
-%define btf_version 1.1.0
+%define btf_version 1.1.2
 %define btf_version_major 1
-%define camd_version 2.2.0
+%define camd_version 2.2.2
 %define camd_version_major 2
-%define ccolamd_version 2.7.1
+%define ccolamd_version 2.7.3
 %define ccolamd_version_major 2
-%define cholmod_version 1.7.1
+%define cholmod_version 1.7.3
 %define cholmod_version_major 1
-%define colamd_version 2.7.1
+%define colamd_version 2.7.3
 %define colamd_version_major 2
 %define csparse_version 2.2.3
 %define csparse_version_major 2
 %define cxsparse_version 2.2.3
 %define cxsparse_version_major 2
-%define klu_version 1.1.0
+%define klu_version 1.1.3
 %define klu_version_major 1
-%define ldl_version 2.0.1
+%define ldl_version 2.0.3
 %define ldl_version_major 2
-%define umfpack_version 5.4.0
+%define umfpack_version 5.5.1
 %define umfpack_version_major 5
-%define spqr_version 1.1.2
+%define spqr_version 1.2.1
 %define spqr_version_major 1
+%define rbio_version 2.0.1
+%define rbio_version_major 2
+%define ufconfig_version 3.6.0
+%define ufconfig_version_major 3
 ### CHOLMOD can also be compiled to use the METIS library, but it is not
 ### used here because its licensing terms exclude it from Fedora Extras.
 ### To compile with METIS, define enable_metis as 1 below.
@@ -98,7 +103,7 @@ This package contains documentation files for %{name}.
 ### enable_csparse as 1 below.
 %define enable_csparse 0
 
-mkdir -p Doc/{AMD,BTF,CAMD,CCOLAMD,CHOLMOD,COLAMD,KLU,LDL,UMFPACK,SPQR} Lib Include
+mkdir -p Doc/{AMD,BTF,CAMD,CCOLAMD,CHOLMOD,COLAMD,KLU,LDL,UMFPACK,SPQR,RBio} Lib Include
 
 export RPM_OPT_FLAGS="-O2 -arch i386 -arch x86_64 -fasynchronous-unwind-tables -fno-strict-aliasing -fno-schedule-insns2"
 pushd AMD
@@ -323,7 +328,8 @@ pushd UMFPACK
         -o libumfpack.%{umfpack_version}.dylib \
         ../UMFPACK/Lib/*.o \
         -framework Accelerate \
-        libamd.%{amd_version_major}.dylib
+        libamd.%{amd_version_major}.dylib \
+        libcholmod.%{cholmod_version_major}.dylib
     ln -sf libumfpack.%{umfpack_version}.dylib libumfpack.%{umfpack_version_major}.dylib
     ln -sf libumfpack.%{umfpack_version}.dylib libumfpack.dylib
     cp -p ../UMFPACK/Lib/*.a ./
@@ -355,7 +361,39 @@ pushd SPQR
   cp -p README_SPQR.txt Doc/* ../Doc/SPQR
 popd
 
-cp -p UFconfig/UFconfig.h Include
+pushd UFconfig
+  make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
+  gcc $RPM_OPT_FLAGS -fno-common -c UFconfig.c
+  pushd ../Lib
+    gcc -dynamiclib -arch i386 -arch x86_64 \
+        -install_name %{_libdir}/%{name}/libufconfig.dylib \
+        -compatibility_version %{ufconfig_version_major} \
+        -current_version %{ufconfig_version} \
+        -o libufconfig.%{ufconfig_version}.dylib ../UFconfig/*.o
+    ln -sf libufconfig.%{ufconfig_version}.dylib libufconfig.%{ufconfig_version_major}.dylib
+    ln -sf libufconfig.%{ufconfig_version}.dylib libufconfig.dylib
+    cp -p ../UFconfig/*.a ./
+  popd
+  cp -p *.h ../Include
+popd
+
+pushd RBio
+  pushd Lib
+    make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
+  popd
+  pushd ../Lib
+    gcc -dynamiclib -arch i386 -arch x86_64 \
+        -install_name %{_libdir}/%{name}/librbio.dylib \
+        -compatibility_version %{rbio_version_major} \
+        -o librbio.%{rbio_version}.dylib ../RBio/Lib/*.o \
+        libufconfig.%{ufconfig_version_major}.dylib
+    ln -sf librbio.%{rbio_version}.dylib librbio.%{rbio_version_major}.dylib
+    ln -sf librbio.%{rbio_version}.dylib librbio.dylib
+    cp -p ../RBio/Lib/*.a ./
+  popd
+  cp -p Include/*.h ../Include
+  cp -p README.txt Doc/ChangeLog Doc/License.txt ../Doc/RBio
+popd
 
 %install
 rm -rf ${RPM_BUILD_ROOT}
@@ -395,6 +433,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc Doc/*
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 3.6.1-0
+- update to 3.6.1
+
 * Thu Nov  4 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.0-3
 - modified for Mac OS X WorkShop 10.6
 

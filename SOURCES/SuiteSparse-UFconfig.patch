@@ -1,8 +1,8 @@
 diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
---- SuiteSparse.orig/UFconfig/UFconfig.mk	2010-09-21 13:24:56.000000000 +0900
-+++ SuiteSparse/UFconfig/UFconfig.mk	2010-09-21 13:25:39.000000000 +0900
-@@ -37,19 +37,19 @@
- # CFLAGS = -O   (for example; see below for details)
+--- SuiteSparse.orig/UFconfig/UFconfig.mk	2011-10-21 19:49:48.000000000 +0900
++++ SuiteSparse/UFconfig/UFconfig.mk	2011-10-21 19:54:17.000000000 +0900
+@@ -37,11 +37,11 @@
+ CFLAGS = -O3 -fexceptions
  
  # C++ compiler (also uses CFLAGS)
 -CPLUSPLUS = g++
@@ -13,30 +13,31 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
 -AR = ar cr
 +AR = libtool -static -o
  
- # delete and rename a file
- RM = rm -f
+ # copy, delete, and rename a file
+ CP = cp -f
+@@ -49,8 +49,8 @@
  MV = mv -f
  
  # Fortran compiler (not normally required)
 -F77 = f77
 -F77FLAGS = -O
-+F77 = gfortran
-+F77FLAGS = -O3 -m32 -m64
++F77 = gfortran-4.2
++F77FLAGS = -O2 -arch i386 -arch x86_64
  F77LIB =
  
  # C and Fortran libraries
-@@ -122,8 +122,8 @@
+@@ -132,8 +132,8 @@
  # The path is relative to where it is used, in CHOLMOD/Lib, CHOLMOD/MATLAB, etc.
  # You may wish to use an absolute path.  METIS is optional.  Compile
  # CHOLMOD with -DNPARTITION if you do not wish to use METIS.
 -METIS_PATH = ../../metis-4.0
 -METIS = ../../metis-4.0/libmetis.a
-+METIS_PATH =
-+METIS =
++METIS_PATH = 
++METIS = 
  
  # If you use CHOLMOD_CONFIG = -DNPARTITION then you must use the following
  # options:
-@@ -184,7 +184,7 @@
+@@ -194,7 +194,7 @@
  # -DNSUNPERF	    for Solaris only.  If defined, do not use the Sun
  #			Performance Library
  
@@ -45,7 +46,7 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
  
  #------------------------------------------------------------------------------
  # SuiteSparseQR configuration:
-@@ -198,7 +198,7 @@
+@@ -208,7 +208,7 @@
  # -DHAVE_TBB        enable the use of Intel's Threading Building Blocks (TBB)
  
  # default, without timing, without TBB:
@@ -54,7 +55,7 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
  # with timing and TBB:
  # SPQR_CONFIG = -DTIMING -DHAVE_TBB
  # with timing
-@@ -296,11 +296,11 @@
+@@ -328,11 +328,11 @@
  # Macintosh
  #------------------------------------------------------------------------------
  
@@ -64,7 +65,7 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
 -# BLAS = -framework Accelerate
 -# LAPACK = -framework Accelerate
 +CC = gcc-4.2
-+CFLAGS = -O3 -fno-common -no-cpp-precomp -fexceptions -arch i386 -arch x86_64
++CFLAGS = -O2 -fno-common -no-cpp-precomp -fexceptions -arch i386 -arch x86_64
 +LIB = -lstdc++ -arch i386 -arch x86_64
 +BLAS = -framework Accelerate
 +LAPACK = -framework Accelerate
