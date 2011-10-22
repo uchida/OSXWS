@@ -1,7 +1,7 @@
 Summary: SKK Dictionaries
 Name: skkdic
 Version: 20100126
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Url: http://openlab.ring.gr.jp/skk/
 Group: Applications/Text
 License: Distrubutable
@@ -32,7 +32,7 @@ SKK dictionaries
 
 %description -l ja
 SKK 辞書パッケージです。
-/usr/share/doc/skkdic-%{version}/dot-dic.skk
+%{_defaultdocdir}/%{name}-%{version}/dot-dic.skk
 を ~/.skk としてコピーして使用してください。
 
 %prep
@@ -54,11 +54,14 @@ install -m 644 zipcode/SKK-JISYO.* $RPM_BUILD_ROOT%{_datadir}/skk
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,wheel)
 %doc DOCS/* dot-dic.skk edict_doc.txt
 %{_datadir}/skk/SKK-JISYO.*
 
 %changelog
+* Sat Oct 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 20100126-2
+- initial build for Mac OS X WorkShop 
+
 * Sun Aug 29 2010 IWAI, Masaharu <iwai@alib.jp> 20100126-1
 - update to 20100126
 - drop SKK-JISYO.fukugo.gz (Source7): upstream removed 2003-04-05
