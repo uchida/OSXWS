@@ -3,8 +3,8 @@
 
 Summary: a Python library for arbitrary-precision floating-point arithmetic
 Name: python-%{modulename}
-Version: 0.16
-Release: 4%{?_dist_release}
+Version: 0.17
+Release: 0%{?_dist_release}
 Source0: http://%{modulename}.googlecode.com/files/%{modulename}-all-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
@@ -74,6 +74,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.17-0
+- update to 0.17
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.16-4
 - mofify python requirements for OSXWS
 
