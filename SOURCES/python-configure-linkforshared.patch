@@ -1,0 +1,12 @@
+diff -uNr Python-2.6.orig/configure Python-2.6/configure
+--- Python-2.6.orig/configure	2008-09-08 04:19:04.000000000 +0900
++++ Python-2.6/configure	2011-10-21 22:53:35.000000000 +0900
+@@ -13187,7 +13187,7 @@
+ 		LINKFORSHARED="$extra_undefs"
+ 		if test "$enable_framework"
+ 		then
+-			LINKFORSHARED="$LINKFORSHARED "'$(PYTHONFRAMEWORKDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)'
++			LINKFORSHARED="$LINKFORSHARED "'-framework Python'
+ 		fi
+ 		LINKFORSHARED="$LINKFORSHARED";;
+ 	OpenUNIX*|UnixWare*) LINKFORSHARED="-Wl,-Bexport";;

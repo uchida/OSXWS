@@ -2,8 +2,8 @@
 
 Summary: The Cython compiler for writing C extensions for the Python language 
 Name: python-%{modulename}
-Version: 0.14.1
-Release: 2%{?_dist_release}
+Version: 0.15.1
+Release: 0%{?_dist_release}
 Source0: http://cython.org/release/%{modulename}-%{version}.tar.gz
 Patch1: Cython-mac-python.patch
 License: Apache
@@ -50,8 +50,8 @@ export ARCHFLAGS="-arch i386 -arch x86_64"
 python setup.py build
 
 # In v0.14.1, runtests.py fails with 1 declarations and 2 numpy error
-#%check
-#python runtests.py
+%check
+python runtests.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -68,6 +68,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.txt INSTALL.txt LICENSE.txt README.txt ToDo.txt USAGE.txt
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.15.1-0
+- update to 0.15.1
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.14.1-2
 - mofify python requirements for OSXWS
 

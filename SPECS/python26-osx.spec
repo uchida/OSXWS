@@ -6,12 +6,13 @@ Summary: An interpreted, interactive, object-oriented programming language.
 Summary(ja): オブジェクト指向言語 Python インタプリタ
 Name: python
 Version: %{python_version}.7
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 Source1: http://docs.python.org/ftp/python/doc/%{version}/python-%{version}-docs-pdf-a4.tar.bz2
 Source2: http://docs.python.org/ftp/python/doc/%{version}/python-%{version}-docs-html.tar.bz2
 Patch0: python-Lib-ctypes-macholib-dyld-fallback-osxws.patch
 Patch1: python-Lib-cgi-osxws.patch
+Patch2: python-configure-linkforshared.patch
 License: PSF
 Group: Development/Languages
 URL: http://www.python.org/
@@ -84,6 +85,7 @@ formats.
 %setup -q -a 1 -a 2 -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 # OSXWS
 sed -i.tmp "s|/usr/local|%{_prefix}|g" setup.py
 rm -f setup.py.tmp
@@ -249,10 +251,15 @@ fi
 %doc Doc html pdf
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.7-3
+- fix LINKSHARED environment variable
+
+* Thu Aug 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.7-2
+- make python-docs noarch
+
 * Thu Aug 25 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.7-1
 - fix postinstall script
 - give paths to CC and CXX
-- make python-docs noarch
 
 * Fri Jul  1 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6.7-0
 - update to 2.6.7
