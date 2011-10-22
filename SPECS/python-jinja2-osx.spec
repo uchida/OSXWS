@@ -1,6 +1,6 @@
 Name:		python-jinja2
-Version:	2.5.5
-Release:	4%{?_dist_release}
+Version:	2.6
+Release:	0%{?_dist_release}
 Summary:	General purpose template engine
 Group:		Development/Languages
 License:	BSD
@@ -81,6 +81,9 @@ make test
 %exclude %{python_sitelib}/jinja2/_debugsupport.c
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.6-0
+- update to 2.6
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.5.5-4
 - mofify python requirements for OSXWS
 
