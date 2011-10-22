@@ -10,6 +10,7 @@ Source0: http://www.cise.ufl.edu/research/sparse/%{name}/%{name}-%{version}.tar.
 Patch0: SuiteSparse-UFconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: fat
+BuildRequires: apple-gcc
 
 %description
 suitesparse is a collection of libraries for computations involving sparse
@@ -111,7 +112,7 @@ pushd AMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libamd.dylib \
         -compatibility_version %{amd_version_major} \
         -current_version %{amd_version} \
@@ -130,7 +131,7 @@ pushd BTF
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libbtf.dylib \
         -compatibility_version %{btf_version_major} \
         -current_version %{btf_version} \
@@ -149,7 +150,7 @@ pushd CAMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libcamd.dylib \
         -compatibility_version %{camd_version_major} \
         -current_version %{camd_version} \
@@ -168,7 +169,7 @@ pushd CCOLAMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libccolamd.dylib \
         -compatibility_version %{ccolamd_version_major} \
         -current_version %{ccolamd_version} \
@@ -187,7 +188,7 @@ pushd COLAMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libcolamd.dylib \
         -compatibility_version %{colamd_version_major} \
         -current_version %{colamd_version} \
@@ -211,7 +212,7 @@ pushd CHOLMOD
     make CFLAGS="$CHOLMOD_FLAGS"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libcholmod.dylib \
         -compatibility_version %{cholmod_version_major} \
         -current_version %{cholmod_version} \
@@ -241,7 +242,7 @@ pushd CSparse
     cp -p cs.h ../../Include
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libcsparse.dylib \
         -compatibility_version %{csparse_version_major} \
         -current_version %{csparse_version} \
@@ -260,7 +261,7 @@ pushd CXSparse
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libcxsparse.dylib \
         -compatibility_version %{cxsparse_version_major} \
         -current_version %{cxsparse_version} \
@@ -281,7 +282,7 @@ pushd KLU
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libklu.dylib \
         -compatibility_version %{klu_version_major} \
         -current_version %{klu_version} \
@@ -302,7 +303,7 @@ pushd LDL
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libldl.dylib \
         -compatibility_version %{ldl_version_major} \
         -current_version %{ldl_version} \
@@ -321,7 +322,7 @@ pushd UMFPACK
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libumfpack.dylib \
         -compatibility_version %{umfpack_version_major} \
         -current_version %{umfpack_version} \
@@ -343,7 +344,7 @@ pushd SPQR
     make CFLAGS="$RPM_OPT_FLAGS -DNPARTITION -fno-common"
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libspqr.dylib \
         -compatibility_version %{spqr_version_major} \
         -current_version %{spqr_version} \
@@ -365,7 +366,7 @@ pushd UFconfig
   make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   gcc $RPM_OPT_FLAGS -fno-common -c UFconfig.c
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/libufconfig.dylib \
         -compatibility_version %{ufconfig_version_major} \
         -current_version %{ufconfig_version} \
@@ -382,7 +383,7 @@ pushd RBio
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    gcc -dynamiclib -arch i386 -arch x86_64 \
+    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
         -install_name %{_libdir}/%{name}/librbio.dylib \
         -compatibility_version %{rbio_version_major} \
         -o librbio.%{rbio_version}.dylib ../RBio/Lib/*.o \
