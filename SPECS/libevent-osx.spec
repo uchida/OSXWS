@@ -3,8 +3,8 @@
 Summary:        Abstract asynchronous event notification library
 Summary(ja):	非同期イベント通知ライブラリ
 Name:           libevent
-Version:        2.0.11
-Release:        2%{?_dist_release}
+Version:        2.0.15
+Release:        0%{?_dist_release}
 Group:          System Environment/Libraries
 License:        BSD
 URL:            http://monkey.org/~provos/libevent/
@@ -139,6 +139,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc INTEL/sample/*.c
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.15-0
+- update to 2.0.15
+
 * Wed Jun 29 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.11-2
 - make more compatible with Vine Linux
 

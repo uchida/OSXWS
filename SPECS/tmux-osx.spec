@@ -1,8 +1,8 @@
 Summary: a terminal multiplexer
 Summary(ja): 端末多重化ユーティリティ
 Name: tmux
-Version: 1.4
-Release: 1%{?_dist_release}
+Version: 1.5
+Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # based on zsh patch http://www.zsh.org/mla/workers/2009/msg01145.html
 Source1: tmux_zshcomp
@@ -26,7 +26,7 @@ tmux may be detached from a screen and continue running in the background, then 
 %build
 export CFLAGS="-arch i386 -arch x86_64"
 export CPPFLAGS="-I%{_includedir}"
-export LDFLAGS="-L%{_libdir} -arch i386 -arch x86_64"
+export LDFLAGS="-L%{_libdir} -arch i386 -arch x86_64 -lresolv"
 %configure \
     CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' CPP="/usr/bin/gcc-4.2 -E"
 make
@@ -57,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES FAQ NOTES TODO
 
 %changelog
+* Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 1.5-0
+- update to tmux 1.5
+
 * Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4-1
 - rebuild with libevent 2.0.10
 
