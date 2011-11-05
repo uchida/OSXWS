@@ -4,22 +4,22 @@
 
 # Pass --without docs to rpmbuild if you don't want the documentation
 Name: 		git
-Version: 	1.7.5.1
-Release:        4%{?_dist_release}
+Version: 	1.7.7.1
+Release:        0%{?_dist_release}
 Summary:  	Core git tools
 Summary(ja):	Core git ツール
 License: 	GPLv2
 Group: 		Development/Tools
 URL: 		http://git-scm.com/
-Source: 	http://kernel.org/pub/software/scm/git/%{name}-%{version}.tar.bz2
+Source: 	http://kernel.org/pub/software/scm/git/%{name}-%{version}.tar.gz
 Source1:	osxws-default-git.el
 Source2:    osxws.git.daemon.plist
 Source3:    gitweb.conf.in
 Source10:       %{name}-install.sh
 Source11:       %{name}-remove.sh
 Source12:	git-init.el
-Source100:  http://kernel.org/pub/software/scm/git/%{name}-htmldocs-%{version}.tar.bz2
-Source200:  http://kernel.org/pub/software/scm/git/%{name}-manpages-%{version}.tar.bz2
+Source100:  http://kernel.org/pub/software/scm/git/%{name}-htmldocs-%{version}.tar.gz
+Source200:  http://kernel.org/pub/software/scm/git/%{name}-manpages-%{version}.tar.gz
 Patch0:     git-perl-macosx.patch
 Patch1:     git_remote_helpers.patch
 Patch10:    git-1.5-gitweb-home-link.patch
@@ -238,12 +238,14 @@ ETC_GITCONFIG=%{_sysconfdir}/gitconfig
 EOF
 
 %build
+export VERSIONER_PERL_VERSION=5.8.9
 make CC="/usr/bin/gcc-4.2 -arch i386 -arch x86_64" \
      AR="/usr/bin/libtool -static" \
      prefix=%{_prefix} all
 
 %install
 rm -rf $RPM_BUILD_ROOT
+export VERSIONER_PERL_VERSION=5.8.9
 make DESTDIR=$RPM_BUILD_ROOT \
      AR="/usr/bin/libtool -static" \
      gitwebdir_SQ=/Library/WebServer/CGI-Executables \
@@ -273,9 +275,9 @@ install -m644 contrib/emacs/*.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/git/
 # install vine-default file
 install -m644 %{SOURCE1} %{SOURCE12} $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/git/
 
-# install  script( bytecompile el and install elc , remove )   
+# install  script( bytecompile el and install elc , remove )
 
-%_installemacsenscript git %{SOURCE10} 
+%_installemacsenscript git %{SOURCE10}
 
 %_removeemacsenscript  git %{SOURCE11}
 
@@ -321,7 +323,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post -n emacs-git
 
-# bytecompile and install 
+# bytecompile and install
 
 if [ "$1" = 2 ]; then
 
@@ -446,6 +448,9 @@ fi
 # No files for you!
 
 %changelog
+* Wed Oct 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.7.1-0
+- update to 1.7.7.1
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.5.1-4
 - mofify python requirements for OSXWS
 
