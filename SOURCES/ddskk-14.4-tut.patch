@@ -1,0 +1,31 @@
+diff -uNr ddskk-14.4.orig/skk-vars.el ddskk-14.4/skk-vars.el
+--- ddskk-14.4.orig/skk-vars.el	2011-12-30 15:47:55.000000000 +0900
++++ ddskk-14.4/skk-vars.el	2012-02-17 01:26:36.000000000 +0900
+@@ -6,7 +6,7 @@
+ ;; Maintainer: SKK Development Team <skk@ring.gr.jp>
+ ;; Version: $Id: skk-vars.el,v 1.419 2011/12/30 06:47:55 skk-cvs Exp $
+ ;; Keywords: japanese, mule, input method
+-;; Last Modified: $Date: 2011/12/30 06:47:55 $
++;; Last Modified: Fri 17 Feb 01:26:36 JST 2012
+ 
+ ;; This file is part of Daredevil SKK.
+ 
+@@ -5181,15 +5181,15 @@
+ (defcustom skk-tut-file
+   (cond ((featurep 'xemacs)
+ 	 (or (locate-data-file "SKK.tut")
+-	     "/usr/local/share/skk/SKK.tut"))
++	     "/usr/osxws/share/skk/SKK.tut"))
+ 	((fboundp 'locate-file)
+ 	 (or (locate-file "skk/SKK.tut"
+ 			  (list (expand-file-name "../../.."
+ 						  data-directory)))
+ 	     (locate-file "skk/SKK.tut" (list data-directory))
+-	     "/usr/local/share/skk/SKK.tut"))
++	     "/usr/osxws/share/skk/SKK.tut"))
+ 	(t
+-	 "/usr/local/share/skk/SKK.tut"))
++	 "/usr/osxws/share/skk/SKK.tut"))
+   "*SKK 日本語チュートリアルのファイル名 (パスを含む)。"
+   :type 'file
+   :group 'skk-tut)

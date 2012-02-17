@@ -6,15 +6,15 @@
 Summary:      SKK for emacs
 Summary(ja):  Emacs 用 SKK (かな漢字変換プログラム)
 Name:         skk
-Version:      13.1
-Release:      1%{?_dist_release}
+Version:      14.4
+Release:      0%{?_dist_release}
 
 Source0:      http://openlab.ring.gr.jp/skk/maintrunk/ddskk-%{version}.tar.gz
 Source1:      %{name}-install.sh
 Source2:      %{name}-remove.sh
 Source3:      %{name}-init.el
 Source4:      osxws-default-%{name}.el
-Patch0:       ddskk-11.4-tut.patch
+Patch0:       ddskk-14.4-tut.patch
 Patch1:       ddskk-11.6.0-make.patch
 Patch2:       ddskk-info.patch
 
@@ -153,6 +153,9 @@ fi
 
 
 %changelog
+* Fri Feb 17 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 14.4-0
+- update to ddskk 14.4 
+
 * Sat Oct 22 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 13.1-2
 - initial build for Mac OS X WorkShop 
 
