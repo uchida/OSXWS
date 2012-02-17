@@ -28,7 +28,7 @@ It provides an extensive set of transcendental functions, unlimited exponent siz
 
 %if %{with doc}
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}

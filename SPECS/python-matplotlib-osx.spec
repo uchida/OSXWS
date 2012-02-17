@@ -51,7 +51,7 @@ matlab のグラフィックをエミュレートする 'pylab' モードがあ�
 
 %if %{with doc}
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}

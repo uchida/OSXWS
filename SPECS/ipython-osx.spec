@@ -27,7 +27,7 @@ To support this goal, IPython has two main components:
 - An architecture for interactive parallel computing.
 
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}

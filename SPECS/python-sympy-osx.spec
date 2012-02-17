@@ -32,7 +32,7 @@ SymPy is written entirely in Python and does not require any external libraries.
 
 %if %{with doc}
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}

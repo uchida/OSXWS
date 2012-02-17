@@ -38,7 +38,7 @@ need to interact with TVTK unless you want to create a new Mayavi
 module.
 
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}

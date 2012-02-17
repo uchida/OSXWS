@@ -36,7 +36,7 @@ Numpy は離散 Fourir 変換や線形代数、乱数生成といった基礎的
 
 %if %{with doc}
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}

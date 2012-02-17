@@ -41,7 +41,7 @@ Numpy と Scipy は簡単に利用できる上に科学、工学の先端をリ�
 
 %if %{with doc}
 %package doc
-Summary: Documentation files for SuiteSparse
+Summary: Documentation files for %{name}
 Group: Documentation
 BuildArch: noarch
 Requires: %{name} = %{version}-%{release}
