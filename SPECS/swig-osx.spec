@@ -5,13 +5,11 @@ Summary: Connects C/C++/Objective C to some high-level programming languages
 Summary(ja): Connects C/C++/Objective C to some high-level programming languages
 Name: swig
 Version: 2.0.4
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 License: GPLv3+ and BSD
 Group: Development/Tools
 URL: http://swig.sourceforge.net/
 Source: http://downloads.sourceforge.net/project/swig/swig/swig-%{version}/swig-%{version}.tar.gz
-Patch1: swig-1.3.23-pylib.patch
-Patch4: swig203-rh706140.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: perl, python-devel, pcre-devel
@@ -45,8 +43,6 @@ This package contains documentation for SWIG and useful examples
 
 %prep
 %setup -q -n swig-%{version}
-%patch1 -p1 -b .pylib
-%patch4 -p1 -b .rh706140
 
 # as written on https://fedoraproject.org/wiki/Packaging_talk:Perl, section 2
 # (specific req/prov filtering). Before you remove this hack make sure you don't
@@ -68,12 +64,13 @@ EOF
 chmod +x %{__perl_requires}
 
 for all in CHANGES README; do
-	iconv -f ISO88591 -t UTF8 < $all > $all.new
+	iconv -f ISO-8859-1 -t UTF8 < $all > $all.new
 	touch -r $all $all.new
 	mv -f $all.new $all
 done
 
 %build
+export CFLAGS="-I%{_includedir} $CFLAGS"
 ./autogen.sh
 %configure
 make %{?_smp_mflags}
@@ -106,7 +103,7 @@ make DESTDIR=%{buildroot} install
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %{_bindir}/*
 %{_datadir}/swig
 %{_mandir}/man1/ccache-swig.1*
@@ -114,10 +111,13 @@ rm -rf %{buildroot}
 %doc LICENSE-UNIVERSITIES COPYRIGHT README TODO
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc Doc Examples LICENSE LICENSE-GPL LICENSE-UNIVERSITIES COPYRIGHT
 
 %changelog
+* Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.4-2
+- initial build for Mac OS X WorkShop 
+
 * Sat Oct 29 2011 Daisuke SUZUKI <daisuke@linux.or.jp> 2.0.4-1
 - update to 2.0.4
 
