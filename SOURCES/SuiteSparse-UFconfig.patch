@@ -1,12 +1,7 @@
 diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
---- SuiteSparse.orig/UFconfig/UFconfig.mk	2011-10-21 19:49:48.000000000 +0900
-+++ SuiteSparse/UFconfig/UFconfig.mk	2011-10-21 19:54:17.000000000 +0900
-@@ -37,11 +37,11 @@
- CFLAGS = -O3 -fexceptions
- 
- # C++ compiler (also uses CFLAGS)
--CPLUSPLUS = g++
-+CPLUSPLUS = /usr/osxws/bin/g++-4.2
+--- SuiteSparse.orig/UFconfig/UFconfig.mk	2012-02-18 21:44:58.000000000 +0900
++++ SuiteSparse/UFconfig/UFconfig.mk	2012-02-18 21:45:48.000000000 +0900
+@@ -41,7 +41,7 @@
  
  # ranlib, and ar, for generating libraries
  RANLIB = ranlib
@@ -21,7 +16,7 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
  # Fortran compiler (not normally required)
 -F77 = f77
 -F77FLAGS = -O
-+F77 = /usr/osxws/bin/gfortran-4.2
++F77 = gfortran
 +F77FLAGS = -O2 -arch i386 -arch x86_64
  F77LIB =
  
@@ -64,7 +59,7 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
 -# LIB = -lstdc++
 -# BLAS = -framework Accelerate
 -# LAPACK = -framework Accelerate
-+CC = /usr/osxws/bin/gcc-4.2
++CC = gcc
 +CFLAGS = -O2 -fno-common -no-cpp-precomp -fexceptions -arch i386 -arch x86_64
 +LIB = -lstdc++ -arch i386 -arch x86_64
 +BLAS = -framework Accelerate

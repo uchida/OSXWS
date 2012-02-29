@@ -1,7 +1,7 @@
 Name:           graphviz
 Summary:        Graph Visualization Tools
 Version:        2.26.3
-Release:        1%{?_dist_release}
+Release:        2%{?_dist_release}
 Group:          Applications/Graphics
 License:        CPL
 URL:            http://www.graphviz.org/
@@ -9,7 +9,6 @@ URL:            http://www.graphviz.org/
 Source:         http://www.graphviz.org/pub/%{name}/stable/SOURCES/%{name}-%{version}.tar.gz
 Patch0: graphviz-ptrdiff.patch
 Patch1: graphviz-quartz-libtool.patch
-BuildArch: fat
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
@@ -85,11 +84,7 @@ export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
     --disable-ruby \
     --disable-tcl \
     --with-quartz \
-    --with-ghostscript \
-    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
-    CXX='/usr/bin/g++-4.2 -arch i386 -arch x86_64' \
-    CPP='/usr/bin/gcc-4.2 -E' \
-    CXXPP='/usr/bin/g++-4.2 -E'
+    --with-ghostscript
 sed -i.tag 's|LTOBJCCOMPILE = $(LIBTOOL)|LTOBJCCOMPILE = $(LIBTOOL) --tag=CC|g' plugin/quartz/Makefile
 make
 
@@ -144,6 +139,9 @@ fi
 %doc __doc/*
 
 %changelog
+* Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.26.3-2
+- build x86_64 mono arch
+
 * Thu Jun 30 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.26.3-1
 - make more compatible with Vine Linux
 

@@ -1,7 +1,7 @@
 Summary: A C programming language indexing and/or cross-reference tool.
 Name: ctags
 Version: 5.8
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 License: GPLv2
 Group: Development/Tools
 Source: http://prdownloads.sourceforge.net/ctags/ctags-%{version}.tar.gz
@@ -11,7 +11,6 @@ URL: http://ctags.sourceforge.net
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires(post): alternatives
 Requires(postun): alternatives
-BuildArch: fat
 
 %description
 Ctags generates an index (or tag) file of C language objects found in
@@ -40,8 +39,6 @@ to make sure you are using this package.
 %patch0 -p1
 
 %build
-export CFLAGS='-arch i386 -arch x86_64'
-export LDFLAGS='-arch i386 -arch x86_64'
 %configure
 make
 
@@ -87,6 +84,9 @@ fi
 %{_mandir}/man1/ctags*
 
 %changelog
+* Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.8-2
+- build x86_64 mono arch
+
 * Tue Jun 28 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 5.8-1
 - change summary and description for Vine Linux compatibility
 
