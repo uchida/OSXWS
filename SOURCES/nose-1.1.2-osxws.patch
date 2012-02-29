@@ -1,0 +1,12 @@
+diff -uNr nose-1.1.2.orig/setup.py nose-1.1.2/setup.py
+--- nose-1.1.2.orig/setup.py	2012-02-29 17:51:21.000000000 +0900
++++ nose-1.1.2/setup.py	2012-02-29 17:51:46.000000000 +0900
+@@ -102,7 +102,7 @@
+     license = 'GNU LGPL',
+     keywords = 'test unittest doctest automatic discovery',
+     url = 'http://readthedocs.org/docs/nose/',
+-    data_files = [('man/man1', ['nosetests.1'])],
++    data_files = [('share/man/man1', ['nosetests.1'])],
+     package_data = {'': ['*.txt',
+                          'examples/*.py',
+                          'examples/*/*.py']},

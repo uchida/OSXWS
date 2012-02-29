@@ -2,8 +2,8 @@
 %bcond_with doc
 
 Name:		python-nose
-Version:    0.11.3
-Release:    3%{?_dist_release}
+Version:    1.1.2
+Release:    0%{?_dist_release}
 Summary:	A discovery-based unittest extension for Python
 Summary(ja):	Python 用の発見型ユニットテスト・エクステンション
 
@@ -11,7 +11,7 @@ Group:		Development/Languages
 License:	LGPLv2
 URL:		http://somethingaboutorange.com/mrl/projects/nose/
 Source0:	http://somethingaboutorange.com/mrl/projects/nose/nose-%{version}.tar.gz
-Patch0:     nose-0.11.3-osxws.patch
+Patch0:     nose-1.1.2-osxws.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
@@ -66,11 +66,15 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/.build/html
 %endif
 %{_bindir}/nosetests
+%{_bindir}/nosetests-%{pyver}
 %{_mandir}/man1/nosetests.1.gz
 %{python_sitelib}/nose-%{version}-py%{pyver}.egg-info
 %{python_sitelib}/nose
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.2-0
+- update to 1.1.2 
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.11.3-3
 - mofify python requirements for OSXWS
 
