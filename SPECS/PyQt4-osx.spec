@@ -1,7 +1,3 @@
-%define python_inc %(%{__python} -c "from distutils.sysconfig import get_python_inc; print get_python_inc()")
-%define python_bin %(%{__python} -c "from distutils.sysconfig import get_config_var; print get_config_var('BINDIR')")
-%define python_data %(%{__python} -c "from distutils.sysconfig import get_config_var; print get_config_var('datarootdir')")
-
 %define _qt4_version %(pkg-config --modversion --silence-errors Qt 2>/dev/null || echo 4.7.2)
 %define _qt4_prefix %(pkg-config --variable prefix --silence-errors Qt 2>/dev/null || echo %{_libdir}/qt-%{qt4_ver})
 %define _qt4_plugindir %(pkg-config --variable plugindir --silence-errors Qt 2>/dev/null || echo %{_qt4_prefix}/plugins)
@@ -9,7 +5,7 @@
 Name: 	 PyQt4
 Summary: Python bindings for Qt4
 Summary(ja): Qt4 の Python バインディング
-Version: 4.8.5
+Version: 4.9.1
 Release: 0%{?_dist_release}
 
 # GPLv2 exceptions(see GPL_EXCEPTIONS*.txt)
@@ -17,6 +13,8 @@ License: GPLv3 or GPLv2 with exceptions
 Group: 	 Development/Languages
 URL:     http://www.riverbankcomputing.com/software/pyqt/
 Source0: http://www.riverbankcomputing.com/static/Downloads/PyQt4/PyQt-mac-gpl-%{version}.tar.gz
+Patch0: PyQt-4.9.1-fix-py_verion.patch
+Patch1: PyQt-4.9.1-fix-QtNetwork.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 %if "%{?_dist_release}" == "osx10.6"
@@ -30,7 +28,6 @@ BuildRequires: qt4-devel >= 4.5.0
 BuildRequires: sip-devel >= 4.12.1
 Requires: sip >= 4.12.1
 Requires: qt4
-BuildArch: fat
 
 %description
 These are Python bindings for Qt4.
@@ -48,6 +45,8 @@ of the Qt4 classes (e.g. KDE or your own).
 
 %prep
 %setup -q -n PyQt-mac-gpl-%{version}
+%patch0 -p1
+%patch1 -p1
 
 ## permissions
 # mark examples non-executable
@@ -59,10 +58,10 @@ python configure.py --assume-shared \
                     --confirm-license \
                     --no-timestamp \
                     --qmake=%{_bindir}/qmake \
-                    --use-arch i386 --use-arch x86_64 \
-                    --no-qsci-api \
-                    --verbose \
-                    CC="/usr/bin/gcc" CXX="/usr/bin/g++"
+                    --no-designer-plugin \
+                    --verbose
+sed -i.gcc 's|gcc|/usr/bin/gcc|g' Makefile
+sed -i.gcc 's|g++|/usr/bin/g++|g' Makefile
 make
 
 %install
@@ -70,16 +69,11 @@ rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL_ROOT=$RPM_BUILD_ROOT
 
-mkdir -p $RPM_BUILD_ROOT%{_bindir}
-for f in pylupdate4 pyrcc4 pyuic4; do
-    ln -sf %{python_bin}/$f $RPM_BUILD_ROOT%{_bindir}
-done
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc NEWS README
 %doc OPENSOURCE-NOTICE.TXT
 %doc LICENSE.GPL2 GPL_EXCEPTION*.TXT
@@ -88,19 +82,20 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{python_sitearch}/PyQt4/uic/pyuic.py*
 
 %files devel
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc doc/*
 %doc examples/
 %{_bindir}/pylupdate4
 %{_bindir}/pyrcc4
 %{_bindir}/pyuic4
-%{python_bin}/pylupdate4
-%{python_bin}/pyrcc4
-%{python_bin}/pyuic4
 %{python_sitearch}/PyQt4/uic/pyuic.py*
-%{python_data}/sip/PyQt4/
+%{_datadir}/sip/PyQt4/
 
 %changelog
+* Tue Feb 21 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.9.1-0
+- update to 4.9.1
+- build x86_64 mono arch
+
 * Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.8.5-0
 - updat to 4.8.5
 

@@ -1,6 +1,6 @@
 Name: python-markupsafe
 Version: 0.12
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Summary: Implements a XML/HTML/XHTML Markup safe string for Python
 
 Group: Development/Languages
@@ -17,7 +17,6 @@ Requires: python
 BuildRequires: python-devel
 %endif
 BuildRequires: python-setuptools
-BuildArch: fat
 
 %description
 A library for safe markup escaping.
@@ -25,12 +24,12 @@ A library for safe markup escaping.
 %setup -q -n MarkupSafe-%{version}
 
 %build
-export CC='/usr/bin/gcc-4.2'
-export ARCHFLAGS="-arch i386 -arch x86_64"
+export ARCHFLAGS='-arch x86_64'
 python setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
+export ARCHFLAGS='-arch x86_64'
 python setup.py install --skip-build --root $RPM_BUILD_ROOT
 # C code errantly gets installed
 rm $RPM_BUILD_ROOT/%{python_sitearch}/markupsafe/*.c
@@ -47,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitearch}/*
 
 %changelog
+* Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-3
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-2
 - mofify python requirements for OSXWS
 

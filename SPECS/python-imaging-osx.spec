@@ -1,11 +1,8 @@
-%define frameworkdir /Library/Frameworks
-%define python_inc %{frameworkdir}/Python.framework/Versions/%{python_version}/include/python%{python_version}
-
 Summary: The Python Imaging Library
 Summary(ja): Python イメージ処理ライブラリ
 Name: python-imaging
 Version: 1.1.7
-Release: 3%{?_dist_release}
+Release: 4%{?_dist_release}
 License: MIT
 Group: Development/Languages
 URL: http://www.pythonware.com/products/pil
@@ -30,7 +27,6 @@ Obsoletes: Imaging < %{version}
 Obsoletes: python-PIL < %{version}
 Obsoletes: python-Imaging <= %{version}
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 The Python Imaging Library (PIL) adds image processing capabilities
@@ -47,21 +43,21 @@ Python Imaging Library (PIL) は Python 環境にイメージ処理能力を加�
 %patch0 -p1
 
 %build
-export CC='/usr/bin/gcc-4.2' ARCHFLAGS='-arch i386 -arch x86_64'
-python setup.py build
+export ARCHFLAGS='-arch x86_64'
+python setup.py build_ext -i
 
 %check
 python selftest.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export CC='/usr/bin/gcc-4.2' ARCHFLAGS='-arch i386 -arch x86_64'
-python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
+export CC='/usr/bin/gcc-4.2' ARCHFLAGS='-arch x86_64'
+python setup.py install --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}/Sane
 install Sane/*[^\.c$] $RPM_BUILD_ROOT%{python_sitearch}/Sane/
-mkdir -p $RPM_BUILD_ROOT%{python_inc}/PIL
-install libImaging/*.h $RPM_BUILD_ROOT%{python_inc}/PIL/
+mkdir -p $RPM_BUILD_ROOT%{_includedir}/python%{pyver}/PIL/
+install libImaging/*.h $RPM_BUILD_ROOT%{_includedir}/python%{pyver}/PIL/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -72,11 +68,15 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitearch}/PIL.pth
 %{python_sitearch}/PIL/*
 %{python_sitearch}/Sane/*
-%{python_inc}/PIL/*
+%{_includedir}/python%{pyver}/PIL/*.h
 %doc BUILDME CHANGES CONTENTS README
 %doc Docs
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-4
+- build x86_64 mono arch
+- change location of headers
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.7-3
 - mofify python requirements for OSXWS
 

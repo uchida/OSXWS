@@ -1,12 +1,12 @@
-diff -uNr git-1.7.3.5.orig/perl/Makefile git-1.7.3.5/perl/Makefile
---- git-1.7.3.5.orig/perl/Makefile	2011-01-08 15:58:55.000000000 +0900
-+++ git-1.7.3.5/perl/Makefile	2011-01-08 16:23:32.000000000 +0900
-@@ -38,7 +38,7 @@
+diff -uNr git-1.7.9.1.orig/perl/Makefile git-1.7.9.1/perl/Makefile
+--- git-1.7.9.1.orig/perl/Makefile	2012-02-22 01:36:18.000000000 +0900
++++ git-1.7.9.1/perl/Makefile	2012-02-22 01:37:42.000000000 +0900
+@@ -39,7 +39,7 @@
  	echo '	echo $(instdir_SQ)' >> $@
  else
  $(makfile): Makefile.PL ../GIT-CFLAGS
--	$(PERL_PATH) $< PREFIX='$(prefix_SQ)' INSTALL_BASE=''
-+	$(PERL_PATH) $< SITEPREFIX='$(prefix_SQ)' INSTALL_BASE=''
+-	$(PERL_PATH) $< PREFIX='$(prefix_SQ)' INSTALL_BASE='' --localedir='$(localedir_SQ)'
++	$(PERL_PATH) $< SITEPREFIX='$(prefix_SQ)' INSTALL_BASE='' --localedir='$(localedir_SQ)'
  endif
  
  # this is just added comfort for calling make directly in perl dir

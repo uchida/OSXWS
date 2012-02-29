@@ -1,13 +1,12 @@
 Name: jansson
 Version: 2.2.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Summary: C library for working with JSON dataColor Management System
 Group: Development/Libraries
 License: MIT
 URL: http://www.digip.org/jansson/
 Source0: http://www.digip.org/jansson/releases/jansson-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 Jansson is a C library for encoding, decoding and manipulating JSON data. It features:
@@ -30,8 +29,7 @@ Requires: pkgconfig
 %setup -q -n %{name}-%{version}
 
 %build
-export CFLAGS="-arch i386 -arch x86_64"
-%configure CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' CPP='/usr/bin/gcc-4.2 -E'
+%configure
 make
 
 pushd doc
@@ -61,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/_build/html/*
 
 %changelog
+* Thu Feb 16 2012 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 2.2.1-1
+- build x86_64 mono arch
+
 * Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.2.1-0
 - update to 2.2.1
 

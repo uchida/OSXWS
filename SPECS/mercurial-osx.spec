@@ -4,7 +4,7 @@ Summary: A fast, lightweight distributed source control management system
 Summary(ja): 軽量で高速な分散構成管理システム
 Name: mercurial
 Version: 1.8.3
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 License: GPLv2
 Group: Development/Tools
 URL: http://mercurial.selenic.com/
@@ -25,7 +25,6 @@ Requires: python
 BuildRequires: python-devel
 %endif
 Provides: hg = %{version}-%{release}
-BuildArch: fat
 
 %description
 Mercurial is a fast, lightweight source control management system designed
@@ -93,18 +92,14 @@ Mac OS X WorkShop のデフォルトでは、「システム環境設定」で �
 sed -i.osxws 's|/usr/local/bin/hg|%{_bindir}/hg|g' contrib/mercurial.el
 sed -i.osxws 's|/home/user/hg/hg/contrib/hgk|%{_libexecdir}/mercurial/hgk|g' contrib/sample.hgrc
 sed -i.osxws 's|/path/to/repo/or/config|%{_sysconfdir}/hgweb.conf|g' hgweb.cgi
-sed -i.osxws 's|#!/usr/bin/env python|#!%{_bindir}/python|g' hgweb.cgi
 
 %build
-export CC="/usr/bin/gcc-4.2"
-export ARCHFLAGS="-arch i386 -arch x86_64"
 export CFLAGS="-I%{_includedir}"
 export LDFLAGS="-L%{_libdir}"
 make all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 
 python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-script=%{_bindir}  --record=%{name}.files
 make install-doc DESTDIR=$RPM_BUILD_ROOT MANDIR=%{_mandir}
@@ -219,6 +214,9 @@ fi
 %dir %{shared_dir}/mercurial
 
 %changelog
+* Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-3
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-2
 - mofify python requirements for OSXWS
 

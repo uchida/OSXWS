@@ -1,6 +1,6 @@
 Name: suitesparse
 Version: 3.6.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Summary: A collection of sparse matrix libraries
 
 Group: System Environment/Libraries
@@ -9,8 +9,6 @@ URL: http://www.cise.ufl.edu/research/sparse/SuiteSparse
 Source0: http://www.cise.ufl.edu/research/sparse/%{name}/%{name}-%{version}.tar.gz
 Patch0: SuiteSparse-UFconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
-BuildRequires: apple-gcc
 
 %description
 suitesparse is a collection of libraries for computations involving sparse
@@ -106,13 +104,13 @@ This package contains documentation files for %{name}.
 
 mkdir -p Doc/{AMD,BTF,CAMD,CCOLAMD,CHOLMOD,COLAMD,KLU,LDL,UMFPACK,SPQR,RBio} Lib Include
 
-export RPM_OPT_FLAGS="-O2 -arch i386 -arch x86_64 -fasynchronous-unwind-tables -fno-strict-aliasing -fno-schedule-insns2"
+export RPM_OPT_FLAGS="-O2  -fasynchronous-unwind-tables -fno-strict-aliasing -fno-schedule-insns2"
 pushd AMD
   pushd Lib
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libamd.dylib \
         -compatibility_version %{amd_version_major} \
         -current_version %{amd_version} \
@@ -131,7 +129,7 @@ pushd BTF
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libbtf.dylib \
         -compatibility_version %{btf_version_major} \
         -current_version %{btf_version} \
@@ -150,7 +148,7 @@ pushd CAMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libcamd.dylib \
         -compatibility_version %{camd_version_major} \
         -current_version %{camd_version} \
@@ -169,7 +167,7 @@ pushd CCOLAMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libccolamd.dylib \
         -compatibility_version %{ccolamd_version_major} \
         -current_version %{ccolamd_version} \
@@ -188,7 +186,7 @@ pushd COLAMD
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libcolamd.dylib \
         -compatibility_version %{colamd_version_major} \
         -current_version %{colamd_version} \
@@ -212,7 +210,7 @@ pushd CHOLMOD
     make CFLAGS="$CHOLMOD_FLAGS"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libcholmod.dylib \
         -compatibility_version %{cholmod_version_major} \
         -current_version %{cholmod_version} \
@@ -242,7 +240,7 @@ pushd CSparse
     cp -p cs.h ../../Include
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libcsparse.dylib \
         -compatibility_version %{csparse_version_major} \
         -current_version %{csparse_version} \
@@ -261,7 +259,7 @@ pushd CXSparse
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libcxsparse.dylib \
         -compatibility_version %{cxsparse_version_major} \
         -current_version %{cxsparse_version} \
@@ -282,7 +280,7 @@ pushd KLU
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libklu.dylib \
         -compatibility_version %{klu_version_major} \
         -current_version %{klu_version} \
@@ -303,7 +301,7 @@ pushd LDL
     make CFLAGS="$RPM_OPT_FLAGS -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libldl.dylib \
         -compatibility_version %{ldl_version_major} \
         -current_version %{ldl_version} \
@@ -322,7 +320,7 @@ pushd UMFPACK
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libumfpack.dylib \
         -compatibility_version %{umfpack_version_major} \
         -current_version %{umfpack_version} \
@@ -344,7 +342,7 @@ pushd SPQR
     make CFLAGS="$RPM_OPT_FLAGS -DNPARTITION -fno-common"
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libspqr.dylib \
         -compatibility_version %{spqr_version_major} \
         -current_version %{spqr_version} \
@@ -366,7 +364,7 @@ pushd UFconfig
   make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   gcc $RPM_OPT_FLAGS -fno-common -c UFconfig.c
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/libufconfig.dylib \
         -compatibility_version %{ufconfig_version_major} \
         -current_version %{ufconfig_version} \
@@ -383,7 +381,7 @@ pushd RBio
     make CFLAGS="$RPM_OPT_FLAGS -fno-common" 
   popd
   pushd ../Lib
-    %{_bindir}/gcc-4.2 -dynamiclib -arch i386 -arch x86_64 \
+    gcc -dynamiclib  \
         -install_name %{_libdir}/%{name}/librbio.dylib \
         -compatibility_version %{rbio_version_major} \
         -o librbio.%{rbio_version}.dylib ../RBio/Lib/*.o \
@@ -434,6 +432,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc Doc/*
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.1-1
+- build x86_64 mono arch 
+
 * Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 3.6.1-0
 - update to 3.6.1
 

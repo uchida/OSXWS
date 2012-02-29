@@ -1,0 +1,19 @@
+diff -uNr PyQt-mac-gpl-4.9.1.orig/sip/QtNetwork/qssl.sip PyQt-mac-gpl-4.9.1/sip/QtNetwork/qssl.sip
+--- PyQt-mac-gpl-4.9.1.orig/sip/QtNetwork/qssl.sip	2012-02-26 21:30:50.000000000 +0900
++++ PyQt-mac-gpl-4.9.1/sip/QtNetwork/qssl.sip	2012-02-27 02:46:37.000000000 +0900
+@@ -98,9 +98,9 @@
+ 
+ %End
+ %End
+-%If (Qt_4_8_0 -)
+-QFlags<QSsl::SslOption> operator|(QSsl::SslOption f1, QFlags<QSsl::SslOption> f2);
+-%End
+-%If (Qt_4_8_0 -)
+-QFlags<QSsl::SslOption> operator|(QSsl::SslOption f1, QSsl::SslOption f2);
+-%End
++//%If (Qt_4_8_0 -)
++//QFlags<QSsl::SslOption> operator|(QSsl::SslOption f1, QFlags<QSsl::SslOption> f2);
++//%End
++//%If (Qt_4_8_0 -)
++//QFlags<QSsl::SslOption> operator|(QSsl::SslOption f1, QSsl::SslOption f2);
++//%End

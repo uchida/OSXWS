@@ -1,0 +1,12 @@
+diff -uNr PyQt-mac-gpl-4.9.1.orig/configure.py PyQt-mac-gpl-4.9.1/configure.py
+--- PyQt-mac-gpl-4.9.1.orig/configure.py	2012-02-26 21:30:48.000000000 +0900
++++ PyQt-mac-gpl-4.9.1/configure.py	2012-02-26 23:13:52.000000000 +0900
+@@ -1515,7 +1515,7 @@
+         qt_sip_flags.append("-x")
+         qt_sip_flags.append("Py_DateTime")
+ 
+-    if sipcfg.py_version < 0x030000:
++    if sipcfg.py_version > 0x030000:
+         qt_sip_flags.append("-x")
+         qt_sip_flags.append("Py_v3")
+ 

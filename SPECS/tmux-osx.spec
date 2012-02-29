@@ -2,7 +2,7 @@ Summary: a terminal multiplexer
 Summary(ja): 端末多重化ユーティリティ
 Name: tmux
 Version: 1.5
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # based on zsh patch http://www.zsh.org/mla/workers/2009/msg01145.html
 Source1: tmux_zshcomp
@@ -13,7 +13,6 @@ URL: http://tmux.sourceforge.net/
 
 BuildRequires: ncurses-devel, libevent-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 tmux is a terminal multiplexer: it enables a number of terminals (or windows), each running a separate program, to be created, accessed, and controlled from a single screen.
@@ -24,11 +23,9 @@ tmux may be detached from a screen and continue running in the background, then 
 %patch0 -p1
 
 %build
-export CFLAGS="-arch i386 -arch x86_64"
 export CPPFLAGS="-I%{_includedir}"
-export LDFLAGS="-L%{_libdir} -arch i386 -arch x86_64 -lresolv"
-%configure \
-    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' CPP="/usr/bin/gcc-4.2 -E"
+export LDFLAGS="-L%{_libdir} -lresolv"
+%configure
 make
 
 %install
@@ -57,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES FAQ NOTES TODO
 
 %changelog
+* Thu Feb 16 2012 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 1.5-1
+- build x86_64 mono arch
+
 * Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 1.5-0
 - update to tmux 1.5
 

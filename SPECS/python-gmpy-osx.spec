@@ -3,7 +3,7 @@
 Summary: MPIR/GMP interface to Python
 Name: python-%{modulename}
 Version: 1.14
-Release: 3%{?_dist_release}
+Release: 4%{?_dist_release}
 Source0: http://gmpy.googlecode.com/files/%{modulename}-%{version}.zip
 License: LGPLv2+
 Group: Development/Languages
@@ -18,7 +18,6 @@ BuildRequires: python-devel
 %endif
 BuildRequires: gmp-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 A C-coded Python extension module
@@ -31,10 +30,9 @@ and more.
 %setup -q -n %{modulename}-%{version}
 
 %build
-export CC='/usr/bin/gcc-4.2'
 export CFLAGS='-I%{_includedir}'
 export LDFLAGS='-L%{_libdir}'
-export ARCHFLAGS="-arch i386 -arch x86_64"
+export ARCHFLAGS="-arch x86_64"
 python setup.py build_ext
 
 %check
@@ -55,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc changes.txt lgpl-2.1.txt mac_build.txt mutable_mpz.txt README
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-4
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-3
 - mofify python requirements for OSXWS
 

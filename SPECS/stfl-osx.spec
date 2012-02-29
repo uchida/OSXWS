@@ -1,7 +1,7 @@
 Summary: Structured Terminal Forms Language/Library
 Name: stfl
 Version: 0.21
-Release: 2%{?_dist_release}
+Release: 3%{?_dist_release}
 Source0: http://www.clifford.at/stfl/stfl-0.21.tar.gz
 Patch0: stfl-macosx.patch
 Patch1: stfl-iconv.patch
@@ -17,8 +17,8 @@ BuildRequires: python-devel > 2.6.1
 BuildRequires: python-devel
 %endif
 BuildRequires: perl, ruby
+BuildRequires: swig
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 STFL is a library which implements a curses-based widget set for text terminals.
@@ -42,8 +42,8 @@ files for stfl
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
-sed -i.arch 's|@LDFLAGS@|"-arch i386 -arch x86_64"|g' perl5/Makefile.snippet
-sed -i.arch 's|@LDDLFLAGS@|"-arch i386 -arch x86_64 -bundle -undefined dynamic_lookup"|g' perl5/Makefile.snippet
+#sed -i.arch 's|@LDFLAGS@|"-arch i386 -arch x86_64"|g' perl5/Makefile.snippet
+sed -i.arch 's|@LDDLFLAGS@|"-bundle -undefined dynamic_lookup"|g' perl5/Makefile.snippet
 rm -f perl5/Makefile.snippet.arch
 %patch1 -p1
 for f in Makefile stfl.pc.in perl5/Makefile.PL python/Makefile.snippet ruby/Makefile.snippet; do
@@ -56,8 +56,8 @@ for f in stfl_internals.h; do
 done
 
 %build
-export CFLAGS='-arch i386 -arch x86_64'
-export LDLIBS='-arch i386 -arch x86_64'
+#export CFLAGS='-arch i386 -arch x86_64'
+#export LDLIBS='-arch i386 -arch x86_64'
 make prefix=%{_prefix} DESTDIR=$RPM_BUILD_ROOT
 
 %install
@@ -86,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21-3
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.21-2
 - mofify python requirements for OSXWS
 

@@ -1,6 +1,6 @@
 Name:             dvipng
 Version:          1.13
-Release:          2%{?_dist_release}
+Release:          3%{?_dist_release}
 
 Summary:          Converts DVI files to PNG/GIF format
 Summary(ja):      DVIファイルをPNG/GIF画像に変換
@@ -17,7 +17,6 @@ BuildRequires:    texlive-collection-basic
 BuildRequires:    freetype-devel
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-root
-BuildArch:        fat
 
 %description
 This program makes PNG and/or GIF graphics from DVI files as obtained
@@ -42,10 +41,7 @@ PNG または GIF 画像に変換するプログラムです。
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir} -no-cpp-precomp"
 export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
-%configure \
-    CC='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
-    CXX='/usr/bin/gcc-4.2 -arch i386 -arch x86_64' \
-    CPP="/usr/bin/gcc-4.2 -E" CXXCPP="/usr/bin/g++-4.2 -E"
+%configure
 make
 
 %install
@@ -76,6 +72,9 @@ fi
 
 
 %changelog
+* Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-3
+- build x86_64 mono arch
+
 * Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-2
 - switchover from tetex to texlive
 

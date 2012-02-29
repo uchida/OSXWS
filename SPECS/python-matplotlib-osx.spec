@@ -4,8 +4,8 @@
 Summary: Python plotting package
 Summary(ja): Python プロットパッケージ
 Name: python-%{modulename}
-Version: 1.0.1
-Release: 3%{?_dist_release}
+Version: 1.1.0
+Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Patch0: matplotlib-setup.cfg.patch
 # sphinx >= 1.0.6 compatible patch
@@ -31,9 +31,7 @@ BuildRequires: python-pytz
 BuildRequires: python-dateutil
 BuildRequires: texlive-collection-basic, dvipng
 BuildRequires: ghostscript
-BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 matplotlib strives to produce publication quality 2D graphics
@@ -67,12 +65,13 @@ This package contains documentation files for %{name}.
 %prep
 %setup -q -n %{modulename}-%{version}
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 
 %build
-export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
-export ARCHFLAGS='-arch i386 -arch x86_64'
-python setup.py build
+export ARCHFLAGS=''
+export CFLAGS='-dynamic -Os -g -pipe -fno-strict-aliasing -fno-common -fwrapv -DENABLE_DTRACE -DMACOSX -DNDEBUG'
+export OPT='-DNDEBUG -g -fwrapv -Os'
+python setup.py build_ext
 %if %{with doc}
 pushd doc
 python make.py --small html latex
@@ -81,7 +80,10 @@ popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
+export ARCHFLAGS=''
+export CFLAGS='-dynamic -Os -g -pipe -fno-strict-aliasing -fno-common -fwrapv -DENABLE_DTRACE -DMACOSX -DNDEBUG'
+export OPT='-DNDEBUG -g -fwrapv -Os'
+python setup.py install --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 rm -rf doc/build/html/_sources
 
 %clean
@@ -89,10 +91,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,wheel)
-%{python_sitelib}/*
+%{python_sitelib}/%{modulename}
+%{python_sitelib}/%{modulename}-%{version}-py%{pyver}.egg-info
+%{python_sitelib}/mpl_toolkits
+%{python_sitelib}/pylab.py*
 %defattr(644,root,wheel,755)
-%doc CHANGELOG INSTALL INTERACTIVE KNOWN_BUGS README.txt TODO
-%doc license matplotlibrc.template
+%doc CHANGELOG INSTALL README.txt TODO
+%doc matplotlibrc.template
 %if %{with doc}
 %files doc
 %defattr(-,root,wheel)
@@ -100,6 +105,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.0-0
+- update to 1.1.0 
+- builx x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-3
 - mofify python requirements for OSXWS
 
