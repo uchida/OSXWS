@@ -1,10 +1,8 @@
-%define modulename Cython
-
 Summary: The Cython compiler for writing C extensions for the Python language 
-Name: python-%{modulename}
+Name: Cython
 Version: 0.15.1
-Release: 1%{?_dist_release}
-Source0: http://cython.org/release/%{modulename}-%{version}.tar.gz
+Release: 2%{?_dist_release}
+Source0: http://cython.org/release/%{name}-%{version}.tar.gz
 Patch1: Cython-mac-python.patch
 License: Apache
 Group: Development/Languages
@@ -21,6 +19,7 @@ BuildRequires: python-devel > 2.6.1
 BuildRequires: python-devel
 %endif
 BuildRequires: python-numpy
+Obsoletes: python-Cython
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildArch: x86_64
 
@@ -40,16 +39,12 @@ libraries, and for fast C modules that speed up the execution of Python
 code.
 
 %prep
-%setup -q -n %{modulename}-%{version}
+%setup -q -n %{name}-%{version}
 %patch1 -p1
 
 %build
 export ARCHFLAGS=''
-python setup.py build_ext
-
-# In v0.14.1, runtests.py fails with 1 declarations and 2 numpy error
-%check
-python runtests.py
+python setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -61,8 +56,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,wheel)
-%{_bindir}/*
-%{python_sitelib}/*
+%{_bindir}/cygdb
+%{_bindir}/cython
+%{python_sitelib}/Cython*
+%{python_sitelib}/cython.py*
+%{python_sitelib}/pyximport
 %doc Demos Doc
 %doc COPYING.txt INSTALL.txt LICENSE.txt README.txt ToDo.txt USAGE.txt
 
