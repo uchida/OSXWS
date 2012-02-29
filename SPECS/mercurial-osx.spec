@@ -3,8 +3,8 @@
 Summary: A fast, lightweight distributed source control management system 
 Summary(ja): 軽量で高速な分散構成管理システム
 Name: mercurial
-Version: 1.8.3
-Release: 3%{?_dist_release}
+Version: 2.1
+Release: 0%{?_dist_release}
 License: GPLv2
 Group: Development/Tools
 URL: http://mercurial.selenic.com/
@@ -214,6 +214,9 @@ fi
 %dir %{shared_dir}/mercurial
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.1-0
+- update to 2.1
+
 * Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.8.3-3
 - build x86_64 mono arch
 
