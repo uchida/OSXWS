@@ -4,8 +4,8 @@
 
 Summary: Python library for symbolic mathematics
 Name: python-%{modulename}
-Version: 0.6.7
-Release: 2%{?_dist_release}
+Version: 0.7.1
+Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/s/%{modulename}/%{modulename}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
@@ -74,6 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{_mandir}/man1/*
 %{python_sitelib}/%{modulename}
+%{python_sitelib}/%{modulename}-%{version}-py%{pyver}.egg-info
 %if %{with ipython}
 %{python_sitelib}/IPython/UserConfig/ipythonrc-sympy
 %endif
