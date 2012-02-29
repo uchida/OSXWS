@@ -2,8 +2,8 @@
 
 Summary: MPIR/GMP interface to Python
 Name: python-%{modulename}
-Version: 1.14
-Release: 4%{?_dist_release}
+Version: 1.15
+Release: 0%{?_dist_release}
 Source0: http://gmpy.googlecode.com/files/%{modulename}-%{version}.zip
 License: LGPLv2+
 Group: Development/Languages
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc changes.txt lgpl-2.1.txt mac_build.txt mutable_mpz.txt README
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.15-0
+- update to 1.15
+
 * Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-4
 - build x86_64 mono arch
 
