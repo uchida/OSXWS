@@ -1,6 +1,6 @@
 Name: python-markupsafe
-Version: 0.12
-Release: 3%{?_dist_release}
+Version: 0.15
+Release: 0%{?_dist_release}
 Summary: Implements a XML/HTML/XHTML Markup safe string for Python
 
 Group: Development/Languages
@@ -46,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitearch}/*
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.15-0
+- update to 0.15 
+
 * Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-3
 - build x86_64 mono arch
 
