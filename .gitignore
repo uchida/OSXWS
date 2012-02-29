@@ -5,8 +5,10 @@ RPMS
 SRPMS
 temp
 *.rpm
+*.gz
 *.tar.gz
 *.tar.bz2
+*.tar.xz
 *.tgz
 *.zip
 UnicodeData.txt
