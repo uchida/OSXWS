@@ -4,7 +4,7 @@
 
 # Pass --without docs to rpmbuild if you don't want the documentation
 Name: 		git
-Version: 	1.7.7.1
+Version: 	1.7.9.1
 Release:        0%{?_dist_release}
 Summary:  	Core git tools
 Summary(ja):	Core git ツール
@@ -30,9 +30,9 @@ Patch10:    git-1.5-gitweb-home-link.patch
 # none
 
 BuildRequires:	zlib-devel >= 1.2, openssl-devel
+BuildRequires:  gettext-libs
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildArch:      fat
 
 Requires:	perl-Git = %{version}-%{release}
 Requires:	zlib
@@ -233,19 +233,20 @@ GITWEB_CSS=/gitweb/static/gitweb.css
 GITWEB_LOGO=/gitweb/static/git-logo.png
 GITWEB_FAVICON=/gitweb/static/git-favicon.png
 GITWEB_CONFIG_SYSTEM=%{_sysconfdir}/gitweb.conf
-PYTHON_PATH=%{_bindir}/python
 ETC_GITCONFIG=%{_sysconfdir}/gitconfig
+CFLAGS=-I%{_includedir}
+LDFLAGS=-L%{_libdir} -lintl
 EOF
 
 %build
-export VERSIONER_PERL_VERSION=5.8.9
-make CC="/usr/bin/gcc-4.2 -arch i386 -arch x86_64" \
+#export VERSIONER_PERL_VERSION=5.8.9
+make CC="/usr/bin/gcc -arch x86_64" \
      AR="/usr/bin/libtool -static" \
      prefix=%{_prefix} all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export VERSIONER_PERL_VERSION=5.8.9
+#export VERSIONER_PERL_VERSION=5.8.9
 make DESTDIR=$RPM_BUILD_ROOT \
      AR="/usr/bin/libtool -static" \
      gitwebdir_SQ=/Library/WebServer/CGI-Executables \
@@ -432,7 +433,10 @@ fi
 %defattr(-,root,wheel)
 %doc gitweb/README
 /Library/WebServer/CGI-Executables/gitweb.cgi
-/Library/WebServer/Documents/gitweb/static/
+/Library/WebServer/Documents/gitweb/static/git-favicon.png
+/Library/WebServer/Documents/gitweb/static/git-logo.png
+%config(noreplace) /Library/WebServer/Documents/gitweb/static/gitweb.css
+%config(noreplace) /Library/WebServer/Documents/gitweb/static/gitweb.js
 %config(noreplace) %{_sysconfdir}/gitweb.conf
 %defattr(777,root,wheel)
 %dir %{shared_dir}/git
@@ -448,6 +452,12 @@ fi
 # No files for you!
 
 %changelog
+* Wed Feb 22 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.9.1-0
+- update to 1.7.9.1
+
+* Wed Oct 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.7.1-0
+- build x86_64 mono arch
+
 * Wed Oct 26 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.7.7.1-0
 - update to 1.7.7.1
 
