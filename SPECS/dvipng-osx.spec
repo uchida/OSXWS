@@ -1,6 +1,6 @@
 Name:             dvipng
-Version:          1.13
-Release:          3%{?_dist_release}
+Version:          1.14
+Release:          0%{?_dist_release}
 
 Summary:          Converts DVI files to PNG/GIF format
 Summary(ja):      DVIファイルをPNG/GIF画像に変換
@@ -8,6 +8,7 @@ Source:           %{name}-%{version}.tar.gz
 URL:              http://sourceforge.net/projects/dvipng/
 Group:            Applications/Publishing
 License:          LGPLv3
+Patch0:           dvipng-1.14-sys-wait.h.patch
 
 BuildRequires:    libkpathsea-devel
 BuildRequires:    gd-devel
@@ -37,6 +38,7 @@ PNG または GIF 画像に変換するプログラムです。
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir} -no-cpp-precomp"
@@ -72,6 +74,9 @@ fi
 
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.14-0
+- update to 1.14 
+
 * Mon Aug 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.13-3
 - build x86_64 mono arch
 

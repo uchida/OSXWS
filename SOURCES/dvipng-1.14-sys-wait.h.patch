@@ -1,0 +1,12 @@
+diff -uNr dvipng-1.14.orig/special.c dvipng-1.14/special.c
+--- dvipng-1.14.orig/special.c	2012-02-16 21:37:28.000000000 +0900
++++ dvipng-1.14/special.c	2012-02-16 21:37:39.000000000 +0900
+@@ -26,7 +26,7 @@
+ 
+ #ifndef MIKTEX
+ #ifndef WIN32
+-#include <wait.h>
++#include <sys/wait.h>
+ #else /* WIN32 */
+ #include <fcntl.h>
+ #include <io.h>
