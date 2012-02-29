@@ -1,6 +1,6 @@
 Name:           rlwrap
 Version:        0.37
-Release:        2%{?dist}
+Release:        3%{?_dist_release}
 Summary:        Wrapper for GNU readline
 
 Group:          Applications/Text
@@ -10,7 +10,6 @@ Source0:        http://utopia.knoware.nl/~hlub/rlwrap/rlwrap-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel
-#Requires:       
 
 %description
 rlwrap is a 'readline wrapper' that uses the GNU readline library to
@@ -44,7 +43,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc AUTHORS COPYING NEWS README
 %{_bindir}/rlwrap
 %{_mandir}/*/rlwrap.*
@@ -54,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.37-3
+- initial build for Mac OS X WorkShop 
+
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.37-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
