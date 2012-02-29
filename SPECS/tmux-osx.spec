@@ -1,12 +1,13 @@
 Summary: a terminal multiplexer
 Summary(ja): 端末多重化ユーティリティ
 Name: tmux
-Version: 1.5
-Release: 1%{?_dist_release}
+Version: 1.6
+Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # based on zsh patch http://www.zsh.org/mla/workers/2009/msg01145.html
 Source1: tmux_zshcomp
 Patch0: tmux-osxws.patch
+Patch1: tmux-cjkwidth.patch
 License: BSD
 Group: Applications/System
 URL: http://tmux.sourceforge.net/
@@ -21,11 +22,12 @@ tmux may be detached from a screen and continue running in the background, then 
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 export CPPFLAGS="-I%{_includedir}"
 export LDFLAGS="-L%{_libdir} -lresolv"
-%configure
+%configure CC='/usr/bin/gcc-4.2 -arch x86_64' CPP="/usr/bin/gcc-4.2 -E"
 make
 
 %install
@@ -54,10 +56,16 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES FAQ NOTES TODO
 
 %changelog
-* Thu Feb 16 2012 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 1.5-1
+* Tue Feb 21 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6-0
+- update to 1.6 
+
+* Tue Feb 21 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5-2
+- apply cjk patch
+
+* Thu Feb 16 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5-1
 - build x86_64 mono arch
 
-* Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 1.5-0
+* Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.5-0
 - update to tmux 1.5
 
 * Thu May 19 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4-1
