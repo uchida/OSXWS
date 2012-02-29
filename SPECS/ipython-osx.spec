@@ -1,7 +1,7 @@
 Summary: An interactive computing environment for Python
 Name: ipython
-Version: 0.10.2
-Release: 2%{?_dist_release}
+Version: 0.12
+Release: 0%{?_dist_release}
 Source0: http://pypi.python.org/packages/source/i/ipython/%{name}-%{version}.tar.gz
 License: BSD
 Group: Development/Languages
@@ -67,14 +67,17 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 %{_mandir}/*
 %{_datadir}/emacs/site-lisp/ipython.el
-%doc README.txt
+%doc docs/README.txt
 
 %files doc
 %defattr(-,root,wheel)
-%doc docs/dist/html docs/dist/ipython.pdf
-%doc docs/examples IPython/Extensions/igrid_help.*
+%doc docs/html
+%doc docs/examples
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-0
+- update to 0.12
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.10.2-2
 - mofify python requirements for OSXWS
 
