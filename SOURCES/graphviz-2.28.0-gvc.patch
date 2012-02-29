@@ -1,0 +1,12 @@
+diff -uNr graphviz-2.28.0.orig/lib/gvc/Makefile.in graphviz-2.28.0/lib/gvc/Makefile.in
+--- graphviz-2.28.0.orig/lib/gvc/Makefile.in	2012-02-29 18:07:22.000000000 +0900
++++ graphviz-2.28.0/lib/gvc/Makefile.in	2012-02-29 18:22:48.000000000 +0900
+@@ -42,7 +42,7 @@
+ @WITH_ORTHO_TRUE@am__append_2 = $(top_builddir)/lib/ortho/libortho_C.la
+ @WITH_ORTHO_TRUE@am__append_3 = $(top_builddir)/lib/ortho/libortho_C.la
+ @ENABLE_LTDL_TRUE@am__append_4 = $(LIBLTDL) $(LIBLTDL_LDFLAGS)
+-@ENABLE_LTDL_TRUE@am__append_5 = $(LIBLTDL)
++#@ENABLE_LTDL_TRUE@am__append_5 = $(LIBLTDL)
+ subdir = lib/gvc
+ DIST_COMMON = $(noinst_HEADERS) $(pkginclude_HEADERS) \
+ 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \

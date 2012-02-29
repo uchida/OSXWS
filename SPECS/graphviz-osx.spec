@@ -1,14 +1,14 @@
 Name:           graphviz
 Summary:        Graph Visualization Tools
-Version:        2.26.3
-Release:        2%{?_dist_release}
+Version:        2.28.0
+Release:        0%{?_dist_release}
 Group:          Applications/Graphics
 License:        CPL
 URL:            http://www.graphviz.org/
 
 Source:         http://www.graphviz.org/pub/%{name}/stable/SOURCES/%{name}-%{version}.tar.gz
 Patch0: graphviz-ptrdiff.patch
-Patch1: graphviz-quartz-libtool.patch
+Patch2: graphviz-2.28.0-gvc.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
@@ -52,7 +52,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+%patch2 -p1
 
 %build
 export CFLAGS="-I/usr/X11/include -I%{_includedir}"
@@ -83,6 +83,7 @@ export LDFLAGS="-L/usr/X11/lib -L%{_libdir}"
     --disable-r \
     --disable-ruby \
     --disable-tcl \
+    --without-qt \
     --with-quartz \
     --with-ghostscript
 sed -i.tag 's|LTOBJCCOMPILE = $(LIBTOOL)|LTOBJCCOMPILE = $(LIBTOOL) --tag=CC|g' plugin/quartz/Makefile
@@ -139,6 +140,9 @@ fi
 %doc __doc/*
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.28.0-0
+- update to 2.28.0
+
 * Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.26.3-2
 - build x86_64 mono arch
 
