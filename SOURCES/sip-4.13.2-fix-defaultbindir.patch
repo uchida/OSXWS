@@ -1,0 +1,12 @@
+diff -uNr sip-4.13.2.orig/configure.py sip-4.13.2/configure.py
+--- sip-4.13.2.orig/configure.py	2012-02-27 00:22:51.000000000 +0900
++++ sip-4.13.2/configure.py	2012-02-27 00:40:07.000000000 +0900
+@@ -267,7 +267,7 @@
+         "sip_bin":          os.path.join(opts.sipbindir, "sip"),
+         "sip_inc_dir":      opts.sipincdir,
+         "sip_mod_dir":      opts.sipmoddir,
+-        "default_bin_dir":  plat_bin_dir,
++        "default_bin_dir":  opts.sipbindir,
+         "default_mod_dir":  plat_py_site_dir,
+         "default_sip_dir":  opts.sipsipdir,
+         "py_version":       py_version,

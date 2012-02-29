@@ -1,15 +1,14 @@
-%define python_inc %(%{__python} -c "from distutils.sysconfig import get_python_inc; print get_python_inc()")
-
 Name:        sip
 Summary:     SIP - Python/C++ Bindings Generator
 Summary(ja): Python/C++ インターフェイス生成ツール
-Version:     4.12.4
+Version:     4.13.2
 Release:     0%{?_dist_release}
 
 License:     GPL
 Group:       Development/Tools
 URL:         http://www.riverbankcomputing.co.uk/software/sip/intro
 Source:      http://www.riverbankcomputing.co.uk/static/Downloads/sip4/%{name}-%{version}.tar.gz
+Patch0:      sip-4.13.2-fix-defaultbindir.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 %if "%{?_dist_release}" == "osx10.6"
@@ -21,7 +20,6 @@ BuildRequires: python-devel
 %endif
 Provides: python-sip = %{version}-%{release}
 Obsoletes: python-sip
-BuildArch: fat
 
 %description
 SIP is a tool for generating bindings for C++ classes so that they can be
@@ -54,16 +52,17 @@ classes library.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
-python configure.py -k -d %{python_sitearch} \
-    -b %{_bindir} --arch i386 --arch x86_64 \
-    CC="/usr/bin/gcc" CXX="/usr/bin/g++"
-make %{?_smp_mflags}
-
 python configure.py -d %{python_sitearch} \
-    -b %{_bindir} --arch i386 --arch x86_64 \
-    CC="/usr/bin/gcc" CXX="/usr/bin/g++"
+    -b %{_bindir} \
+    -e %{_includedir} \
+    -v %{_datadir}/%{name} \
+    CC='/usr/bin/gcc' \
+    CXX='/usr/bin/g++' \
+    --arch x86_64 \
+    --deployment-target 10.5
 make %{?_smp_mflags}
 
 %install
@@ -72,26 +71,28 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 install sipconfig.pyc $RPM_BUILD_ROOT%{python_sitearch}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}
-install -m644 siplib/libsip.a $RPM_BUILD_ROOT%{_libdir}/libsip.a
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/sip
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-, root, root, 755)
+%defattr(-,root,wheel,755)
 %doc LICENSE LICENSE-GPL2 LICENSE-GPL3 NEWS README 
 %doc doc/html
 %{_bindir}/sip
 %{python_sitearch}/*
 
 %files devel
-%defattr(-, root, root, 755)
-%{python_inc}/*
-%{_libdir}/libsip.a
+%defattr(-,root,wheel,755)
+%{_includedir}/sip.h
 %dir %{_datadir}/sip
 
 %changelog
+* Sat Feb 18 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 4.13.2-0
+- update to 4.13.2
+- build x86_64 mono arch
+
 * Fri Oct 21 2011 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 4.12.4-0
 - update to 4.12.4
 
