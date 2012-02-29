@@ -1,6 +1,6 @@
 Name:           python-Traits
 Version:        3.6.0
-Release:        3%{?_dist_release}
+Release:        4%{?_dist_release}
 Summary:        Explicitly typed attributes for Python
 Group:          Development/Libraries
 # Images have different licenses. For image license breakdown check
@@ -19,7 +19,6 @@ BuildRequires: python-devel
 %endif
 BuildRequires:  python-setupdocs, python-setuptools
 Requires:       python-numpy
-BuildArch:      fat
 
 %description
 The traits package developed by Enthought provides a special type
@@ -64,9 +63,11 @@ iconv -f iso8859-1 -t utf-8 image_LICENSE_Eclipse.txt \
  image_LICENSE_Eclipse.txt.conv image_LICENSE_Eclipse.txt
 
 %build
+export ARCHFLAGS=''
 python setup.py build
 
 %install
+export ARCHFLAGS=''
 python setup.py install --skip-build --root $RPM_BUILD_ROOT
 
 rm $RPM_BUILD_ROOT%{python_sitearch}/enthought/traits/protocols/_speedups.c
@@ -82,6 +83,9 @@ rm $RPM_BUILD_ROOT%{python_sitearch}/enthought/traits/ctraits.c
 %{python_sitearch}/enthought/traits
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-4
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.0-3
 - mofify python requirements for OSXWS
 

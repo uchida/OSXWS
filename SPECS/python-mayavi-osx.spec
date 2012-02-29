@@ -1,6 +1,6 @@
 Name:           python-mayavi
 Version:        3.4.1
-Release:        4%{?_dist_release}
+Release:        5%{?_dist_release}
 Summary:        Scientific data 3-dimensional visualizer
 Group:          Applications/Edutainment
 License:        BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3
@@ -15,8 +15,6 @@ BuildRequires: python-devel
 %endif
 BuildRequires:  python-setuptools, python-setupdocs
 BuildRequires:  python-numpy, vtk-python
-BuildRequires:  apple-gcc
-BuildArch:      fat
 Requires:       vtk-python, python-AppTools
 # EnthoughtBase, Traits[ui] and numpy come with TraitsGUI
 # TraitsGUI comes with AppTools
@@ -81,12 +79,11 @@ chmod 0644 enthought/mayavi/tests/data/cellsnd.ascii.inp
 unzip docs/html.zip
 
 %build
-export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
-export F77='/usr/osxws/bin/gfortran-4.2' F90='/usr/osxws/bin/gfortran-4.2'
-export ARCHFLAGS="-arch i386 -arch x86_64"
+export ARCHFLAGS=""
 python setup.py build
 
 %install
+export ARCHFLAGS=""
 python setup.py install --skip-build --root $RPM_BUILD_ROOT \
                         --install-scripts=%{_bindir} --install-data=%{_prefix}
 
@@ -121,6 +118,9 @@ mv docs/build/tvtk/html build/docs/tvtk
 %doc build/docs/*
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-5
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.4.1-4
 - mofify python requirements for OSXWS
 

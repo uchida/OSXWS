@@ -3,7 +3,7 @@
 Summary: The Cython compiler for writing C extensions for the Python language 
 Name: python-%{modulename}
 Version: 0.15.1
-Release: 0%{?_dist_release}
+Release: 1%{?_dist_release}
 Source0: http://cython.org/release/%{modulename}-%{version}.tar.gz
 Patch1: Cython-mac-python.patch
 License: Apache
@@ -21,9 +21,8 @@ BuildRequires: python-devel > 2.6.1
 BuildRequires: python-devel
 %endif
 BuildRequires: python-numpy
-BuildRequires: apple-gcc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
+BuildArch: x86_64
 
 %description
 The Cython language makes writing C extensions for the Python language as
@@ -45,9 +44,8 @@ code.
 %patch1 -p1
 
 %build
-export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
-export ARCHFLAGS="-arch i386 -arch x86_64"
-python setup.py build
+export ARCHFLAGS=''
+python setup.py build_ext
 
 # In v0.14.1, runtests.py fails with 1 declarations and 2 numpy error
 %check
@@ -55,7 +53,8 @@ python runtests.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
-python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
+export ARCHFLAGS=''
+python setup.py install --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -68,6 +67,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.txt INSTALL.txt LICENSE.txt README.txt ToDo.txt USAGE.txt
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.15.1-1
+- build x86_64 mono arch
+
 * Fri Oct 21 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.15.1-0
 - update to 0.15.1
 
