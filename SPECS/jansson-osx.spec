@@ -1,6 +1,6 @@
 Name: jansson
-Version: 2.2.1
-Release: 1%{?_dist_release}
+Version: 2.3
+Release: 0%{?_dist_release}
 Summary: C library for working with JSON dataColor Management System
 Group: Development/Libraries
 License: MIT
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/_build/html/*
 
 %changelog
+* Mon Feb 20 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.3-0
+- update to 2.3
+
 * Thu Feb 16 2012 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 2.2.1-1
 - build x86_64 mono arch
 
