@@ -1,0 +1,46 @@
+--- ddskk-11.6.0/SKK-MK.orig	Sun Dec 16 12:56:34 2001
++++ ddskk-11.6.0/SKK-MK	Thu Dec 27 10:52:03 2001
+@@ -794,8 +794,8 @@
+       (make-directory PACKAGE_LISPDIR t))
+     (unless (file-exists-p PACKAGE_DATADIR)
+       (make-directory PACKAGE_DATADIR t))
+-    (unless (file-exists-p PACKAGE_INFODIR)
+-      (make-directory PACKAGE_INFODIR t))
++;;    (unless (file-exists-p PACKAGE_INFODIR)
++;;      (make-directory PACKAGE_INFODIR t))
+     ;; delete already installed unnecessary files.
+     (setq SKK_MODULES (delq 'skk-autoloads
+ 			    (append
+@@ -895,19 +895,19 @@
+     ;; install skk-setup.el
+     (install-elisp-modules (list 'skk-setup) "." PACKAGE_LISPDIR)
+     ;; install infos.
+-    (SKK-MK-compile-info)
+-    (when SKK_INFO
+-      (let ((files (list SKK_INFO))
+-	    (i 1)
+-	    file)
+-	(while (file-exists-p
+-		(expand-file-name
+-		 (setq file (format "%s-%d" SKK_INFO i))
+-		 DOCDIR))
+-	  (setq files (cons file files))
+-	  (setq i (1+ i)))
+-	(install-files (nreverse files) DOCDIR
+-		       PACKAGE_INFODIR nil t nil)))
++;;    (SKK-MK-compile-info)
++;;    (when SKK_INFO
++;;      (let ((files (list SKK_INFO))
++;;	    (i 1)
++;;	    file)
++;;	(while (file-exists-p
++;;		(expand-file-name
++;;		 (setq file (format "%s-%d" SKK_INFO i))
++;;		 DOCDIR))
++;;	  (setq files (cons file files))
++;;	  (setq i (1+ i)))
++;;	(install-files (nreverse files) DOCDIR
++;;		       PACKAGE_INFODIR nil t nil)))
+     ;; install tutorials.
+     (install-files SKK_TUTORIALS ETCDIR
+ 		   PACKAGE_DATADIR nil t nil)

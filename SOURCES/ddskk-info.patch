@@ -1,0 +1,10 @@
+--- ddskk-11.6.0/doc/skk.texi.orig	Sun Dec 16 20:01:55 2001
++++ ddskk-11.6.0/doc/skk.texi	Mon Feb 11 17:23:13 2002
+@@ -16,7 +16,6 @@
+ @set UPDATED $Date: 2001/12/16 11:01:55 $
+ 
+ @dircategory Emacs
+-@dircategory GNU Emacs Lisp
+ @direntry
+ * SKK: (skk).           Simple Kana to Kanji conversion program.
+ @end direntry
