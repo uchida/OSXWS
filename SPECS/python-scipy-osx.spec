@@ -4,14 +4,14 @@
 Summary: Scientific Library for Python
 Summary(ja): Python 科学技術計算ライブラリ
 Name: python-%{modulename}
-Version: 0.9.0
-Release: 4%{?_dist_release}
+Version: 0.10.1
+Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
+Source1: numpy-site.cfg
 License: BSD
 Group: Development/Languages
 URL: http://www.scipy.org
 
-Requires: apple-gcc
 %if "%{?_dist_release}" == "osx10.6"
 Requires: python > 2.6.1
 BuildRequires: python-devel > 2.6.1
@@ -22,11 +22,12 @@ BuildRequires: python-devel
 Requires: python-numpy
 Requires: suitesparse-devel
 Requires: python-nose
-BuildRequires: apple-gcc
+%if "%{?_dist_release}" == "osx10.7"
+BuildRequires: gcc >= 4.6.2
+%endif
 BuildRequires: python-numpy
 BuildRequires: suitesparse-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-BuildArch: fat
 
 %description
 SciPy (pronounced "Sigh Pie") is open-source software for mathematics, science, and engineering. The SciPy library depends on NumPy, which provides convenient and fast N-dimensional array manipulation. The SciPy library is built to work with NumPy arrays, and provides many user-friendly and efficient numerical routines such as routines for numerical integration and optimization. Together, they run on all popular operating systems, are quick to install, and are free of charge. NumPy and SciPy are easy to use, but powerful enough to be depended upon by some of the world's leading scientists and engineers. If you need to manipulate numbers on a computer and display or publish the results, give SciPy a try!
@@ -53,11 +54,11 @@ This package contains documentation files for %{name}.
 
 %prep
 %setup -q -n %{modulename}-%{version}
+cp -pf %{SOURCE1} site.cfg
 
 %build
-export CC='/usr/osxws/bin/gcc-4.2' CXX='/usr/osxws/bin/g++-4.2'
-export F77='/usr/osxws/bin/gfortran-4.2' F90='/usr/osxws/bin/gfortran-4.2'
-export ARCHFLAGS='-arch i386 -arch x86_64'
+export ARCHFLAGS=''
+export CC='clang' CXX='clang++' FFLAGS='-ff2c'
 python setup.py build
 
 for f in `find $RPM_BUILD_DIR/build -type f -name __config__.py`; do
@@ -67,23 +68,23 @@ done
 
 %if %{with doc}
 pushd doc
-make html latex
-pushd build/latex
-make all-pdf
-popd
+make html
 popd
 %endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-python setup.py install --skip-build --root=$RPM_BUILD_ROOT
+export ARCHFLAGS=''
+export CC='clang' CXX='clang++' FFLAGS='-ff2c'
+python setup.py install --root=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,wheel)
-%{python_sitelib}/*
+%{python_sitelib}/%{modulename}
+%{python_sitelib}/%{modulename}-%{version}-py%{pyver}.egg-info
 %if %{with doc}
 %files doc
 %doc doc/build/html
@@ -91,6 +92,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sat Mar 03 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.10.1-0
+- update to 0.10.1
+- build x86_64 mono arch
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.0-4
 - mofify python requirements for OSXWS
 
