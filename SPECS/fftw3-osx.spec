@@ -2,7 +2,7 @@
 
 Summary: Fast Fourier Transform library
 Name: fftw3
-Version: 3.2.2
+Version: 3.3
 Release: 0%{?_dist_release}
 License: GPL
 Group: System Environment/Libraries
@@ -10,9 +10,9 @@ URL: http://www.fftw.org/
 
 Source: http://www.fftw.org/fftw-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{distname}-%{version}-root
-BuildArch: fat
-Requires: apple-gcc
-BuildRequires: apple-gcc
+%if "%{?_dist_release}" == "osx10.7"
+BuildRequires: gcc >= 4.6.2
+%endif
 
 %description
 FFTW is a C subroutine library for computing the Discrete Fourier Transform
@@ -36,10 +36,7 @@ you will need to install %{name}-devel.
 %setup -q -n %{distname}-%{version}
 
 %build
-export CC="/usr/osxws/bin/gcc-4.2 -arch i386 -arch x86_64"
-export CXX="/usr/osxws/bin/g++-4.2 -arch i386 -arch x86_64"
-export F77="/usr/osxws/bin/gfortran-4.2 -arch i386 -arch x86_64"
-export CPP="/usr/osxws/bin/gcc-4.2 -E"
+export CC="/usr/bin/gcc" CXX="/usr/bin/g++" F77="%{_bindir}/gfortran"
 ./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
             --bindir=%{_bindir} --sbindir=%{_sbindir} \
             --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} \
@@ -83,6 +80,10 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_libdir}/lib*.*.*
 
 %changelog
+* Sun Mar 04 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.3-0
+- update to 3.3
+- build x86_64 mono arch
+
 * Tue Nov  9 2010 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.2.2-0
 - initial build for Mac OS X WorkShop
 
