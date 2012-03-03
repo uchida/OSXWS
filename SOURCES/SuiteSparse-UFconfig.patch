@@ -1,27 +1,18 @@
 diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
---- SuiteSparse.orig/UFconfig/UFconfig.mk	2012-02-18 21:44:58.000000000 +0900
-+++ SuiteSparse/UFconfig/UFconfig.mk	2012-02-18 21:45:48.000000000 +0900
-@@ -41,7 +41,7 @@
+--- SuiteSparse.orig/UFconfig/UFconfig.mk	2012-03-04 01:55:08.000000000 +0900
++++ SuiteSparse/UFconfig/UFconfig.mk	2012-03-04 02:05:01.000000000 +0900
+@@ -66,8 +66,8 @@
+ # RM = rm -f
  
- # ranlib, and ar, for generating libraries
- RANLIB = ranlib
--AR = ar cr
-+AR = libtool -static -o
- 
- # copy, delete, and rename a file
- CP = cp -f
-@@ -49,8 +49,8 @@
- MV = mv -f
- 
- # Fortran compiler (not normally required)
--F77 = f77
--F77FLAGS = -O
-+F77 = gfortran
-+F77FLAGS = -O2 -arch i386 -arch x86_64
+ # Fortran compiler (not required for 'make' or 'make library')
+-F77 = gfortran
+-F77FLAGS = $(FFLAGS) -O
++F77 = /usr/bin/gfortran
++F77FLAGS = $(FFLAGS) -O2
  F77LIB =
  
  # C and Fortran libraries
-@@ -132,8 +132,8 @@
+@@ -148,8 +148,8 @@
  # The path is relative to where it is used, in CHOLMOD/Lib, CHOLMOD/MATLAB, etc.
  # You may wish to use an absolute path.  METIS is optional.  Compile
  # CHOLMOD with -DNPARTITION if you do not wish to use METIS.
@@ -30,18 +21,18 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
 +METIS_PATH = 
 +METIS = 
  
- # If you use CHOLMOD_CONFIG = -DNPARTITION then you must use the following
- # options:
-@@ -194,7 +194,7 @@
+ #------------------------------------------------------------------------------
+ # UMFPACK configuration:
+@@ -211,7 +211,7 @@
  # -DNSUNPERF	    for Solaris only.  If defined, do not use the Sun
  #			Performance Library
  
 -CHOLMOD_CONFIG =
 +CHOLMOD_CONFIG = -DNPARTITION
  
- #------------------------------------------------------------------------------
- # SuiteSparseQR configuration:
-@@ -208,7 +208,7 @@
+ # uncomment this line to compile CHOLMOD without METIS:
+ # CHOLMOD_CONFIG = -DNPARTITION
+@@ -228,7 +228,7 @@
  # -DHAVE_TBB        enable the use of Intel's Threading Building Blocks (TBB)
  
  # default, without timing, without TBB:
@@ -50,7 +41,7 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
  # with timing and TBB:
  # SPQR_CONFIG = -DTIMING -DHAVE_TBB
  # with timing
-@@ -328,11 +328,11 @@
+@@ -348,11 +348,11 @@
  # Macintosh
  #------------------------------------------------------------------------------
  
@@ -59,9 +50,9 @@ diff -uNr SuiteSparse.orig/UFconfig/UFconfig.mk SuiteSparse/UFconfig/UFconfig.mk
 -# LIB = -lstdc++
 -# BLAS = -framework Accelerate
 -# LAPACK = -framework Accelerate
-+CC = gcc
-+CFLAGS = -O2 -fno-common -no-cpp-precomp -fexceptions -arch i386 -arch x86_64
-+LIB = -lstdc++ -arch i386 -arch x86_64
++CC = /usr/bin/gcc
++CFLAGS = -O3 -fno-common -no-cpp-precomp -fexceptions
++LIB = -lstdc++
 +BLAS = -framework Accelerate
 +LAPACK = -framework Accelerate
  
