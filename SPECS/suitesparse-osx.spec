@@ -1,6 +1,6 @@
 Name: suitesparse
 Version: 3.6.1
-Release: 1%{?_dist_release}
+Release: 2%{?_dist_release}
 Summary: A collection of sparse matrix libraries
 
 Group: System Environment/Libraries
@@ -420,8 +420,10 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files devel
 %defattr(-,root,wheel)
-%{_includedir}/%{name}
 %{_libdir}/lib*.dylib
+%dir %{_includedir}/%{name}/
+%defattr(644,root,wheel)
+%{_includedir}/%{name}/*.h
 
 %files static
 %defattr(-,root,wheel)
@@ -432,6 +434,9 @@ rm -rf ${RPM_BUILD_ROOT}
 %doc Doc/*
 
 %changelog
+* Sun Mar 04 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.1-2
+- make header file readable
+
 * Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.6.1-1
 - build x86_64 mono arch 
 
