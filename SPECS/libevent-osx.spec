@@ -3,7 +3,7 @@
 Summary:        Abstract asynchronous event notification library
 Summary(ja):	非同期イベント通知ライブラリ
 Name:           libevent
-Version:        2.0.15
+Version:        2.0.17
 Release:        0%{?_dist_release}
 Group:          System Environment/Libraries
 License:        BSD
@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc INTEL/sample/*.c
 
 %changelog
+* Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.0.17-0
+- update to 2.0.17
+
 * Thu Feb 16 2012 Akihiro Uchida	<uchida@ike-dyn.ritsumei.ac.jp> 2.0.15-1
 - build x86_64 mono arch
 
