@@ -44,11 +44,22 @@ code.
 
 %build
 export ARCHFLAGS=''
+export CC='clang' CXX='clang++'
+export CFLAGS='-dynamic -Os -g -pipe -fno-strict-aliasing -fno-common -fwrapv -DENABLE_DTRACE -DMACOSX -DNDEBUG'
+export CXXFLAGS='-dynamic -Os -g -pipe -fno-strict-aliasing -fno-common -fwrapv -DENABLE_DTRACE -DMACOSX -DNDEBUG'
+export OPT='-DNDEBUG -g -fwrapv -Os'
 python setup.py build
+
+#%check
+#python runtests.py -v
 
 %install
 rm -rf $RPM_BUILD_ROOT
 export ARCHFLAGS=''
+export CC='clang' CXX='clang++'
+export CFLAGS='-dynamic -Os -g -pipe -fno-strict-aliasing -fno-common -fwrapv -DENABLE_DTRACE -DMACOSX -DNDEBUG'
+export CXXFLAGS='-dynamic -Os -g -pipe -fno-strict-aliasing -fno-common -fwrapv -DENABLE_DTRACE -DMACOSX -DNDEBUG'
+export OPT='-DNDEBUG -g -fwrapv -Os'
 python setup.py install --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 
 %clean

@@ -24,6 +24,8 @@ lists can be specified on the command line.
 
 
 %build
+export CFLAGS="-I%{_includedir}"
+export LDFLAGS="-L%{_libdir}"
 %configure
 make %{?_smp_mflags}
 

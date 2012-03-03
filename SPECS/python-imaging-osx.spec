@@ -51,7 +51,7 @@ python selftest.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export CC='/usr/bin/gcc-4.2' ARCHFLAGS='-arch x86_64'
+export ARCHFLAGS='-arch x86_64'
 python setup.py install --root=$RPM_BUILD_ROOT --install-scripts=%{_bindir}
 
 mkdir -p $RPM_BUILD_ROOT%{python_sitearch}/Sane

@@ -82,7 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples
 %if %{with doc}
 %files doc
-%doc doc/_build/html doc/_build/sympy.pdf
+%doc doc/_build/html
 %endif
 
 %changelog

@@ -8,9 +8,6 @@ Version: 1.1.0
 Release: 0%{?_dist_release}
 Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
 Patch0: matplotlib-setup.cfg.patch
-# sphinx >= 1.0.6 compatible patch
-# http://sourceforge.net/tracker/?func=detail&aid=3165692&group_id=80706&atid=560722
-Patch1: matplotlib-doc-small.patch
 License: PSF
 Group: Development/Languages
 URL: http://matplotlib.sourceforge.net
@@ -65,7 +62,6 @@ This package contains documentation files for %{name}.
 %prep
 %setup -q -n %{modulename}-%{version}
 %patch0 -p1
-#%patch1 -p1
 
 %build
 export ARCHFLAGS=''
@@ -74,7 +70,7 @@ export OPT='-DNDEBUG -g -fwrapv -Os'
 python setup.py build_ext
 %if %{with doc}
 pushd doc
-python make.py --small html latex
+python make.py --small html
 popd
 %endif
 
@@ -101,7 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with doc}
 %files doc
 %defattr(-,root,wheel)
-%doc doc/build/html doc/build/latex/matplotlib.pdf
+%doc doc/build/html
 %endif
 
 %changelog

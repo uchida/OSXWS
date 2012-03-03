@@ -27,7 +27,7 @@ tmux may be detached from a screen and continue running in the background, then 
 %build
 export CPPFLAGS="-I%{_includedir}"
 export LDFLAGS="-L%{_libdir} -lresolv"
-%configure CC='/usr/bin/gcc-4.2 -arch x86_64' CPP="/usr/bin/gcc-4.2 -E"
+%configure CC='/usr/bin/gcc'
 make
 
 %install
