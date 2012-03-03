@@ -1,0 +1,201 @@
+diff -r 65e4c29a24e4 sphinx/quickstart.py
+--- a/sphinx/quickstart.py	Tue Nov 01 21:46:01 2011 +0100
++++ b/sphinx/quickstart.py	Tue Nov 22 19:34:09 2011 +0900
+@@ -392,6 +392,7 @@
+ \t@echo "  epub       to make an epub"
+ \t@echo "  latex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
+ \t@echo "  latexpdf   to make LaTeX files and run them through pdflatex"
++\t@echo "  latexpdfja to make LaTeX files and run them through platex and dvipdfmx"
+ \t@echo "  text       to make text files"
+ \t@echo "  man        to make manual pages"
+ \t@echo "  texinfo    to make Texinfo files"
+@@ -473,6 +474,12 @@
+ \t$(MAKE) -C $(BUILDDIR)/latex all-pdf
+ \t@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
+ 
++latexpdfja:
++\t$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
++\t@echo "Running LaTeX files through platex and dvipdfmx..."
++\t$(MAKE) -C $(BUILDDIR)/latex all-pdf-ja
++\t@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
++
+ text:
+ \t$(SPHINXBUILD) -b text $(ALLSPHINXOPTS) $(BUILDDIR)/text
+ \t@echo
+@@ -650,6 +657,26 @@
+ \tgoto end
+ )
+ 
++if "%%1" == "latexpdf" (
++\t%%SPHINXBUILD%% -b latex %%ALLSPHINXOPTS%% %%BUILDDIR%%/latex
++\tcd %%BUILDDIR%%/latex
++\tmake all-pdf
++\tcd %%BUILDDIR%%/..
++\techo.
++\techo.Build finished; the PDF files are in %%BUILDDIR%%/latex.
++\tgoto end
++)
++
++if "%%1" == "latexpdfja" (
++\t%%SPHINXBUILD%% -b latex %%ALLSPHINXOPTS%% %%BUILDDIR%%/latex
++\tcd %%BUILDDIR%%/latex
++\tmake all-pdf-ja
++\tcd %%BUILDDIR%%/..
++\techo.
++\techo.Build finished; the PDF files are in %%BUILDDIR%%/latex.
++\tgoto end
++)
++
+ if "%%1" == "text" (
+ \t%%SPHINXBUILD%% -b text %%ALLSPHINXOPTS%% %%BUILDDIR%%/text
+ \tif errorlevel 1 exit /b 1
+diff -r 65e4c29a24e4 sphinx/texinputs/Makefile
+--- a/sphinx/texinputs/Makefile	Tue Nov 01 21:46:01 2011 +0100
++++ b/sphinx/texinputs/Makefile	Tue Nov 22 19:34:09 2011 +0900
+@@ -16,11 +16,11 @@
+ 	for f in *.dvi; do dvips $$f; done
+ 
+ all-pdf-ja:
+-	for f in *.pdf *.png *.gif *.jpg *.jpeg; do ebb $$f; done
++	for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $$f; done
+ 	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
+ 	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
+ 	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
+-	for f in *.idx; do mendex -U -f -d "`basename $$f .idx`.dic" -s python.ist $$f; done
++	-for f in *.idx; do mendex -U -f -d "`basename $$f .idx`.dic" -s python.ist $$f; done
+ 	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
+ 	for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
+ 	for f in *.dvi; do dvipdfmx $$f; done
+diff -r 65e4c29a24e4 sphinx/texinputs/fncychap.sty
+--- a/sphinx/texinputs/fncychap.sty	Tue Nov 01 21:46:01 2011 +0100
++++ b/sphinx/texinputs/fncychap.sty	Tue Nov 22 19:34:09 2011 +0900
+@@ -178,6 +178,9 @@
+   \renewcommand{\DOCH}{%
+     \raggedleft
+     \CNV\FmN{\@chapapp}\space \CNoV\thechapter
++    \ifx\@chappos\undefined\else
++      \CNV\FmN{\@chappos}
++    \fi
+     \par\nobreak
+     \vskip 40\p@}
+   \renewcommand{\DOTI}[1]{%
+diff -r 65e4c29a24e4 sphinx/texinputs/sphinx.sty
+--- a/sphinx/texinputs/sphinx.sty	Tue Nov 01 21:46:01 2011 +0100
++++ b/sphinx/texinputs/sphinx.sty	Tue Nov 22 19:34:09 2011 +0900
+@@ -45,6 +45,13 @@
+ %\renewcommand{\paperwidth}{8.5in}   % typical squarish manual
+ %\renewcommand{\paperwidth}{7in}     % O'Reilly ``Programmming Python''
+ 
++% use pdfoutput for pTeX and dvipdfmx
++\ifx\kanjiskip\undefined\else
++  \ifx\Gin@driver{dvipdfmx.def}\undefined\else
++    \newcount\pdfoutput\pdfoutput=0
++  \fi
++\fi
++
+ % For graphicx, check if we are compiling under latex or pdflatex.
+ \ifx\pdftexversion\undefined
+   \usepackage{graphicx}
+@@ -111,6 +118,10 @@
+     \fancyhead[LE,RO]{{\py@HeaderFamily \@title, \py@release}}
+     \renewcommand{\headrulewidth}{0.4pt}
+     \renewcommand{\footrulewidth}{0.4pt}
++    \ifx\@chappos\undefined\else
++      \def\chaptermark##1{\markboth{
++          \@chapapp\space\thechapter\space\@chappos\space ##1}{}}
++    \fi
+   }
+   % Update the plain style so we get the page number & footer line,
+   % but not a chapter or section title.  This is to keep the first
+@@ -422,6 +433,21 @@
+   \addcontentsline{toc}{chapter}{\bibname}
+ }
+ 
++% to make pdf with correct encoded bookmarks in Japanese
++% this should precede the hyperref package
++\ifx\kanjiskip\undefined\else
++  \usepackage{atbegshi}
++  \ifx\ucs\undefined
++    \ifnum 42146=\euc"A4A2
++      \AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
++    \else
++      \AtBeginShipoutFirst{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
++    \fi
++  \else
++    \AtBeginShipoutFirst{\special{pdf:tounicode UTF8-UCS2}}
++  \fi
++\fi
++
+ % Include hyperref last.
+ \RequirePackage[colorlinks,breaklinks,
+                 linkcolor=InnerLinkColor,filecolor=OuterLinkColor,
+@@ -479,3 +505,37 @@
+     \@gobble
+ }
+ \def\FN@sf@gobble@twobracket[#1]#2{}
++
++% to adjust the margins for footer,
++% this works with the jsclasses (Japanese standard document classes)
++\ifx\@jsc@uplatextrue\undefined\else
++  \hypersetup{setpagesize=false}
++  \setlength\footskip{2\baselineskip}
++  \addtolength{\textheight}{-2\baselineskip}
++\fi
++
++% fix double index and bibliography
++% in jsclasses (Japanese standard document classes)
++\ifx\@jsc@uplatextrue\undefined\else
++  \renewcommand{\theindex}{
++    \cleardoublepage
++    \phantomsection
++    \py@OldTheindex
++  }
++  \renewcommand{\thebibliography}[1]{
++    \cleardoublepage
++    \phantomsection
++    \py@OldThebibliography{1}
++  }
++\fi
++
++% do not use \@chappos in Appendix in pTeX
++\ifx\kanjiskip\undefined\else
++  \renewcommand{\appendix}{\par
++    \setcounter{chapter}{0}
++      \setcounter{section}{0}
++      \gdef\@chapapp{\appendixname}
++      \gdef\@chappos{}
++      \gdef\thechapter{\@Alph\c@chapter}
++  }
++\fi
+diff -r 65e4c29a24e4 sphinx/writers/latex.py
+--- a/sphinx/writers/latex.py	Tue Nov 01 21:46:01 2011 +0100
++++ b/sphinx/writers/latex.py	Tue Nov 22 19:34:09 2011 +0900
+@@ -47,6 +47,10 @@
+ \date{%(date)s}
+ \release{%(release)s}
+ \author{%(author)s}
++\hypersetup{
++  pdftitle={%(title)s},
++  pdfauthor={%(author)s},
++}
+ \newcommand{\sphinxlogo}{%(logo)s}
+ \renewcommand{\releasename}{%(releasename)s}
+ %(makeindex)s
+@@ -204,13 +208,10 @@
+ 
+             # pTeX (Japanese TeX) for support
+             if builder.config.language == 'ja':
+-                self.elements['classoptions'] = ',dvipdfm'
+-                # found elements of babel, but this should be above sphinx.sty.
+-                # because pTeX (Japanese TeX) cannot handle this count.
+-                self.elements['babel'] = r'\newcount\pdfoutput\pdfoutput=0'
+-                # to make the pdf with correct encoded hyperref bookmarks
+-                self.elements['preamble'] += \
+-                    r'\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}'
++                # use dvipdfmx as default class option in Japanese
++                self.elements['classoptions'] = ',dvipdfmx'
++                # disable babel which has not publishing quality in Japanese
++                self.elements['babel'] = ''
+         else:
+             self.elements['classoptions'] += ',english'
+         # allow the user to override them all

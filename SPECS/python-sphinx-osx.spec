@@ -1,6 +1,6 @@
 Name:       python-sphinx
-Version:    1.0.7
-Release:    3%{?_dist_release}
+Version:    1.1.2
+Release:    1%{?_dist_release}
 Summary:    Python documentation generator
 
 Group:      Development/Tools
@@ -12,16 +12,8 @@ Group:      Development/Tools
 License: BSD and Public Domain and Python and (MIT or GPLv2)
 URL:        http://sphinx.pocoo.org/
 Source0:    http://pypi.python.org/packages/source/S/Sphinx/Sphinx-%{version}.tar.gz
-# hg clone http://bitbucket.org/shibu/sphinx-domains-docjp
-# tar -czvf sphinx-docjp-20101201.tar.gz -C sphinx-domains-docjp docjp
-Source1: sphinx-docjp-20101201.tar.gz
-Source2: sphinx.dic
-# http://bitbucket.org/birkenfeld/sphinx/issue/613
-Patch1: sphinx-1.0.7-ptex.patch
-# to build sphinx-docjp
-Patch2: sphinx-docjp.patch
-# http://bitbucket.org/birkenfeld/sphinx/issue/613
-Patch3: sphinx-1.0.7-idescape.patch
+#
+Patch1: sphinx-ptex.patch
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch:     noarch
@@ -91,27 +83,9 @@ useful to many other projects.
 
 This package contains documentation in reST and HTML formats.
 
-%package docjp
-Summary:    Japanese documentation for %{name}
-Group:      Japanese documentation
-License:    BSD
-Requires:   %{name} = %{version}-%{release}
-
-%description docjp
-Sphinx is a tool that makes it easy to create intelligent and
-beautiful documentation for Python projects (or other documents
-consisting of multiple reStructuredText sources), written by Georg
-Brandl. It was originally created to translate the new Python
-documentation, but has now been cleaned up in the hope that it will be
-useful to many other projects.
-
-This package contains Japanse documentation in PDF and HTML formats.
-
 %prep
-%setup -q -a 1 -n Sphinx-%{version}
-%patch1 -p1 
-%patch2 -p0
-%patch3 -p1
+%setup -q -n Sphinx-%{version}
+#%patch1 -p1
 sed -i.tmp '1d' sphinx/pycode/pgen2/token.py
 rm -f sphinx/pycode/pgen2/token.py.tmp
 
@@ -127,18 +101,6 @@ mv _build/latex/sphinx.pdf ..
 make man
 mv _build/man ..
 rm -rf _*
-popd
-
-pushd docjp
-make html
-rm -rf _build/html/.buildinfo
-mv _build/html .
-make latex
-pushd _build/latex
-cp %{SOURCE2} .
-make all-pdf-ja
-popd
-mv _build/latex/sphinx.pdf .
 popd
 
 %install
@@ -169,11 +131,13 @@ make test
 %defattr(-,root,wheel)
 %doc html reST sphinx.pdf
 
-%files docjp
-%defattr(-,root,wheel)
-%doc docjp/html docjp/sphinx.pdf
-
 %changelog
+* Tue Nov 22 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.2-1
+- improve pLaTeX support
+
+* Sat Nov 05 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.1.2-0
+- update to 1.1.2
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.0.7-3
 - mofify python requirements for OSXWS
 
