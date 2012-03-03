@@ -1,0 +1,47 @@
+diff -uNr readline-6.2.2.orig/setup.py readline-6.2.2/setup.py
+--- readline-6.2.2.orig/setup.py	2012-02-24 19:42:49.000000000 +0900
++++ readline-6.2.2/setup.py	2012-02-29 14:28:51.000000000 +0900
+@@ -43,7 +43,7 @@
+         UNIVERSAL = '-isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64'
+     elif osx_version > '10.6':
+         # Starting with 10.7 (Lion) and Xcode 4.3, the developer sysroot is inside the Xcode.app - ignore it
+-        UNIVERSAL = '-arch i386 -arch x86_64'
++        UNIVERSAL = '-arch x86_64'
+ 
+ # Since we have the latest readline (post 4.2), enable all readline functionality
+ # These macros can be found in pyconfig.h.in in the main directory of the Python tarball
+@@ -69,18 +69,6 @@
+     if s in ['--verbose', '-v']:
+         verbose = True
+     
+-# Build readline first, if it is not there and we are building the module
+-if building and not os.path.exists('readline/libreadline.a'):
+-    if verbose:
+-        print("\n============ Building the readline library ============\n")
+-        os.system('cd rl && /bin/bash ./build.sh')
+-        print("\n============ Building the readline extension module ============\n")
+-    else:
+-        os.system('cd rl && /bin/bash ./build.sh > /dev/null 2>&1')        
+-    # Add symlink that simplifies include and link paths to real library
+-    if not (os.path.exists('readline') or os.path.islink('readline')):
+-        os.symlink(os.path.join('rl','readline-lib'), 'readline')
+-
+ setup(
+     name="readline",
+     version=VERSION,
+@@ -96,12 +84,12 @@
+     ext_modules=[
+         Extension(name="readline",
+                   sources=["Modules/%s.x/readline.c" % (sys.version_info[0],)],
+-                  include_dirs=['.'],
++                  include_dirs=['.', '/usr/osxws/include'],
++                  library_dirs=['/usr/osxws/lib'],
+                   define_macros=DEFINE_MACROS,
+                   extra_compile_args=['-Wno-strict-prototypes'] + UNIVERSAL.split(),
+                   extra_link_args=UNIVERSAL.split(),
+-                  extra_objects=['readline/libreadline.a', 'readline/libhistory.a'], 
+-                  libraries=['ncurses']
++                  libraries=['readline', 'ncurses']
+         ),
+     ],
+     zip_safe=False,
