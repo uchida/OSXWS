@@ -6,8 +6,8 @@
 Summary: an open-source text processing system written in Python
 Summary(ja): Pythonで書かれたテキスト処理システム
 Name: python-%{srcname}
-Version: 0.7
-Release: 4%{?_dist_release}
+Version: 0.8.1
+Release: 0%{?_dist_release}
 Group: Development/Languages
 License: Public Domain and MIT and Python and GPLv2
 URL: http://docutils.sourceforge.net/
@@ -62,10 +62,6 @@ reStructuredText の Emacs サポート
 
 %prep
 %setup -q -n %{srcname}-%{version}
-
-# Remove a shebang from one of the library files
-sed -i.tmp '1D' docutils/readers/python/pynodes.py
-rm -f docutils/readers/python/pynodes.py.tmp
 
 %build
 python setup.py build
@@ -137,7 +133,7 @@ fi
 
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,wheel)
 %doc BUGS.txt HISTORY.txt RELEASE-NOTES.txt docs COPYING.txt THANKS.txt FAQ.txt README.txt
 %doc licenses docs
 %{_bindir}/*
@@ -146,7 +142,7 @@ fi
 %{python_sitelib}/docutils-*.egg-info
 
 %files -n %{elisppkgname}
-%defattr(-,root,root)
+%defattr(-,root,wheel)
 %doc BUGS.txt HISTORY.txt RELEASE-NOTES.txt COPYING.txt THANKS.txt FAQ.txt README.txt
 %doc licenses tools/editors
 %{_datadir}/emacs/site-lisp/%{elisppkgname}
@@ -155,6 +151,9 @@ fi
 
 
 %changelog
+* Fri Mar 09 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.8.1-0
+- update to 0.8.1
+
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.7-4
 - mofify python requirements for OSXWS
 
