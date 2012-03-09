@@ -181,10 +181,10 @@ fi
 
 
 %files -f %{name}-base.files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc CONTRIBUTORS COPYING doc/README doc/hg*.txt doc/hg*.html *.cgi contrib/*.fcgi
-%doc %attr(644,root,root) %{_mandir}/man?/hg*.gz
-%doc %attr(644,root,root) contrib/*.svg contrib/sample.hgrc
+%doc %attr(644,root,wheel) %{_mandir}/man?/hg*.gz
+%doc %attr(644,root,wheel) contrib/*.svg contrib/sample.hgrc
 %{_sysconfdir}/bash_completion.d/mercurial.sh
 %{_datadir}/zsh/site-functions/_mercurial
 %{_bindir}/hg-ssh

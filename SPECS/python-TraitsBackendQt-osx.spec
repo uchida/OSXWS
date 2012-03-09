@@ -41,7 +41,7 @@ python setup.py build
 python setup.py install --skip-build --root $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc *.txt docs/*.txt
 %{python_sitelib}/*.egg-info
 %{python_sitelib}/*.pth

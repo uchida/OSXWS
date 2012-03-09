@@ -64,7 +64,7 @@ if [ "$1" = "0" ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc COPYING ChangeLog ChangeLog.0 README RELEASE
 %{_bindir}/dvigif
 %{_bindir}/dvipng

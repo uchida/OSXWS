@@ -50,11 +50,11 @@ python setup.py install --skip-build --root=$RPM_BUILD_ROOT --install-scripts=%{
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc docs/*.txt
 # For noarch packages: sitelib
 %{python_sitelib}/*
-%attr(755,root,root) %{_bindir}/virtualenv
+%attr(755,root,wheel) %{_bindir}/virtualenv
 
 %changelog
 * Wed Aug 31 2011 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.6.1-2
