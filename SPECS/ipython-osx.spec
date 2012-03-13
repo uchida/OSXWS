@@ -14,6 +14,7 @@ BuildRequires: python-devel > 2.6.1
 Requires: python
 BuildRequires: python-devel
 %endif
+Requires: python-readline
 Provides: python-ipython = %{version}-%{release}
 Obsoletes: python-ipython
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -75,6 +76,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc docs/examples
 
 %changelog
+* Wed Mar 14 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-1
+- add Requires python-readline for Mac OS X built-in python
+
 * Wed Feb 29 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.12-0
 - update to 0.12
 
