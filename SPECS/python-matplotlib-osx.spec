@@ -6,7 +6,8 @@ Summary(ja): Python プロットパッケージ
 Name: python-%{modulename}
 Version: 1.1.0
 Release: 0%{?_dist_release}
-Source0: http://downloads.sourceforge.net/%{modulename}/%{modulename}-%{version}.tar.gz
+# removed agg24/include/agg_conv_gpc.h
+Source0: %{modulename}-%{version}-without-gpc.tar.gz
 Patch0: matplotlib-setup.cfg.patch
 License: PSF
 Group: Development/Languages
