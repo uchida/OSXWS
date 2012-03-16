@@ -1,11 +1,9 @@
 Summary: Library of graphics routines used by libgnomecanvas
 Name: libart_lgpl
 Version: 2.3.21
-Release: 3%{?dist}
+Release: 4%{?_dist_release}
 URL: http://www.gnome.org/
 Source0: http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/%{name}-%{version}.tar.bz2
-#Fedora specific patch
-Patch0: libart-multilib.patch
 License: LGPLv2+
 Group: System Environment/Libraries 
 BuildRequires: pkgconfig
@@ -25,7 +23,6 @@ developing applications that use %{name}.
 
 %prep
 %setup -q
-%patch0 -p1 -b .multilib
 
 %build
 %configure --disable-static
@@ -35,51 +32,22 @@ make %{?_smp_mflags}
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 
-# fix multilib issues
-%ifarch x86_64 s390x ia64 ppc64 alpha sparc64
-%define wordsize 64
-%else
-%define wordsize 32
-%endif
-
-mv $RPM_BUILD_ROOT%{_includedir}/libart-2.0/libart_lgpl/art_config.h \
-   $RPM_BUILD_ROOT%{_includedir}/libart-2.0/libart_lgpl/art_config-%{wordsize}.h
-
-cat >$RPM_BUILD_ROOT%{_includedir}/libart-2.0/libart_lgpl/art_config.h <<EOF
-#ifndef LIBART_MULTILIB
-#define LIBART_MULTILIB
-
-#include <bits/wordsize.h>
-
-#if __WORDSIZE == 32
-# include "art_config-32.h"
-#elif __WORDSIZE == 64
-# include "art_config-64.h"
-#else
-# error "unexpected value for __WORDSIZE macro"
-#endif
-
-#endif 
-EOF
-
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc AUTHORS COPYING NEWS README
-%{_libdir}/lib*.so.*
+%{_libdir}/lib*.*.dylib
 
 %files devel
-%defattr(-,root,root,-)
-%{_libdir}/lib*.so
+%defattr(-,root,wheel,-)
+%{_libdir}/lib*.dylib
 %{_libdir}/pkgconfig/*
 %{_bindir}/libart2-config
 %{_includedir}/*
 
 %changelog
+* Fri Mar 16 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.3.21-4
+- initial build for Mac OS X WorkShop
+
 * Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.21-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 

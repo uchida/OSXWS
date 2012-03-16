@@ -1,6 +1,6 @@
 Name:           libconfuse
 Version:        2.7
-Release:        3%{?dist}
+Release:        4%{?_dist_release}
 Summary:        A configuration file parser library
 
 Group:          System Environment/Libraries
@@ -64,29 +64,25 @@ cp -p examples/{ftpconf.c,ftp.conf,simple.c,simple.conf,reread.c,reread.conf} \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-
-%post -p /sbin/ldconfig
-
-
-%postun -p /sbin/ldconfig
-
-
 %files -f confuse.lang
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc AUTHORS NEWS README
 %doc doc/html
-%{_libdir}/libconfuse.so.*
+%{_libdir}/libconfuse.*.dylib
 %{_mandir}/man?/*.*
 
 %files devel
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc ex2/examples
 %{_includedir}/confuse.h
-%{_libdir}/libconfuse.so
+%{_libdir}/libconfuse.dylib
 %{_libdir}/pkgconfig/libconfuse.pc
 
 
 %changelog
+* Fri Mar 16 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 2.7-4
+- initial build for Mac OS X WorkShop
+
 * Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.7-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 

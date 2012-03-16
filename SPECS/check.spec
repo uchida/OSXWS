@@ -1,6 +1,6 @@
 Name:           check
 Version:        0.9.8
-Release:        4%{?dist}
+Release:        5%{?_dist_release}
 Summary:        A unit test framework for C
 Source0:        http://downloads.sourceforge.net/check/%{name}-%{version}.tar.gz
 Group:          Development/Tools
@@ -61,24 +61,30 @@ if [ $1 = 0 -a -e %{_infodir}/%{name}.info* ]; then
 fi
 
 %files
+%defattr(-,root,wheel,-)
 %doc AUTHORS COPYING.LESSER ChangeLog ChangeLogOld NEWS README SVNChangeLog
 %doc THANKS TODO
-%{_libdir}/libcheck.so.*
+%{_libdir}/libcheck.*.dylib
 %{_infodir}/check*
 
 %files devel
+%defattr(-,root,wheel,-)
 %doc doc/example
 %{_includedir}/check.h
-%{_libdir}/libcheck.so
+%{_libdir}/libcheck.dylib
 %{_libdir}/pkgconfig/check.pc
 %{_datadir}/aclocal/check.m4
 
 #check used to be static only, hence this.
 %files static
+%defattr(-,root,wheel,-)
 %doc COPYING.LESSER
 %{_libdir}/libcheck.a
 
 %changelog
+* Fri Mar 16 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 0.9.8-5
+- initial build for Mac OS X
+
 * Fri Jan  6 2012 Jerry James <loganjerry@gmail.com> - 0.9.8-4
 - Rebuild for GCC 4.7
 - Minor spec file cleanups.
