@@ -1,39 +1,27 @@
 %define with_python %{?_without_python: 0} %{?!_without_python: 1}
-%define with_php %{?_without_php: 0} %{?!_without_php: 1}
 %define with_tcl %{?_without_tcl: 0} %{?!_without_tcl: 1}
 %define with_ruby %{?_without_ruby: 0} %{?!_without_ruby: 1}
 %define with_lua %{?_without_lua: 0} %{?!_without_lua: 1}
-%define php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php4)
 %define svnrev r1190
-#define pretag 1.2.99908020600
-
-# Private libraries are not be exposed globally by RPM
-# RPM 4.8
-%{?filter_provides_in: %filter_provides_in %{php_extdir}/.*\.so$}
-%{?filter_setup}
-# RPM 4.9
-%global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}%{php_extdir}/.*\\.so$
-
 
 Summary: Round Robin Database Tool to store and display time-series data
 Name: rrdtool
 Version: 1.4.7
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+ with exceptions
 Group: Applications/Databases
 URL: http://oss.oetiker.ch/rrdtool/
 Source0: http://oss.oetiker.ch/%{name}/pub/%{name}-%{version}.tar.gz
-Source1: php4-%{svnrev}.tar.gz
-Patch1: rrdtool-1.4.4-php54.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires: dejavu-sans-mono-fonts, dejavu-lgc-sans-mono-fonts
-BuildRequires: gcc-c++, openssl-devel, freetype-devel
+#Requires: dejavu-sans-mono-fonts, dejavu-lgc-sans-mono-fonts
+#BuildRequires: gcc-c++
+BuildRequires: openssl-devel, freetype-devel
 BuildRequires: libpng-devel, zlib-devel, intltool >= 0.35.0
 BuildRequires: cairo-devel >= 1.4.6, pango-devel >= 1.17
 BuildRequires: libtool, groff
 BuildRequires: gettext, libxml2-devel
-BuildRequires: perl-ExtUtils-MakeMaker, perl-devel
+#BuildRequires: perl-ExtUtils-MakeMaker, perl-devel
 
 %description
 RRD is the Acronym for Round Robin Database. RRD is a system to store and
@@ -88,39 +76,17 @@ Requires: python >= %{rrd_python_version}
 Requires: %{name} = %{version}-%{release}
 Obsoletes: python-%{name} < %{version}-%{release}
 Provides: python-%{name} = %{version}-%{release}
+Patch10: rrdtool-1.4.7-python.patch
 
 %description python
 Python RRDtool bindings.
-%endif
-
-%ifarch ppc64
-# php bits busted on ppc64 at the moment
-%define with_php 0
-%endif
-
-%if %{with_php}
-%package php
-Summary: PHP RRDtool bindings
-Group: Development/Languages
-BuildRequires: php-devel >= 4.0
-Requires: php >= 4.0
-Requires: %{name} = %{version}-%{release}
-Requires: php(zend-abi) = %{php_zend_api}
-Requires: php(api) = %{php_core_api}
-Obsoletes: php-%{name} < %{version}-%{release}
-Provides: php-%{name} = %{version}-%{release}
-Provides: php-pecl(rrdtool)
-
-%description php
-The %{name}-php package includes a dynamic shared object (DSO) that adds
-RRDtool bindings to the PHP HTML-embedded scripting language.
 %endif
 
 %if %{with_tcl}
 %package tcl
 Summary: Tcl RRDtool bindings
 Group: Development/Languages
-BuildRequires: tcl-devel >= 8.0
+#BuildRequires: tcl-devel >= 8.0
 Requires: tcl >= 8.0
 Requires: %{name} = %{version}-%{release}
 Obsoletes: tcl-%{name} < %{version}-%{release}
@@ -135,7 +101,7 @@ The %{name}-tcl package includes RRDtool bindings for Tcl.
 %package ruby
 Summary: Ruby RRDtool bindings
 Group: Development/Languages
-BuildRequires: ruby, ruby-devel
+#BuildRequires: ruby, ruby-devel
 Requires: ruby(abi) = 1.9.1
 Requires: %{name} = %{version}-%{release}
 
@@ -160,14 +126,8 @@ The %{name}-lua package includes RRDtool bindings for Lua.
 %endif
 
 %prep
-%setup -q -n %{name}-%{version} %{?with_php: -a 1}
-%if %{with_php}
-%patch1 -p1 -b .php54
-%endif
-
-# Fix to find correct python dir on lib64
-%{__perl} -pi -e 's|get_python_lib\(0,0,prefix|get_python_lib\(1,0,prefix|g' \
-    configure
+%setup -q -n %{name}-%{version}
+%patch10 -p1
 
 # Most edits shouldn't be necessary when using --libdir, but
 # w/o, some introduce hardcoded rpaths where they shouldn't
@@ -178,14 +138,11 @@ The %{name}-lua package includes RRDtool bindings for Lua.
 %{__perl} -pi.orig -e 's|1.299907080300|1.29990708|' \
     bindings/perl-shared/RRDs.pm bindings/perl-piped/RRDp.pm
 
-#
-# fix config files for php4 bindings
-# workaround needed due to https://bugzilla.redhat.com/show_bug.cgi?id=211069
-cp -p /usr/lib/rpm/config.{guess,sub} php4/
-
 %build
+export ARCHFLAGS='-arch x86_64'
 %configure \
-    --with-perl-options='INSTALLDIRS="vendor"' \
+    --enable-perl-site-install \
+    --with-perl-options="INSTALLSITEMAN3DIR=%{_mandir}/man3" \
     --disable-rpath \
 %if %{with_tcl}
     --enable-tcl-site \
@@ -199,7 +156,7 @@ cp -p /usr/lib/rpm/config.{guess,sub} php4/
     --disable-python \
 %endif
 %if %{with_ruby}
-    --enable-ruby \
+    --enable-ruby-site-install \
 %endif
     --disable-static \
     --with-pic
@@ -212,32 +169,10 @@ cp -p /usr/lib/rpm/config.{guess,sub} php4/
 # Remove Rpath from Ruby
 %{__perl} -pi.orig -e 's|-Wl,--rpath -Wl,\$\(EPREFIX\)/lib||g' \
     bindings/ruby/extconf.rb
-sed -i 's| extconf.rb| extconf.rb --vendor |' bindings/Makefile
 %endif
-
-# Force RRDp bits where we want 'em, not sure yet why the
-# --with-perl-options and --libdir don't take
-pushd bindings/perl-piped/
-%{__perl} Makefile.PL INSTALLDIRS=vendor
-%{__perl} -pi.orig -e 's|/lib/perl|/%{_lib}/perl|g' Makefile
-popd
 
 #{__make} %{?_smp_mflags}
 make
-
-# Build the php module, the tmp install is required
-%if %{with_php}
-%define rrdtmp %{_tmppath}/%{name}-%{version}-tmpinstall
-%{__make} install DESTDIR="%{rrdtmp}"
-pushd php4/
-%configure \
-    --with-rrdtool="%{rrdtmp}%{_prefix}" \
-    --disable-static
-#{__make} %{?_smp_mflags}
-make
-popd
-%{__rm} -rf %{rrdtmp}
-%endif
 
 # Fix @perl@ and @PERL@
 find examples/ -type f \
@@ -247,27 +182,14 @@ find examples/ -name "*.pl" \
 
 %install
 rm -rf $RPM_BUILD_ROOT
+export ARCHFLAGS='-arch x86_64'
 make DESTDIR="$RPM_BUILD_ROOT" install
 
-# Install the php module
-%if %{with_php}
-%{__install} -D -m0755 php4/modules/rrdtool.so \
-    %{buildroot}%{php_extdir}/rrdtool.so
-# Clean up the examples for inclusion as docs
-%{__rm} -rf php4/examples/.svn
-# Put the php config bit into place
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/php.d
-%{__cat} << __EOF__ > %{buildroot}%{_sysconfdir}/php.d/rrdtool.ini
-; Enable rrdtool extension module
-extension=rrdtool.so
-__EOF__
-%endif
-
 # Pesky RRDp.pm...
-%{__mv} $RPM_BUILD_ROOT%{perl_vendorlib}/RRDp.pm $RPM_BUILD_ROOT%{perl_vendorarch}/
+%{__mv} $RPM_BUILD_ROOT%{perl_sitelib}/RRDp.pm $RPM_BUILD_ROOT%{perl_sitearch}/
 
 # Dunno why this is getting installed here...
-%{__rm} -f $RPM_BUILD_ROOT%{perl_vendorlib}/leaktest.pl
+%{__rm} -f $RPM_BUILD_ROOT%{perl_sitelib}/leaktest.pl
 
 # We only want .txt and .html files for the main documentation
 %{__mkdir_p} doc2/html doc2/txt
@@ -286,32 +208,18 @@ find examples/ -type f -exec chmod 0644 {} \;
 
 # Clean up the buildroot
 %{__rm} -rf $RPM_BUILD_ROOT%{_docdir}/%{name}-* \
-        $RPM_BUILD_ROOT%{perl_vendorarch}/ntmake.pl \
+        $RPM_BUILD_ROOT%{perl_sitearch}/ntmake.pl \
         $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod \
         $RPM_BUILD_ROOT%{_datadir}/%{name}/examples \
-        $RPM_BUILD_ROOT%{perl_vendorarch}/auto/*/{.packlist,*.bs}
-
-%check
-# minimal load test for the PHP extension
-%if %{with_php}
-LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
-    -d extension_dir=%{buildroot}%{php_extdir} \
-    -d extension=rrdtool.so -m \
-    | grep rrdtool
-%endif
-
+        $RPM_BUILD_ROOT%{perl_sitearch}/auto/*/{.packlist,*.bs}
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{_bindir}/*
-%{_libdir}/*.so.*
+%{_libdir}/*.*.dylib
 %{_datadir}/%{name}
 %{_mandir}/man1/*
 
@@ -319,7 +227,7 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %defattr(-,root,root,-)
 %{_includedir}/*.h
 %exclude %{_libdir}/*.la
-%{_libdir}/*.so
+%{_libdir}/*.dylib
 %{_libdir}/pkgconfig/*.pc
 
 %files doc
@@ -331,8 +239,8 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %defattr(-,root,root,-)
 %doc doc3/html
 %{_mandir}/man3/*
-%{perl_vendorarch}/*.pm
-%attr(0755,root,root) %{perl_vendorarch}/auto/RRDs/
+%{perl_sitearch}/*.pm
+%attr(0755,root,root) %{perl_sitearch}/auto/RRDs/
 
 %if %{with_python}
 %files python
@@ -342,19 +250,11 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %{python_sitearch}/py_rrdtool-*.egg-info
 %endif
 
-%if %{with_php}
-%files php
-%defattr(-,root,root,0755)
-%doc php4/examples php4/README
-%config(noreplace) %{_sysconfdir}/php.d/rrdtool.ini
-%{php_extdir}/rrdtool.so
-%endif
-
 %if %{with_tcl}
 %files tcl
 %defattr(-,root,root,-)
 %doc bindings/tcl/README
-%{_libdir}/tclrrd*.so
+%{_libdir}/tclrrd*.dylib
 %{_libdir}/rrdtool/*.tcl
 %endif
 
@@ -362,7 +262,7 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %files ruby
 %defattr(-,root,root,-)
 %doc bindings/ruby/README
-%{ruby_vendorarchdir}/RRD.so
+%{rsarchdir}/RRD.bundle
 %endif
 
 %if %{with_lua}
@@ -373,6 +273,10 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %endif
 
 %changelog
+* Fri Mar 16 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 1.4.7-6
+- initial build for Mac OS X WorkShop
+- disable building with php
+
 * Thu Feb  9 2012 Jaroslav Škarvada <jskarvad@redhat.com> - 1.4.7-5
 - Changed ruby(abi) to 1.9.1
 
