@@ -217,34 +217,34 @@ find examples/ -type f -exec chmod 0644 {} \;
 %{__rm} -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %{_bindir}/*
 %{_libdir}/*.*.dylib
 %{_datadir}/%{name}
 %{_mandir}/man1/*
 
 %files devel
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %{_includedir}/*.h
 %exclude %{_libdir}/*.la
 %{_libdir}/*.dylib
 %{_libdir}/pkgconfig/*.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc CONTRIBUTORS COPYING COPYRIGHT README TODO NEWS THREADS
 %doc examples doc2/html doc2/txt
 
 %files perl
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc doc3/html
 %{_mandir}/man3/*
 %{perl_sitearch}/*.pm
-%attr(0755,root,root) %{perl_sitearch}/auto/RRDs/
+%attr(0755,root,wheel) %{perl_sitearch}/auto/RRDs/
 
 %if %{with_python}
 %files python
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc bindings/python/AUTHORS bindings/python/COPYING bindings/python/README
 %{python_sitearch}/rrdtoolmodule.so
 %{python_sitearch}/py_rrdtool-*.egg-info
@@ -252,7 +252,7 @@ find examples/ -type f -exec chmod 0644 {} \;
 
 %if %{with_tcl}
 %files tcl
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc bindings/tcl/README
 %{_libdir}/tclrrd*.dylib
 %{_libdir}/rrdtool/*.tcl
@@ -260,14 +260,14 @@ find examples/ -type f -exec chmod 0644 {} \;
 
 %if %{with_ruby}
 %files ruby
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc bindings/ruby/README
 %{rsarchdir}/RRD.bundle
 %endif
 
 %if %{with_lua}
 %files lua
-%defattr(-,root,root,-)
+%defattr(-,root,wheel,-)
 %doc bindings/lua/README
 %{lualibdir}/*
 %endif

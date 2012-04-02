@@ -1,0 +1,72 @@
+diff -uNr ganglia-3.3.1.orig/configure ganglia-3.3.1/configure
+--- ganglia-3.3.1.orig/configure	2012-03-18 00:16:44.000000000 +0900
++++ ganglia-3.3.1/configure	2012-03-18 00:20:30.000000000 +0900
+@@ -24294,7 +24294,7 @@
+ fi
+ 
+ 
+-varstatedir="/var/lib"
++varstatedir="${prefix}/var/lib"
+ 
+ # Used when static linking requested
+ EXPORT_SYMBOLS="-export-dynamic"
+@@ -24495,7 +24495,7 @@
+ #define SUPPORT_GEXEC 0
+ _ACEOF
+ 
+-		varstatedir="/var/db"
++		varstatedir="${prefix}/var/db"
+ 		osreldate=`awk '/^\#define[[:space:]]*__FreeBSD_version/ { print $3 }' /usr/include/osreldate.h`
+ 		if test $osreldate -lt 502102; then
+ 		   CFLAGS="-pthread $CFLAGS -D_REENTRANT"
+@@ -24512,7 +24512,7 @@
+ #define SUPPORT_GEXEC 0
+ _ACEOF
+ 
+-		varstatedir="/var/db"
++		varstatedir="${prefix}/var/db"
+ 
+ cat >>confdefs.h <<\_ACEOF
+ #define DRAGONFLYBSD 1
+@@ -24524,7 +24524,7 @@
+ #define SUPPORT_GEXEC 0
+ _ACEOF
+ 
+-		varstatedir="/var/db"
++		varstatedir="${prefix}/var/db"
+ 
+ cat >>confdefs.h <<\_ACEOF
+ #define NETBSD 1
+@@ -24536,7 +24536,7 @@
+ #define SUPPORT_GEXEC 0
+ _ACEOF
+ 
+-		varstatedir="/var/db"
++		varstatedir="${prefix}/var/db"
+ 
+ cat >>confdefs.h <<\_ACEOF
+ #define OPENBSD 1
+diff -uNr ganglia-3.3.1.orig/web/Makefile ganglia-3.3.1/web/Makefile
+--- ganglia-3.3.1.orig/web/Makefile	2012-03-18 00:16:45.000000000 +0900
++++ ganglia-3.3.1/web/Makefile	2012-03-18 00:17:54.000000000 +0900
+@@ -9,7 +9,7 @@
+ GWEB_MICRO_VERSION = 1
+ 
+ # Gweb statedir (where RRD files, Dwoo templates are stored)
+-GWEB_STATEDIR = /var/lib
++GWEB_STATEDIR = /usr/osxws/var/lib
+ GANGLIA_STATEDIR = $(GWEB_STATEDIR)/ganglia
+ 
+ # Dwoo compile directory
+diff -uNr ganglia-3.3.1.orig/web/conf_default.php.in ganglia-3.3.1/web/conf_default.php.in
+--- ganglia-3.3.1.orig/web/conf_default.php.in	2012-03-18 00:16:45.000000000 +0900
++++ ganglia-3.3.1/web/conf_default.php.in	2012-03-18 00:18:40.000000000 +0900
+@@ -43,7 +43,7 @@
+ 
+ # Leave this alone if rrdtool is installed in $conf['gmetad_root'],
+ # otherwise, change it if it is installed elsewhere (like /usr/bin)
+-$conf['rrdtool'] = "/usr/bin/rrdtool";
++$conf['rrdtool'] = "/usr/osxws/bin/rrdtool";
+ 
+ # Render graphs with rrdtool's --slope-mode option
+ $conf['rrdtool_slope_mode'] = true;

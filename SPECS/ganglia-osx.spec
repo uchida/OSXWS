@@ -1,6 +1,6 @@
 Name:               ganglia
-Version:            3.1.7
-Release:            7%{?_dist_release}
+Version:            3.3.1
+Release:            0%{?_dist_release}
 Summary:            Ganglia Distributed Monitoring System
 
 Group:              Applications/Internet
@@ -13,7 +13,7 @@ Source20:           osxws.ganglia.gmetad.plist
 Patch0:             diskusage-pcre.patch
 Patch2:             diskmetrics.patch
 Patch10:            patch-libmetrics-darwin-metrics.c.diff
-Patch20:            ganglia-3.1.7-osxws-prefix.patch
+Patch20:            ganglia-3.3.1-osxws-prefix.patch
 Buildroot:          %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:      rrdtool-devel
@@ -32,7 +32,8 @@ well-defined XML format.
 %package web
 Summary:            Ganglia Web Frontend
 Group:              Applications/Internet
-Requires:           rrdtool, php, php-gd
+Requires:           rrdtool
+#Requires:           php, php-gd
 Requires:           %{name}-gmetad = %{version}-%{release}
 
 %description web
@@ -53,6 +54,10 @@ well-defined XML format.
 This gmetad daemon aggregates monitoring data from several clusters
 to form a monitoring grid. It also keeps metric history using rrdtool.
 
+To launch gmetad:
+
+ $ launchctl load /Library/LaunchDaemons/osxws.ganglia.gmetad.plist
+
 %package gmond
 Summary:            Ganglia Monitoring daemon
 Group:              Applications/Internet
@@ -65,6 +70,11 @@ well-defined XML format.
 
 This gmond daemon provides the ganglia service within a single cluster or
 Multicast domain.
+
+To launch gmond:
+
+ $ launchctl load /Library/LaunchDaemons/osxws.ganglia.gmond.plist
+
 
 %package gmond-python
 Summary:            Ganglia Monitor daemon python DSO and metric modules
@@ -98,32 +108,40 @@ programmers can use to build scalable cluster or grid applications
 chmod -x lib/*.{h,x}
 
 %build
+#export CC=clang
+#export CXX=clang++
 export CPPFLAGS="-I%{_includedir}"
 export LDFLAGS="-L%{_libdir}"
 %configure \
     --with-gmetad \
+    --with-gexec \
+    --disable-debug \
     --disable-static \
     --enable-shared \
     --sysconfdir=%{_sysconfdir}/ganglia \
+    --with-libpcre=%{_libdir} \
     --with-librrd=%{_libdir}
 
 make %{?_smp_mflags}
+make -C web
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT 
 
 ## Put web files in place
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
-mkdir -p $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables/%{name}
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-cp -rp web/* $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables/%{name}/
-mv $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables/%{name}/conf.php $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
-ln -s ../../../..%{_sysconfdir}/%{name}/conf.php \
-    $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables/%{name}/conf.php
-mv $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables/%{name}/private_clusters $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
-ln -s ../../../..%{_sysconfdir}/%{name}/private_clusters \
-    $RPM_BUILD_ROOT/Library/WebServer/CGI-Executables/%{name}/private_clusters
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/ganglia/dwoo/compiled
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/ganglia/dwoo/cache
+cp -rf web/conf $RPM_BUILD_ROOT%{_localstatedir}/ganglia
+mkdir -p $RPM_BUILD_ROOT/Library/WebServer/Documents/%{name}
+(cd web && tar --exclude ".git*" --exclude "*.gz" \
+               --exclude "*.in" --exclude "Makefile" \
+               --exclude "AUTHORS" --exclude "COPYING" \
+               --exclude "README" --exclude "TODO" \
+               --exclude "debian" --exclude "ganglia-web" \
+               --exclude "gweb.spec" --exclude "rpmbuild" -cpf - .) | \
+(cd $RPM_BUILD_ROOT/Library/WebServer/Documents/%{name} && tar xpf -)
+ln -s /Library/WebServer/Documents/%{name}/conf_default.php $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/conf_default.php
 
 ## Create directory structures
 mkdir -p $RPM_BUILD_ROOT/Library/LaunchDaemons
@@ -158,6 +176,9 @@ rm -f $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/*.conf.in
 # Don't install Makefile* in the web dir
 rm -f $RPM_BUILD_ROOT%{_datadir}/%{name}/Makefile*
 
+# Remove multicpu.conf. modmulticpu.so is broken, this work only on Linux
+rm -f $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/multicpu.conf
+
 ## Install binaries
 make install DESTDIR=$RPM_BUILD_ROOT
 ## House cleaning
@@ -166,12 +187,6 @@ rm -f $RPM_BUILD_ROOT%{_datadir}/%{name}/{Makefile.am,version.php.in}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%post gmond
-launchctl load /Library/LaunchDaemons/osxws.ganglia.gmond.plist
-
-%post gmetad
-launchctl load /Library/LaunchDaemons/osxws.ganglia.gmetad.plist
 
 %preun gmetad
 if [ "$1" = 0 ]
@@ -189,7 +204,8 @@ fi
 
 %files
 %defattr(-,root,wheel,-)
-%doc AUTHORS COPYING NEWS README ChangeLog
+%doc AUTHORS BUGS COPYING INSTALL NEWS
+%doc README.AIX README.GIT README.WIN
 %{_libdir}/libganglia*.*.dylib
 %dir %{_libdir}/ganglia
 %{_libdir}/ganglia/*.so
@@ -199,7 +215,7 @@ fi
 %files gmetad
 %defattr(-,root,wheel,-)
 %dir %{_localstatedir}/%{name}
-%attr(0755,ganglia,ganglia) %{_localstatedir}/%{name}/rrds
+%attr(0755,nobody,nobody) %{_localstatedir}/%{name}/rrds
 %{_sbindir}/gmetad
 %{_mandir}/man1/gmetad.1*
 /Library/LaunchDaemons/osxws.ganglia.gmetad.plist
@@ -219,12 +235,12 @@ fi
 %dir %{_sysconfdir}/ganglia
 %dir %{_sysconfdir}/ganglia/conf.d
 %config(noreplace) %{_sysconfdir}/ganglia/gmond.conf
-%config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.conf
 %exclude %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
 %files gmond-python
 %defattr(-,root,wheel,-)
 %dir %{_libdir}/ganglia/python_modules/
+%{_mandir}/man1/gmetad.py.1*
 %{_libdir}/ganglia/python_modules/*.py*
 %{_libdir}/ganglia/modpython.so*
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.pyconf*
@@ -237,12 +253,21 @@ fi
 
 %files web
 %defattr(-,root,wheel,-)
-%doc web/AUTHORS web/COPYING
-%config(noreplace) %{_sysconfdir}/%{name}/conf.php
-%attr(0640,root,apache) %config(noreplace) %{_sysconfdir}/%{name}/private_clusters
-/Library/WebServer/CGI-Executables/%{name}
+%doc web/AUTHORS web/COPYING web/README web/TODO
+%{_localstatedir}/%{name}/conf/*.json
+%{_localstatedir}/%{name}/conf/sql/ganglia.mysql
+%attr(755,www,www) %{_localstatedir}/ganglia/dwoo/compiled
+%attr(755,www,www) %{_localstatedir}/ganglia/dwoo/cache
+/Library/WebServer/Documents/%{name}
+%config(noreplace) /Library/WebServer/Documents/%{name}/conf_default.php
+%{_sysconfdir}/ganglia/conf_default.php
 
 %changelog
+* Wed Apr 04 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.3.1-0
+- update to 3.3.1
+- change config file for ganglia-web
+- disable g{meta,mon}d auto launch
+
 * Fri Mar 16 2012 Akihiro Uchida <uchida@ike-dyn.ritsumei.ac.jp> 3.1.7-6
 - initial build for Mac OS X WorkShop
 
