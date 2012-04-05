@@ -1,0 +1,33 @@
+diff -uNr rrdtool-1.4.7.orig/bindings/Makefile.in rrdtool-1.4.7/bindings/Makefile.in
+--- rrdtool-1.4.7.orig/bindings/Makefile.in	2012-03-13 23:02:16.000000000 +0900
++++ rrdtool-1.4.7/bindings/Makefile.in	2012-03-13 23:43:47.000000000 +0900
+@@ -660,7 +660,7 @@
+ 	$(AM_V_GEN)test -f perl-piped/Makefile && cd perl-piped && $(MAKE) install || true
+ 	$(AM_V_GEN)test -f perl-shared/Makefile && cd perl-shared && $(MAKE) install || true
+ 	$(AM_V_GEN)test -f ruby/Makefile && cd ruby && $(MAKE) EPREFIX=$(DESTDIR)$(exec_prefix) $(RUBY_MAKE_OPTIONS) install || true
+-	$(AM_V_GEN)test -d python/build && cd python && env BUILDLIBDIR=../../src/.libs $(PYTHON) setup.py install --skip-build --prefix=$(DESTDIR)$(prefix) --exec-prefix=$(DESTDIR)$(exec_prefix) || true
++	$(AM_V_GEN)test -d python/build && cd python && env BUILDLIBDIR=../../src/.libs $(PYTHON) setup.py install --skip-build --root=$(DESTDIR) || true
+ 
+ # rules for building the ruby module
+ # RUBYARCHDIR= is to work around in a makefile quirk not sure 
+diff -uNr rrdtool-1.4.7.orig/configure rrdtool-1.4.7/configure
+--- rrdtool-1.4.7.orig/configure	2012-03-13 23:02:16.000000000 +0900
++++ rrdtool-1.4.7/configure	2012-03-13 23:24:25.000000000 +0900
+@@ -29651,7 +29651,7 @@
+      else
+        am_py_prefix=$prefix
+      fi
+-     am_cv_python_pythondir=`$PYTHON -c "import sys; from distutils import sysconfig; sys.stdout.write(sysconfig.get_python_lib(0,0,prefix='$am_py_prefix'))" 2>/dev/null ||
++     am_cv_python_pythondir=`$PYTHON -c "import sys; from distutils import sysconfig; sys.stdout.write(sysconfig.get_python_lib(0,0))" 2>/dev/null ||
+      echo "$PYTHON_PREFIX/lib/python$PYTHON_VERSION/site-packages"`
+      case $am_cv_python_pythondir in
+      $am_py_prefix*)
+@@ -29681,7 +29681,7 @@
+      else
+        am_py_exec_prefix=$exec_prefix
+      fi
+-     am_cv_python_pyexecdir=`$PYTHON -c "import sys; from distutils import sysconfig; sys.stdout.write(sysconfig.get_python_lib(1,0,prefix='$am_py_exec_prefix'))" 2>/dev/null ||
++     am_cv_python_pyexecdir=`$PYTHON -c "import sys; from distutils import sysconfig; sys.stdout.write(sysconfig.get_python_lib(1,0))" 2>/dev/null ||
+      echo "$PYTHON_EXEC_PREFIX/lib/python$PYTHON_VERSION/site-packages"`
+      case $am_cv_python_pyexecdir in
+      $am_py_exec_prefix*)
